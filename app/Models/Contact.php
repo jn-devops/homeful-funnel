@@ -9,11 +9,13 @@ use Spatie\ModelStates\HasStates;
 use App\States\ContactState;
 
 /**
- * Class Contract
+ * Class Contact
  *
  * @property string $id
  * @property string $mobile
  * @property ContactState $state
+ * @property Organization $organization
+ * @property Campaign $campaign
  *
  * @method int getKey()
  */
@@ -24,6 +26,10 @@ class Contact extends Model
     use HasStates;
     use HasUuids;
 
+    protected $fillable = [
+        'mobile'
+    ];
+
     protected $casts = [
         'state' => ContactState::class
     ];
@@ -31,5 +37,15 @@ class Contact extends Model
     public function getRouteKeyName(): string
     {
         return 'mobile';
+    }
+
+    public function organization(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Organization::class);
+    }
+
+    public function campaign(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Campaign::class);
     }
 }
