@@ -24,8 +24,8 @@ class Campaign extends Model
         'name'
     ];
 
-    public function contacts(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function checkins(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany(Contact::class);
+        return $this->hasMany(Checkin::class);
     }
 }

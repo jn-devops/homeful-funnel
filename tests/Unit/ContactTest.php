@@ -2,7 +2,7 @@
 
 use App\States\{FirstState, SecondState, ThirdState, FourthState};
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use App\Models\{Campaign, Contact, Organization};
+use App\Models\{Checkin, Contact, Organization};
 use Illuminate\Foundation\Testing\WithFaker;
 use App\States\ContactState;
 
@@ -33,9 +33,11 @@ test('contact has an organization', function () {
     expect($contact->organization)->toBeInstanceOf(Organization::class);
 });
 
-test('contact has an campaign', function () {
-    $contact = Contact::factory()->forCampaign()->create();
-    expect($contact->campaign)->toBeInstanceOf(Campaign::class);
+test('contact has checkins', function () {
+    [$checkin1, $checkin2] = Checkin::factory(2)->forContact()->create();
+    expect($checkin1->contact->id)->toBe($checkin2->contact->id);
+    $contact = $checkin1->contact;
+    expect($contact->checkins)->toHaveCount(2);
 });
 
 //it('returns a successful response', function () {

@@ -44,8 +44,8 @@ class Contact extends Model
         return $this->belongsTo(Organization::class);
     }
 
-    public function campaign(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function checkins(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->belongsTo(Campaign::class);
+        return $this->hasMany(Checkin::class);
     }
 }
