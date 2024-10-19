@@ -3,8 +3,10 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Spatie\SchemalessAttributes\SchemalessAttributes;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
+use Homeful\Common\Traits\HasMeta;
 use Spatie\ModelStates\HasStates;
 use App\States\ContactState;
 
@@ -16,6 +18,7 @@ use App\States\ContactState;
  * @property ContactState $state
  * @property Organization $organization
  * @property Campaign $campaign
+ * @property SchemalessAttributes $meta
  *
  * @method int getKey()
  */
@@ -25,6 +28,7 @@ class Contact extends Model
     use HasFactory;
     use HasStates;
     use HasUuids;
+    use HasMeta;
 
     protected $fillable = [
         'mobile'

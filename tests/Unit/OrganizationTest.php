@@ -1,9 +1,9 @@
 <?php
 
+use Spatie\SchemalessAttributes\SchemalessAttributes;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use App\Models\{Contact, Organization};
-
 
 uses(RefreshDatabase::class, WithFaker::class);
 
@@ -11,6 +11,7 @@ test('organization has attributes', function () {
     $organization = Organization::factory()->create();
     expect($organization->id)->toBeUuid();
     expect($organization->name)->toBeString();
+    expect($organization->meta)->toBeInstanceOf(SchemalessAttributes::class);
 });
 
 test('organization has contacts', function () {

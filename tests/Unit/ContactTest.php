@@ -1,6 +1,7 @@
 <?php
 
 use App\States\{FirstState, SecondState, ThirdState, FourthState};
+use Spatie\SchemalessAttributes\SchemalessAttributes;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\{Checkin, Contact, Organization};
 use Illuminate\Foundation\Testing\WithFaker;
@@ -15,6 +16,7 @@ test('contact has attributes', function () {
     expect($contact->state)->toBeInstanceOf(ContactState::class);
     expect($contact->organization)->toBeNull();
     expect($contact->campaign)->toBeNull();
+    expect($contact->meta)->toBeInstanceOf(SchemalessAttributes::class);
 });
 
 test('contact has states', function () {
