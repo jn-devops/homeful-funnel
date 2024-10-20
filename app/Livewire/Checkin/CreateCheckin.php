@@ -100,7 +100,7 @@ class CreateCheckin extends Component implements HasForms
                     'middle_name' => $data['middle_name'],
                     'mobile' => $data['mobile'],
                 ];
-                return redirect()->to('http://homeful-lazarus.test/client-information?' . http_build_query($params));
+                return redirect()->to('https://gnc-lazarus.homeful.ph/client-information?' . http_build_query($params));
             }
             return null;
         }catch (Exception $e) {
