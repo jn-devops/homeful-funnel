@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Faker\Provider\en_PH\PhoneNumber;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Contact>
@@ -17,7 +18,7 @@ class ContactFactory extends Factory
     public function definition(): array
     {
         return [
-            'mobile' => $this->faker->e164PhoneNumber()
+            'mobile' => '0917' . $this->faker->numberBetween(1000000, 9999999)
         ];
     }
 }

@@ -4,7 +4,7 @@ use Spatie\SchemalessAttributes\SchemalessAttributes;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use App\Models\{Campaign, Checkin};
-
+use App\Models\Contact;
 
 uses(RefreshDatabase::class, WithFaker::class);
 
@@ -20,4 +20,14 @@ test('campaign has checkins', function () {
     expect($checkin1->campaign->id)->toBe($checkin2->campaign->id);
     $campaign = $checkin1->campaign;
     expect($campaign->checkins)->toHaveCount(2);
+    $campaign->checkins()->create();
+    $campaign->refresh();
+    expect($campaign->checkins)->toHaveCount(3);
+    $checkin = new Checkin;
+    $checkin->contact()->associate($contact = Contact::factory()->create());
+    $checkin->save();
+    $campaign->checkins()->save($checkin);
+    $campaign->refresh();
+    expect($campaign->checkins)->toHaveCount(4);
+    expect($campaign->checkins()->where('id', $checkin->id)->first()->contact->is($contact))->toBeTrue();
 });

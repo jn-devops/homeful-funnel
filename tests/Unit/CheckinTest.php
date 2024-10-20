@@ -5,7 +5,6 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use App\Models\{Campaign, Checkin, Contact};
 
-
 uses(RefreshDatabase::class, WithFaker::class);
 
 test('checkin has attributes', function () {

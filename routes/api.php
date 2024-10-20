@@ -1,11 +1,12 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Actions\CheckinContact;
+use Illuminate\Http\Request;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::post('first/{mobile}', \App\Actions\FirstAction::class)
-    ->name('first');
+Route::post('checkin/{campaign}/{contact}', CheckinContact::class)
+    ->name('checkin-contact');

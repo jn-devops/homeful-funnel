@@ -12,6 +12,7 @@ use Homeful\Common\Traits\HasMeta;
  * Class Organization
  *
  * @property string $id
+ * @property string $code
  * @property string $name
  * @property SchemalessAttributes $meta
  *
@@ -25,8 +26,17 @@ class Organization extends Model
     use HasMeta;
 
     protected $fillable = [
-        'name'
+        'code', 'name'
     ];
+
+    public static function booted(): void
+    {
+        static::creating(function (Organization $organization) {
+            $uuid = [];
+            preg_match('/(.*)-(.*)-(.*)-(.*)-(.*)/', $organization->id, $uuid);
+            $organization->code = $uuid[4];
+        });
+    }
 
     public function contacts(): \Illuminate\Database\Eloquent\Relations\HasMany
     {

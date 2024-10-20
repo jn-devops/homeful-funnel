@@ -1,10 +1,14 @@
 <?php
 
 use App\States\{FirstState, SecondState, ThirdState, FourthState};
+use Propaganistas\LaravelPhone\Exceptions\NumberParseException;
 use Spatie\SchemalessAttributes\SchemalessAttributes;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Events\ContactPersistedFromRouteBinding;
 use App\Models\{Checkin, Contact, Organization};
 use Illuminate\Foundation\Testing\WithFaker;
+use Propaganistas\LaravelPhone\PhoneNumber;
+use Illuminate\Support\Facades\Event;
 use App\States\ContactState;
 
 uses(RefreshDatabase::class, WithFaker::class);
@@ -13,10 +17,23 @@ test('contact has attributes', function () {
     $contact = Contact::factory()->create();
     expect($contact->id)->toBeUuid();
     expect($contact->mobile)->toBeString();
+    expect($contact->mobile_country)->toBeString();
     expect($contact->state)->toBeInstanceOf(ContactState::class);
     expect($contact->organization)->toBeNull();
     expect($contact->campaign)->toBeNull();
     expect($contact->meta)->toBeInstanceOf(SchemalessAttributes::class);
+});
+
+test('contact has default values', function () {
+    $contact = Contact::factory()->create();
+    expect($contact->mobile_country)->toBe('PH');
+});
+
+test('contact can be persisted from a mobile number', function () {
+    $mobile = '9171234567';
+    $contact = Contact::create(['mobile' => $mobile]);
+    expect($contact)->toBeInstanceOf(Contact::class);
+    expect((new PhoneNumber($mobile, 'PH'))->equals(new PhoneNumber($contact->mobile, 'PH')))->toBeTrue();
 });
 
 test('contact has states', function () {
@@ -42,16 +59,34 @@ test('contact has checkins', function () {
     expect($contact->checkins)->toHaveCount(2);
 });
 
-//it('returns a successful response', function () {
-//    $contact = Contact::factory()->create();
-//    $response = $this->post(route('first', ['user' => $contact->mobile]));
-//
-//    $response->assertStatus(200);
-//});
+test('contact has route model binding from existing record', function () {
+    Event::fake(ContactPersistedFromRouteBinding::class);
+    $mobile = '9171234567';
+    $contact = Contact::create(['mobile' => $mobile]);
+    $url = route('contacts.show', ['contact' => $contact->mobile]);
+    $response = $this->get($url);
+    expect($response->status())->toBe(200);
+    expect((new PhoneNumber($response->json('mobile'), 'PH'))->equals(new PhoneNumber($mobile, 'PH')))->toBeTrue();
+    Event::assertNothingDispatched(ContactPersistedFromRouteBinding::class);
+});
 
-//it('returns a successful response', function () {
-//    $mobile = $this->faker->e164PhoneNumber();
-//    $response = $this->post(route('first', ['mobile' => $mobile]));
-//
-//    $response->assertStatus(200);
-//});
+test('contact has route model binding from non-existing record', function () {
+    Event::fake(ContactPersistedFromRouteBinding::class);
+    $mobile = '9171234567';
+    $url = route('contacts.show', ['contact' => $mobile]);
+    $response = $this->get($url);
+    expect($response->status())->toBe(200);
+    expect((new PhoneNumber($response->json('mobile'), 'PH'))->equals(new PhoneNumber($mobile, 'PH')))->toBeTrue();
+    $contact = Contact::fromMobile($mobile);
+    expect($contact)->toBeInstanceOf(Contact::class);
+    Event::assertDispatched(ContactPersistedFromRouteBinding::class);
+});
+
+test('contact not persisted if mobile is not right', function () {
+    Event::fake(ContactPersistedFromRouteBinding::class);
+    $mobile = '34567';
+    $url = route('contacts.show', ['contact' => $mobile]);
+    $response = $this->get($url);
+    expect($response->status())->toBe(404);
+    Event::assertNotDispatched(ContactPersistedFromRouteBinding::class);
+})->expect(NumberParseException::class);
