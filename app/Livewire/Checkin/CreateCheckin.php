@@ -65,8 +65,8 @@ class CreateCheckin extends Component implements HasForms
                         ->inlineLabel(),
                     Forms\Components\ToggleButtons::make('ready_to_avail')
                         ->label('Ready to avail: ')
-                        ->inline(true)
-                        ->inlineLabel(true)
+                        ->inline()
+                        ->inlineLabel()
                         ->required()
                         ->boolean()
                         ->columnSpanFull(),

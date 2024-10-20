@@ -49,6 +49,8 @@ class ContactResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('mobile')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('name')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('state')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')

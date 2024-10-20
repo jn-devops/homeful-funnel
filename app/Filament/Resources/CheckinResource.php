@@ -38,7 +38,7 @@ class CheckinResource extends Resource
                 Tables\Columns\TextColumn::make('id')
                     ->label('ID')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('contact.id')
+                Tables\Columns\TextColumn::make('contact.name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('campaign.name')
                     ->searchable(),
