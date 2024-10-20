@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Checkin;
 
+use App\Actions\CheckinContact;
 use App\Models\Campaign;
 use App\Models\Checkin;
 use App\Models\Contact;
@@ -85,12 +86,14 @@ class CreateCheckin extends Component implements HasForms
                 'mobile' => $data['mobile'],
                 'name' => $data['first_name'].' '.$data['middle_name'].' '.$data['last_name'],
             ]);
-           $checkin= Checkin::create([
-                'campaign_id' => $this->campaign->id,
-                'organization_id' => $this->organization->id,
-                'meta' => $data,
-                'contact_id' => $contact->id,
-            ]);
+//           $checkin= Checkin::create([
+//                'campaign_id' => $this->campaign->id,
+//                'organization_id' => $this->organization->id,
+//                'meta' => $data,
+//                'contact_id' => $contact->id,
+//            ]);
+
+            CheckinContact::dispatch($this->campaign, $contact, $this->organization, $data);
 
             $this->dispatch('open-modal', id: 'success-modal');
             if ($data['ready_to_avail']) {
