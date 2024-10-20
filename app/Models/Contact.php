@@ -79,6 +79,11 @@ class Contact extends Model
         return $this->belongsTo(Organization::class);
     }
 
+    public function campaign(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Campaign::class);
+    }
+
     public function checkins(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Checkin::class);
@@ -89,13 +94,13 @@ class Contact extends Model
         return 'PH';
     }
 
-    protected function Mobile(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => phone($value, $this->mobile_country)->formatForMobileDialingInCountry($this->mobile_country),
-            set: fn ($value) => phone($value, $this->mobile_country, self::PHONE_SEARCH_FORMAT),
-        );
-    }
+//    protected function Mobile(): Attribute
+//    {
+//        return Attribute::make(
+//            get: fn ($value) => phone($value, $this->mobile_country)->formatForMobileDialingInCountry($this->mobile_country),
+//            set: fn ($value) => phone($value, $this->mobile_country, self::PHONE_SEARCH_FORMAT),
+//        );
+//    }
 
     public function setNameAttribute(string $value): static
     {
