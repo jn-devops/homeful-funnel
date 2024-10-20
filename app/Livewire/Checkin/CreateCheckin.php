@@ -85,7 +85,7 @@ class CreateCheckin extends Component implements HasForms
                 'mobile' => $data['mobile'],
                 'name' => $data['first_name'].' '.$data['middle_name'].' '.$data['last_name'],
             ]);
-            Checkin::create([
+           $checkin= Checkin::create([
                 'campaign_id' => $this->campaign->id,
                 'organization_id' => $this->organization->id,
                 'meta' => $data,

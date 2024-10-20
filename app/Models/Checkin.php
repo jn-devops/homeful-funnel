@@ -24,6 +24,11 @@ class Checkin extends Model
     use HasFactory;
     use HasUuids;
     use HasMeta;
+    protected $fillable = [
+        'campaign_id',
+        'contact_id',
+    ];
+
 
     public function contact(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
