@@ -47,9 +47,9 @@ class CreateCheckin extends Component implements HasForms
                         ->regex("/^[0-9]+$/")
                         ->minLength(10)
                         ->maxLength(10)
-                        ->afterStateUpdated(function(Set $set, String $state){
-                            if(strlen($state)==10){
-                                $contact = Contact::where('mobile','+63'.$state)->first();
+                        ->afterStateUpdated(function(Set $set, String $state=null){
+                            if(strlen($state??'')==10){
+                                $contact = Contact::where('mobile','+63'.$state??'')->first();
                                 if($contact){
                                     $set('first_name',$contact->first_name??'');
                                     $set('last_name',$contact->last_name??'');
