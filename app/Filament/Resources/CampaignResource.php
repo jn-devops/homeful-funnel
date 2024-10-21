@@ -52,7 +52,7 @@ class CampaignResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('campaignTypegi.name')
+                Tables\Columns\TextColumn::make('campaignType.name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('project.name')
                     ->searchable(),
