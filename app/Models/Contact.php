@@ -8,6 +8,7 @@ use Spatie\SchemalessAttributes\SchemalessAttributes;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use App\Events\ContactPersistedFromRouteBinding;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Model;
 use libphonenumber\PhoneNumberFormat;
 use Homeful\Common\Traits\HasMeta;
@@ -35,6 +36,7 @@ class Contact extends Model
 {
     /** @use HasFactory<\Database\Factories\ContactFactory> */
     use HasFactory;
+    use Notifiable;
     use HasStates;
     use HasUuids;
     use HasMeta;
@@ -75,6 +77,11 @@ class Contact extends Model
         }
 
         return $contact;
+    }
+
+    public function routeNotificationForEngageSpark(): string
+    {
+        return $this->mobile;
     }
 
     public function organization(): \Illuminate\Database\Eloquent\Relations\BelongsTo
