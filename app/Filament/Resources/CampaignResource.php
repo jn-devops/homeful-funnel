@@ -24,6 +24,9 @@ class CampaignResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('name')
+                    ->label('Name')
+                    ->unique(ignoreRecord: true,column: 'name',table: Campaign::class)
+                    ->live()
                     ->required()
                     ->maxLength(255),
                 Forms\Components\Select::make('project_id')
