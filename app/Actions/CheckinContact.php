@@ -2,6 +2,7 @@
 
 namespace App\Actions;
 
+use App\Notifications\AcknowledgeAvailmentNotification;
 use App\Models\{Campaign, Checkin, Contact};
 use Lorisleiva\Actions\Concerns\AsAction;
 use Lorisleiva\Actions\ActionRequest;
@@ -21,6 +22,7 @@ class CheckinContact
         if ($attribs)
             $contact->update($attribs);
         $contact->save();
+        $contact->notify(new AcknowledgeAvailmentNotification('Thank you for checking in!'));
         $checkin->contact()->associate($contact);
         $checkin->save();
 

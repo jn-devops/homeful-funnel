@@ -7,6 +7,7 @@ use App\Models\Checkin;
 use App\Models\Organization;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
+use Illuminate\Support\HtmlString;
 
 class StatsOverview extends BaseWidget
 {
@@ -30,7 +31,7 @@ class StatsOverview extends BaseWidget
             })->implode('<br>'); // Combine multiple organizations into a single string
 
             return Stat::make($campaign->name,  $campaign->checkins()->get()->count())
-                ->description($description)
+                ->description(new HtmlString($description))
                 ->color('Success');
         })->toArray();
 
