@@ -27,7 +27,8 @@ class StatsOverview extends BaseWidget
 
             $description = $organizationCounts->map(function ($org) {
                 return $org['org_name']. ': ' . $org['count'] ;
-            })->implode(', '); // Combine multiple organizations into a single string
+            })->implode('
+            '); // Combine multiple organizations into a single string
 
             return Stat::make($campaign->name,  $campaign->checkins()->get()->count())
                 ->description($description)
