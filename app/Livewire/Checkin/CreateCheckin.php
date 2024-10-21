@@ -13,6 +13,7 @@ use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
 use Illuminate\Routing\Redirector;
+use Illuminate\Support\Facades\Http;
 use Livewire\Component;
 use Illuminate\Contracts\View\View;
 
@@ -39,7 +40,6 @@ class CreateCheckin extends Component implements HasForms
                 Forms\Components\Section::make()->schema([
                     Forms\Components\TextInput::make('mobile')
                         ->label('Mobile Number: ')
-                        ->unique(table: Contact::class,column: 'mobile')
                         ->required()
                         ->prefix('+63')
                         ->regex("/^[0-9]+$/")
@@ -82,10 +82,10 @@ class CreateCheckin extends Component implements HasForms
     {
         $data = $this->form->getState();
         try {
-            $contact =Contact::create([
-                'mobile' => $data['mobile'],
-                'name' => $data['first_name'].' '.$data['middle_name'].' '.$data['last_name'],
-            ]);
+//            $contact =Contact::create([
+//                'mobile' => $data['mobile'],
+//                'name' => $data['first_name'].' '.$data['middle_name'].' '.$data['last_name'],
+//            ]);
 //           $checkin= Checkin::create([
 //                'campaign_id' => $this->campaign->id,
 //                'organization_id' => $this->organization->id,
@@ -93,7 +93,14 @@ class CreateCheckin extends Component implements HasForms
 //                'contact_id' => $contact->id,
 //            ]);
 
-            CheckinContact::dispatch($this->campaign, $contact, $this->organization, $data);
+            $url = route('checkin-contact', ['campaign' => $this->campaign->id, 'contact' => $data['mobile']]);
+            Http::post($url, [
+                'name' => $data['first_name'].' '.$data['middle_name'].' '.$data['last_name'],
+                'code' => $this->organization->code
+            ]);
+
+//            CheckinContact::dispatch($this->campaign, $contact, $this->organization, $data);
+
 
             $this->dispatch('open-modal', id: 'success-modal');
             if ($data['ready_to_avail']) {
