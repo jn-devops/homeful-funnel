@@ -24,7 +24,10 @@ class CheckinContact
         $contact->save();
         $checkin->contact()->associate($contact);
         $checkin->save();
-        $contact->notify(new AcknowledgeAvailmentNotification('Thank you for checking in!'));
+        $contact->notify(new AcknowledgeAvailmentNotification('Thank you for checking in. Here is your check-in reference code: '.substr($contact->id, -12).'
+
+If you are ready to secure the unit, kindly click on the link provided below:
+https://www.homeful.ph/pagsikat/availnow/promocode=?pasinaya'.substr($contact->id, -12)));
 
         return $checkin;
     }
