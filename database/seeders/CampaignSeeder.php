@@ -14,13 +14,9 @@ class CampaignSeeder extends Seeder
     public function run(): void
     {
         $data=[
-            'Seminar',
-            'Conference',
-            'Workshop',
-            'Meeting',
-            'Training',
-            'Webinar',
             'Presentation',
+            'Booth',
+            'Site Visit',
         ];
         foreach ($data as $index => $d) {
             Campaign::updateOrCreate( ['name' => $d]);
