@@ -2,7 +2,9 @@
 
 namespace App\Providers\Filament;
 
-use App\Filament\Resources\CheckinResource\Widgets\StatsOverview;
+use App\Filament\Widgets\StatsOverview;
+use App\Filament\Widgets\CampaignAnalysisChart;
+use App\Filament\Widgets\CampaignsTable;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
@@ -35,13 +37,14 @@ class AdminPanelProvider extends PanelProvider
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
-//                Pages\Dashboard::class,
+            //    Pages\Dashboard::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
-                Widgets\AccountWidget::class,
-                StatsOverview::class,
-//                Widgets\FilamentInfoWidget::class,
+                // Widgets\AccountWidget::class,
+                // CampaignAnalysisChart::class,
+                // StatsOverview::class,
+                // CampaignsTable::class,
             ])
             ->middleware([
                 EncryptCookies::class,
