@@ -1,5 +1,10 @@
-<div class="flex justify-center items-center min-h-screen">
-    <div class="w-full max-w-lg bg-white p-4 rounded-lg">
+<div class="flex justify-center items-center min-h-screen" x-data="{ showSplash: true }" x-init="setTimeout(() => showSplash = false, 2500)">
+    <!-- Splash Screen -->
+    <div x-show="showSplash" class="fixed inset-0 flex justify-center items-center bg-white z-50">
+        <img class="h-auto w-40 lg:w-full" src="/CompanyLogo.png" alt="Company Logo">
+    </div>
+
+    <div  x-show="!showSplash" x-transition class="w-full max-w-lg bg-white p-4 rounded-lg">
         <div class=" flex justify-center ">
             <img class="h-auto w-40 lg:w-full" src="/CompanyLogo.png" alt="CompanyLogo.png">
         </div>
