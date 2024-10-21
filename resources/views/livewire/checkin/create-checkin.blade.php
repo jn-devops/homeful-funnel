@@ -5,10 +5,17 @@
         </div>
         <form wire:submit="save" class="w-full">
             <div  class="flex justify-center ">
-                <h2 class="text-xl font-bold leading-tight text-gray-800 mb-4 text-center">
-                    {{$this->organization->name}}
+                <h2 class="text-xl font-bold leading-tight text-gray-800  text-center">
+                    {{$this->campaign->name}}
                 </h2>
+
             </div>
+            <div  class="flex justify-center ">
+                <p class="text-m  leading-tight text-gray-800 mb-4 text-center">
+                    {{$this->organization->name}}
+                </p>
+            </div>
+
             {{ $this->form }}
             @if($this->isDifferentCompanyBefore)
                 <div  class="flex justify-center ">
