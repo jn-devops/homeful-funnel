@@ -26,6 +26,7 @@ class CreateCheckin extends Component implements HasForms
     public Campaign $campaign;
     public Organization $organization;
     public String $error = '';
+    public bool $isDifferentCompanyBefore=false;
 
     public function mount(Campaign $campaign ,Organization $organization): void
     {
@@ -53,6 +54,11 @@ class CreateCheckin extends Component implements HasForms
                                     $set('first_name',$contact->first_name??'');
                                     $set('last_name',$contact->last_name??'');
                                     $set('middle_name',$contact->middle_name??'');
+                                    if ($contact->organization->id != $this->organization->id) {
+                                        $this->isDifferentCompanyBefore = true;
+                                    }else{
+                                        $this->isDifferentCompanyBefore = false;
+                                    }
                                 }
                             }
                         })

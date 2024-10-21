@@ -5,11 +5,18 @@
         </div>
         <form wire:submit="save" class="w-full">
             <div  class="flex justify-center ">
-                <h2 class="text-xl font-bold leading-tight text-gray-800 mb-4">
+                <h2 class="text-xl font-bold leading-tight text-gray-800 mb-4 text-center">
                     {{$this->organization->name}}
                 </h2>
             </div>
             {{ $this->form }}
+            @if($this->isDifferentCompanyBefore)
+                <div  class="flex justify-center ">
+                    <h5 class="text-xl font-bold leading-tight text-rose-800 mb-4 text-center">
+                        You belong to different company before, this will update your record.
+                    </h5>
+                </div>
+            @endif
             <div class="flex justify-center ">
                 <x-filament::button type="submit" class="mt-4  text-white py-2 px-4 rounded mx-auto w-60">
                     Submit
