@@ -12,6 +12,7 @@ use Filament\Forms;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
+use Filament\Forms\Set;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Http;
 use Livewire\Component;
@@ -45,6 +46,15 @@ class CreateCheckin extends Component implements HasForms
                         ->regex("/^[0-9]+$/")
                         ->minLength(10)
                         ->maxLength(10)
+                        ->afterStateUpdated(function(Set $set, String $state){
+                            if(strlen($state)==10){
+                                $contact = Contact::where('mobile',$state)->first();
+                                if($contact){
+                                    dd($contact);
+                                    $set('first_name',$contact->name);
+                                }
+                            }
+                        })
                         ->live()
                         ->afterStateUpdated(function (Forms\Contracts\HasForms $livewire, Forms\Components\TextInput $component) {
                             $livewire->validateOnly($component->getStatePath());
@@ -96,7 +106,11 @@ class CreateCheckin extends Component implements HasForms
             $url = route('checkin-contact', ['campaign' => $this->campaign->id, 'contact' => $data['mobile']]);
             Http::post($url, [
                 'name' => $data['first_name'].' '.$data['middle_name'].' '.$data['last_name'],
-                'code' => $this->organization->code
+                'code' => $this->organization->code,
+                'last_name' => $data['last_name'],
+                'first_name' => $data['first_name'],
+                'middle_name' => $data['middle_name'],
+                'mobile' => $data['mobile'],
             ]);
 
 //            CheckinContact::dispatch($this->campaign, $contact, $this->organization, $data);
