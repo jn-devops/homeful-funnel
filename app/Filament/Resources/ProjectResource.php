@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\CampaignResource\Pages;
-use App\Filament\Resources\CampaignResource\RelationManagers;
-use App\Models\Campaign;
+use App\Filament\Resources\ProjectResource\Pages;
+use App\Filament\Resources\ProjectResource\RelationManagers;
+use App\Models\Project;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -13,9 +13,9 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class CampaignResource extends Resource
+class ProjectResource extends Resource
 {
-    protected static ?string $model = Campaign::class;
+    protected static ?string $model = Project::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -26,12 +26,6 @@ class CampaignResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\Select::make('project_id')
-                    ->label('Project')
-                    ->relationship('project', 'name')
-                    ->preload()
-                    ->native(false)
-                    ->required(),
                 Forms\Components\TextInput::make('meta'),
             ]);
     }
@@ -39,14 +33,11 @@ class CampaignResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->defaultSort('created_at', 'desc')
             ->columns([
                 Tables\Columns\TextColumn::make('id')
                     ->label('ID')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('name')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('project.name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
@@ -74,7 +65,7 @@ class CampaignResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageCampaigns::route('/'),
+            'index' => Pages\ManageProjects::route('/'),
         ];
     }
 }
