@@ -14,11 +14,10 @@ use Homeful\Common\Traits\HasMeta;
  * @property string $id
  * @property string $name
  * @property SchemalessAttributes $meta
- * @property Project $project
  *
  * @method int getKey()
  */
-class Campaign extends Model
+class Project extends Model
 {
     /** @use HasFactory<\Database\Factories\CampaignFactory> */
     use HasFactory;
@@ -28,14 +27,4 @@ class Campaign extends Model
     protected $fillable = [
         'name'
     ];
-
-    public function checkins(): \Illuminate\Database\Eloquent\Relations\HasMany
-    {
-        return $this->hasMany(Checkin::class);
-    }
-
-    public function project(): \Illuminate\Database\Eloquent\Relations\BelongsTo
-    {
-        return $this->belongsTo(Project::class);
-    }
 }
