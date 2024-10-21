@@ -41,6 +41,9 @@ class CheckinContact
     {
         return [
             'name' => ['nullable', 'string'],//contact name
+            'first_name' => ['nullable', 'string'],//contact name
+            'middle_name' => ['nullable', 'string'],//contact name
+            'last_name' => ['nullable', 'string'],//contact name
             'code' => ['nullable', 'string'],//organization code
         ];
     }

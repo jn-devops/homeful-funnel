@@ -25,6 +25,9 @@ use App\States\ContactState;
  * @property Campaign $campaign
  * @property SchemalessAttributes $meta
  * @property string $name
+ * @property string $first_name
+ * @property string $middle_name
+ * @property string $last_name
  *
  * @method int getKey()
  */
@@ -38,7 +41,7 @@ class Contact extends Model
 
     const PHONE_SEARCH_FORMAT = PhoneNumberFormat::E164;
     protected $fillable = [
-        'mobile', 'name'
+        'mobile', 'name', 'first_name', 'middle_name', 'last_name'
     ];
 
     protected $casts = [
@@ -112,5 +115,41 @@ class Contact extends Model
     public function getNameAttribute(): ?string
     {
         return $this->getAttribute('meta')->get('name');
+    }
+
+    public function setFirstNameAttribute(string $value): static
+    {
+        $this->getAttribute('meta')->set('first_name', $value);
+
+        return $this;
+    }
+
+    public function getFirstNameAttribute(): ?string
+    {
+        return $this->getAttribute('meta')->get('first_name');
+    }
+
+    public function setMiddleNameAttribute(string $value): static
+    {
+        $this->getAttribute('meta')->set('middle_name', $value);
+
+        return $this;
+    }
+
+    public function getMiddleNameAttribute(): ?string
+    {
+        return $this->getAttribute('meta')->get('middle_name');
+    }
+
+    public function setLastNameAttribute(string $value): static
+    {
+        $this->getAttribute('meta')->set('last_name', $value);
+
+        return $this;
+    }
+
+    public function getLastNameAttribute(): ?string
+    {
+        return $this->getAttribute('meta')->get('last_name');
     }
 }
