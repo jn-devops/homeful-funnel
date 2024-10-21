@@ -111,6 +111,12 @@ class CreateCheckin extends Component implements HasForms
                 'first_name' => $data['first_name'],
                 'middle_name' => $data['middle_name'],
                 'mobile' => $data['mobile'],
+                'meta'=>[
+                    'last_name' => $data['last_name'],
+                    'first_name' => $data['first_name'],
+                    'middle_name' => $data['middle_name'],
+                    'mobile' => $data['mobile'],
+                ]
             ]);
 
 //            CheckinContact::dispatch($this->campaign, $contact, $this->organization, $data);
