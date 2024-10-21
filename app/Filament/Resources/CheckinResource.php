@@ -23,8 +23,8 @@ class CheckinResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('contact_id')
-                    ->relationship('contact', 'id'),
+//                Forms\Components\Select::make('contact_id')
+//                    ->relationship('contact', 'id'),
                 Forms\Components\Select::make('campaign_id')
                     ->relationship('campaign', 'name'),
                 Forms\Components\TextInput::make('meta'),

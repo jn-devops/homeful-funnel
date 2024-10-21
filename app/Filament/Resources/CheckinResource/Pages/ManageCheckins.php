@@ -20,7 +20,7 @@ class ManageCheckins extends ManageRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+//            Actions\CreateAction::make(),
             Actions\Action::make('checkin')
                 ->icon('heroicon-m-qr-code')
                 ->modalIcon('heroicon-m-qr-code')
