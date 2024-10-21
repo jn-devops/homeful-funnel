@@ -112,18 +112,20 @@ class CreateCheckin extends Component implements HasForms
 //            ]);
 
             $url = route('checkin-contact', ['campaign' => $this->campaign->id, 'contact' => $data['mobile']]);
-            Http::post($url, [
+          $response =  Http::post($url, [
                 'name' => $data['first_name'].' '.$data['middle_name'].' '.$data['last_name'],
                 'code' => $this->organization->code,
                 'last_name' => $data['last_name'],
                 'first_name' => $data['first_name'],
                 'middle_name' => $data['middle_name'],
                 'mobile' => $data['mobile'],
+                'ready_to_avail'=>$data['ready_to_avail'],
                 'meta'=>[
                     'last_name' => $data['last_name'],
                     'first_name' => $data['first_name'],
                     'middle_name' => $data['middle_name'],
                     'mobile' => $data['mobile'],
+                    'ready_to_avail' =>$data['ready_to_avail'],
                 ]
             ]);
 

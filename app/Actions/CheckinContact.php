@@ -22,9 +22,9 @@ class CheckinContact
         if ($attribs)
             $contact->update($attribs);
         $contact->save();
-        $contact->notify(new AcknowledgeAvailmentNotification('Thank you for checking in!'));
         $checkin->contact()->associate($contact);
         $checkin->save();
+        $contact->notify(new AcknowledgeAvailmentNotification('Thank you for checking in!'));
 
         return $checkin;
     }
