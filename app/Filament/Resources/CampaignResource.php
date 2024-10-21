@@ -6,11 +6,13 @@ use App\Filament\Resources\CampaignResource\Pages;
 use App\Filament\Resources\CampaignResource\RelationManagers;
 use App\Models\Campaign;
 use Filament\Forms;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class CampaignResource extends Resource
@@ -41,7 +43,20 @@ class CampaignResource extends Resource
                     ->preload()
                     ->native(false)
                     ->required(),
-                Forms\Components\TextInput::make('meta'),
+                FileUpload::make('splash_image')
+                    ->label('Splash Image')
+                    ->columnSpanFull()
+                    ->image()
+                    ->imageEditor()
+                    ->imageEditorAspectRatios([
+                        null,
+                        '16:9',
+                        '4:3',
+                        '1:1',
+                    ])
+                    ->maxSize(2048)
+                    ->openable()
+                    ->downloadable()
             ]);
     }
 
@@ -59,6 +74,8 @@ class CampaignResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('project.name')
                     ->searchable(),
+                Tables\Columns\ImageColumn::make('splash_image')
+                    ->label('Splash Image'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -72,7 +89,12 @@ class CampaignResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->mutateRecordDataUsing(function (array $data,Model $record): array {
+                    $data['user_id'] = auth()->id();
+                    $data['splash_image']=$record->meta->get('splash_image');
+                    return $data;
+                }),
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([

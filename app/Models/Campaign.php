@@ -27,7 +27,8 @@ class Campaign extends Model
     use HasMeta;
 
     protected $fillable = [
-        'name'
+        'name',
+        'splash_image'
     ];
 
     public function checkins(): \Illuminate\Database\Eloquent\Relations\HasMany
@@ -43,5 +44,16 @@ class Campaign extends Model
     public function campaignType(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(CampaignType::class);
+    }
+
+    public function setSplashImageAttribute(string $value): static
+    {
+        $this->meta->set('splash_image', $value);
+        return $this;
+    }
+
+    public function getSplashImageAttribute(): ?string
+    {
+        return $this->meta->get('splash_image');
     }
 }
