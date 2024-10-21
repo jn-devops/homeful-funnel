@@ -44,6 +44,7 @@ class CampaignResource extends Resource
                     ->native(false)
                     ->required(),
                 FileUpload::make('splash_image')
+                    ->required()
                     ->label('Splash Image')
                     ->columnSpanFull()
                     ->image()
