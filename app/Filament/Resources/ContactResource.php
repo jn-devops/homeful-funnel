@@ -26,17 +26,17 @@ class ContactResource extends Resource
                 Forms\Components\TextInput::make('mobile')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('state')
+                Forms\Components\TextInput::make('name')
                     ->maxLength(255),
-                Forms\Components\TextInput::make('meta'),
+//                Forms\Components\TextInput::make('meta'),
                 Forms\Components\Select::make('organization_id')
                     ->preload()
                     ->relationship('organization', 'name')
                     ->searchable(),
-                Forms\Components\Select::make('campaign_id')
-                    ->preload()
-                    ->relationship('campaign', 'name')
-                    ->searchable(),
+//                Forms\Components\Select::make('campaign_id')
+//                    ->preload()
+//                    ->relationship('campaign', 'name')
+//                    ->searchable(),
             ]);
     }
 
@@ -71,7 +71,7 @@ class ContactResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+//                Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([

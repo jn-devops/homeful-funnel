@@ -25,9 +25,10 @@ class CheckinResource extends Resource
             ->schema([
 //                Forms\Components\Select::make('contact_id')
 //                    ->relationship('contact', 'id'),
+//                Forms\Components\TextInput::make('contact.name'),
+
                 Forms\Components\Select::make('campaign_id')
                     ->relationship('campaign', 'name'),
-                Forms\Components\TextInput::make('meta'),
             ]);
     }
 
@@ -56,7 +57,7 @@ class CheckinResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+//                Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
