@@ -15,6 +15,7 @@ use Homeful\Common\Traits\HasMeta;
  * @property string $name
  * @property SchemalessAttributes $meta
  * @property Project $project
+ * @property CampaignType $campaignType
  *
  * @method int getKey()
  */
@@ -37,5 +38,10 @@ class Campaign extends Model
     public function project(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Project::class);
+    }
+
+    public function campaignType(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(CampaignType::class);
     }
 }

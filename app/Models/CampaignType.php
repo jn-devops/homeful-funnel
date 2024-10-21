@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Homeful\Common\Traits\HasMeta;
 
 /**
- * Class Campaign
+ * Class CampaignType
  *
  * @property string $id
  * @property string $name
@@ -17,9 +17,9 @@ use Homeful\Common\Traits\HasMeta;
  *
  * @method int getKey()
  */
-class Project extends Model
+class CampaignType extends Model
 {
-    /** @use HasFactory<\Database\Factories\ProjectFactory> */
+    /** @use HasFactory<\Database\Factories\CampaignTypeFactory> */
     use HasFactory;
     use HasUuids;
     use HasMeta;

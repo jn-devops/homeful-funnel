@@ -4,7 +4,6 @@ use Spatie\SchemalessAttributes\SchemalessAttributes;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use App\Models\Project;
-use App\Models\Contact;
 
 uses(RefreshDatabase::class, WithFaker::class);
 

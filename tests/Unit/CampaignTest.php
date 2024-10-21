@@ -3,7 +3,7 @@
 use Spatie\SchemalessAttributes\SchemalessAttributes;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use App\Models\{Campaign, Checkin, Project};
+use App\Models\{Campaign, CampaignType, Checkin, Project};
 use App\Models\Contact;
 
 uses(RefreshDatabase::class, WithFaker::class);
@@ -37,4 +37,11 @@ test('campaign has projects', function () {
     $project = Project::factory()->create();
     $campaign->project()->associate($project);
     expect($campaign->project->is($project))->toBeTrue();
+});
+
+test('campaign has campaign types', function () {
+    $campaign = Campaign::factory()->create();
+    $campaignType = CampaignType::factory()->create();
+    $campaign->campaignType()->associate($campaignType);
+    expect($campaign->campaignType()->is($campaignType))->toBeTrue();
 });
