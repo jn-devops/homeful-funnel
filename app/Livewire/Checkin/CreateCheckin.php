@@ -48,10 +48,11 @@ class CreateCheckin extends Component implements HasForms
                         ->maxLength(10)
                         ->afterStateUpdated(function(Set $set, String $state){
                             if(strlen($state)==10){
-                                $contact = Contact::where('mobile',$state)->first();
+                                $contact = Contact::where('mobile','+63'.$state)->first();
                                 if($contact){
-                                    dd($contact);
-                                    $set('first_name',$contact->name);
+                                    $set('first_name',$contact->first_name??'');
+                                    $set('last_name',$contact->last_name??'');
+                                    $set('middle_name',$contact->middle_name??'');
                                 }
                             }
                         })
