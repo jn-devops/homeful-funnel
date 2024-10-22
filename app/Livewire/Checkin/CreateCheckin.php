@@ -55,7 +55,7 @@ class CreateCheckin extends Component implements HasForms
                                     $set('last_name',$contact->last_name??'');
                                     $set('middle_name',$contact->middle_name??'');
 
-                                    if ($contact->organization->id??'' != $this->organization->id) {
+                                    if (!empty($contact->organization->id) && $contact->organization->id != $this->organization->id) {
                                         $this->isDifferentCompanyBefore = true;
                                     }else{
                                         $this->isDifferentCompanyBefore = false;
