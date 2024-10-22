@@ -31,6 +31,28 @@ class CampaignResource extends Resource
                     ->live()
                     ->required()
                     ->maxLength(255),
+                Forms\Components\DatePicker::make('event_date')
+                    ->label('Date')
+                    ->date()
+                    ->native(false)
+                    ->required(),
+                Forms\Components\TimePicker::make('event_time_from')
+                    ->label('Time From')
+                    ->seconds(false)
+                    ->timezone('Asia/Manila')
+                    ->native(false)
+                    ->minutesStep(30)
+                    ->displayFormat('h:i A')
+                    ->required(),
+                Forms\Components\TimePicker::make('event_time_to')
+                    ->label('Time To')
+                    ->seconds(false)
+                    ->timezone('Asia/Manila')
+                    ->native(false)
+                    ->minutesStep(30)
+                    ->rule('after:start_time')
+                    ->displayFormat('h:i A')
+                    ->required(),
                 Forms\Components\Select::make('project_id')
                     ->label('Project')
                     ->relationship('project', 'name')
@@ -93,7 +115,10 @@ class CampaignResource extends Resource
                 Tables\Actions\EditAction::make()
                     ->mutateRecordDataUsing(function (array $data,Model $record): array {
                     $data['user_id'] = auth()->id();
-                    $data['splash_image']=$record->meta->get('splash_image');
+                        $data['splash_image']=$record->meta->get('splash_image');
+                        $data['event_date']=$record->meta->get('event_date');
+                        $data['event_time_from']=$record->meta->get('event_time_from');
+                        $data['event_time_to']=$record->meta->get('event_time_to');
                     return $data;
                 }),
                 Tables\Actions\DeleteAction::make(),

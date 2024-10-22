@@ -28,7 +28,10 @@ class Campaign extends Model
 
     protected $fillable = [
         'name',
-        'splash_image'
+        'splash_image',
+        'event_date',
+        'event_time_from',
+        'event_time_to',
     ];
 
     public function checkins(): \Illuminate\Database\Eloquent\Relations\HasMany
@@ -55,5 +58,38 @@ class Campaign extends Model
     public function getSplashImageAttribute(): ?string
     {
         return $this->meta->get('splash_image');
+    }
+
+    public function setEventDateAttribute(string $value): static
+    {
+        $this->meta->set('event_date', $value);
+        return $this;
+    }
+
+    public function getEventDateAttribute(): ?string
+    {
+        return $this->meta->get('event_date');
+    }
+
+    public function setEventTimeFromAttribute(string $value): static
+    {
+        $this->meta->set('event_time_from', $value);
+        return $this;
+    }
+
+    public function getEventTimeFromAttribute(): ?string
+    {
+        return $this->meta->get('event_time_from');
+    }
+
+    public function setEventTimeToAttribute(string $value): static
+    {
+        $this->meta->set('event_time_to', $value);
+        return $this;
+    }
+
+    public function getEventTimeToAttribute(): ?string
+    {
+        return $this->meta->get('event_time_to');
     }
 }
