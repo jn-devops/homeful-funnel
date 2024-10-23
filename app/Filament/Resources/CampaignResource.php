@@ -14,6 +14,8 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Forms\Components\MarkdownEditor;
+use Filament\Forms\Components\RichEditor;
 
 class CampaignResource extends Resource
 {
@@ -71,6 +73,8 @@ class CampaignResource extends Resource
                     ->required()
                     ->maxLength(255)
                     ->columnSpan(2),
+                Forms\Components\TextInput::make('feedback')
+                    ->columnSpan(2),
                 FileUpload::make('splash_image')
                     ->required()
                     ->label('Splash Image')
@@ -106,6 +110,9 @@ class CampaignResource extends Resource
                 Tables\Columns\TextColumn::make('rider_url')
                     ->label('Redirect URL')
                     ->searchable(),
+                // Tables\Columns\TextColumn::make('feedback')
+                //     ->label('Feedback')
+                //     ->searchable(),
                 Tables\Columns\ImageColumn::make('splash_image')
                     ->label('Splash Image'),
                 Tables\Columns\TextColumn::make('created_at')

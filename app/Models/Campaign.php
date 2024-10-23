@@ -34,7 +34,8 @@ class Campaign extends Model
         'event_date',
         'event_time_from',
         'event_time_to',
-        'rider_url'
+        'rider_url',
+        'feedback',
     ];
 
     public function checkins(): \Illuminate\Database\Eloquent\Relations\HasMany
