@@ -34,16 +34,25 @@ class CheckinResource extends Resource
 
     public static function table(Table $table): Table
     {
+        // dd(Checkin::where('id', '9d4f86fc-c4a4-4f1f-8268-604a4b21e506')->first()->contact);
         return $table
             ->defaultSort('created_at', 'desc')
             ->columns([
-                Tables\Columns\TextColumn::make('id')
-                    ->label('ID')
-                    ->searchable(),
+                // Tables\Columns\TextColumn::make('id')
+                //     ->label('ID')
+                //     ->searchable(),
                 Tables\Columns\TextColumn::make('contact.name')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('contact.organization.name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('campaign.name')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('campaign.campaignType.name')
+                        ->label('Campaign Type')
+                        ->searchable(),
+                Tables\Columns\TextColumn::make('campaign.project.name')
+                        ->label('Project')
+                        ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
