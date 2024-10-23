@@ -25,6 +25,17 @@ class Project extends Model
     use HasMeta;
 
     protected $fillable = [
-        'name'
+        'name',
+        'project_image'
     ];
+    public function setProjectImageAttribute(string $value): static
+    {
+        $this->meta->set('project_image', $value);
+        return $this;
+    }
+
+    public function getProjectImageAttribute(): ?string
+    {
+        return $this->meta->get('project_image');
+    }
 }
