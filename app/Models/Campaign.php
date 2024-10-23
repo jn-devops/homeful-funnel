@@ -38,6 +38,11 @@ class Campaign extends Model
         'feedback',
     ];
 
+    protected $appends = [
+        'rider_url',
+        'feedback',
+    ];
+
     public function checkins(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Checkin::class);
