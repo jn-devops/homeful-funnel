@@ -75,11 +75,11 @@ class CreateCheckin extends Component implements HasForms
                         ->required()
                         ->maxLength(255)
                         ->inlineLabel(),
-                    Forms\Components\TextInput::make('middle_name')
-                        ->label('Middle Name: ')
-                        ->required()
-                        ->maxLength(255)
-                        ->inlineLabel(),
+                    // Forms\Components\TextInput::make('middle_name')
+                    //     ->label('Middle Name: ')
+                    //     ->required()
+                    //     ->maxLength(255)
+                    //     ->inlineLabel(),
                     Forms\Components\TextInput::make('last_name')
                         ->label('Last Name: ')
                         ->required()
@@ -116,17 +116,17 @@ class CreateCheckin extends Component implements HasForms
 
             $url = route('checkin-contact', ['campaign' => $this->campaign->id, 'contact' => $data['mobile']]);
           $response =  Http::post($url, [
-                'name' => $data['first_name'].' '.$data['middle_name'].' '.$data['last_name'],
+                'name' => $data['first_name'].' '.$data['last_name'],
                 'code' => $this->organization->code,
                 'last_name' => $data['last_name'],
                 'first_name' => $data['first_name'],
-                'middle_name' => Arr::get($data, 'middle_name', 'N/A'),
+                // 'middle_name' => Arr::get($data, 'middle_name', 'N/A'),
                 'mobile' => $data['mobile'],
                 // 'ready_to_avail'=>$data['ready_to_avail'],
                 'meta'=>[
                     'last_name' => $data['last_name'],
                     'first_name' => $data['first_name'],
-                    'middle_name' => Arr::get($data, 'middle_name', 'N/A'),
+                    // 'middle_name' => Arr::get($data, 'middle_name', 'N/A'),
                     'mobile' => $data['mobile'],
                     // 'ready_to_avail' =>$data['ready_to_avail'],
                 ]
