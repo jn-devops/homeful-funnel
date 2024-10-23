@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\CampaignResource\Pages;
 use App\Filament\Resources\CampaignResource\RelationManagers;
 use App\Models\Campaign;
+use App\Models\Organization;
 use Filament\Forms;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Form;
@@ -15,7 +16,12 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\MarkdownEditor;
+use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Get;
+use Filament\Support\Enums\MaxWidth;
+use Filament\Tables\Actions\Action;
 
 class CampaignResource extends Resource
 {
@@ -138,6 +144,34 @@ class CampaignResource extends Resource
                     return $data;
                 }),
                 Tables\Actions\DeleteAction::make(),
+                Action::make('View QR')
+                    ->icon('heroicon-m-qr-code')
+                    ->modalIcon('heroicon-m-qr-code')
+                    ->form([
+                        Select::make('organization')
+                            ->options(Organization::query()->pluck('name', 'id'))
+                            ->searchable()
+                            ->live()
+                            ->required(),
+                        Placeholder::make('qr_code')
+                            ->label('QR Code')
+                            ->content(function (Get $get, Model $record) {
+                                return \LaraZeus\Qr\Facades\Qr::render(
+                                    data:  config('app.url').'/checkin/'.$record->id.'/'. $get('organization'), // This is your model. We are passing the personalizations. If you want the default just comment it out.
+                                );
+                        })
+    //                        ->formatStateUsing(function (string $state, $record) {
+    //                            return \LaraZeus\Qr\Facades\Qr::render(
+    //                                data: $state,
+    //                                options: $record->options // This is your model. We are passing the personalizations. If you want the default just comment it out.
+    //                            );
+    //                        }),
+                    ])
+                ->label('Generate QR')
+                ->modalFooterActions([])
+                ->modalSubmitAction(false)
+                ->modalCancelAction(false)
+                ->modalWidth(MaxWidth::Small),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
