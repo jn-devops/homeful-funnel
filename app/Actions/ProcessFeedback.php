@@ -15,7 +15,7 @@ class ProcessFeedback
         $checkin = $checkin instanceof Checkin ? $checkin : Checkin::where('id', $checkin)->first();
         if ($checkin instanceof Checkin) {
             $contact = $checkin->contact;
-            return __($feedback, [
+            return __(str_replace('@', ':', $feedback), [
                 'mobile' => phone($contact->mobile, 'PH')->formatNational(),
                 'name' => $contact->name,
                 'organization' => $contact->organization->name,
