@@ -17,6 +17,7 @@ use Homeful\Common\Traits\HasMeta;
  * @property Project $project
  * @property CampaignType $campaignType
  * @property string $rider_url
+ * @property string $feedback
  *
  * @method int getKey()
  */
@@ -104,5 +105,16 @@ class Campaign extends Model
     public function getRiderUrlAttribute(): ?string
     {
         return $this->meta->get('rider_url');
+    }
+
+    public function setFeedbackAttribute(string $value): static
+    {
+        $this->meta->set('feedback', $value);
+        return $this;
+    }
+
+    public function getFeedbackAttribute(): ?string
+    {
+        return $this->meta->get('feedback');
     }
 }
