@@ -101,7 +101,7 @@ class Campaign extends Model
         return $this;
     }
 
-    public function getRiderUrlToAttribute(): ?string
+    public function getRiderUrlAttribute(): ?string
     {
         return $this->meta->get('rider_url');
     }
