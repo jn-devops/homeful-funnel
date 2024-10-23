@@ -17,7 +17,8 @@ class CampaignFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->company()
+            'name' => $this->faker->company(),
+            'rider_url' => $this->faker->url(),
         ];
     }
 }

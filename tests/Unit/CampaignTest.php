@@ -13,6 +13,7 @@ test('campaign has attributes', function () {
     expect($campaign->id)->toBeUuid();
     expect($campaign->name)->toBeString();
     expect($campaign->meta)->toBeInstanceOf(SchemalessAttributes::class);
+    expect($campaign->rider_url)->toBeString();
 });
 
 test('campaign has checkins', function () {

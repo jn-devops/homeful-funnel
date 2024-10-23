@@ -16,6 +16,7 @@ use Homeful\Common\Traits\HasMeta;
  * @property SchemalessAttributes $meta
  * @property Project $project
  * @property CampaignType $campaignType
+ * @property string $rider_url
  *
  * @method int getKey()
  */
@@ -32,6 +33,7 @@ class Campaign extends Model
         'event_date',
         'event_time_from',
         'event_time_to',
+        'rider_url'
     ];
 
     public function checkins(): \Illuminate\Database\Eloquent\Relations\HasMany
@@ -91,5 +93,16 @@ class Campaign extends Model
     public function getEventTimeToAttribute(): ?string
     {
         return $this->meta->get('event_time_to');
+    }
+
+    public function setRiderUrlAttribute(string $value): static
+    {
+        $this->meta->set('rider_url', $value);
+        return $this;
+    }
+
+    public function getRiderUrlToAttribute(): ?string
+    {
+        return $this->meta->get('rider_url');
     }
 }
