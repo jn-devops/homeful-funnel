@@ -17,9 +17,11 @@ use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Http;
 use Livewire\Component;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Arr;
 
 class CreateCheckin extends Component implements HasForms
 {
+
     use InteractsWithForms;
 
     public ?array $data = [];
@@ -75,6 +77,7 @@ class CreateCheckin extends Component implements HasForms
                         ->inlineLabel(),
                     Forms\Components\TextInput::make('middle_name')
                         ->label('Middle Name: ')
+                        ->required()
                         ->maxLength(255)
                         ->inlineLabel(),
                     Forms\Components\TextInput::make('last_name')
@@ -82,13 +85,13 @@ class CreateCheckin extends Component implements HasForms
                         ->required()
                         ->maxLength(255)
                         ->inlineLabel(),
-                    Forms\Components\ToggleButtons::make('ready_to_avail')
-                        ->label('Ready to avail: ')
-                        ->inline()
-                        ->inlineLabel()
-                        ->required()
-                        ->boolean()
-                        ->columnSpanFull(),
+                    // Forms\Components\ToggleButtons::make('ready_to_avail')
+                    //     ->label('Ready to avail: ')
+                    //     ->inline()
+                    //     ->inlineLabel()
+                    //     ->required()
+                    //     ->boolean()
+                    //     ->columnSpanFull(),
 
                 ]),
             ])
@@ -117,15 +120,15 @@ class CreateCheckin extends Component implements HasForms
                 'code' => $this->organization->code,
                 'last_name' => $data['last_name'],
                 'first_name' => $data['first_name'],
-                'middle_name' => $data['middle_name'],
+                'middle_name' => Arr::get($data, 'middle_name', 'N/A'),
                 'mobile' => $data['mobile'],
-                'ready_to_avail'=>$data['ready_to_avail'],
+                // 'ready_to_avail'=>$data['ready_to_avail'],
                 'meta'=>[
                     'last_name' => $data['last_name'],
                     'first_name' => $data['first_name'],
-                    'middle_name' => $data['middle_name'],
+                    'middle_name' => Arr::get($data, 'middle_name', 'N/A'),
                     'mobile' => $data['mobile'],
-                    'ready_to_avail' =>$data['ready_to_avail'],
+                    // 'ready_to_avail' =>$data['ready_to_avail'],
                 ]
             ]);
 
@@ -133,16 +136,19 @@ class CreateCheckin extends Component implements HasForms
 
 
             $this->dispatch('open-modal', id: 'success-modal');
-            if ($data['ready_to_avail']) {
-                $params = [
-                    'last_name' => $data['last_name'],
-                    'first_name' => $data['first_name'],
-                    'middle_name' => $data['middle_name'],
-                    'mobile' => $data['mobile'],
-                ];
-                return redirect()->to('https://gnc-lazarus.homeful.ph/client-information?' . http_build_query($params));
-            }
-            return null;
+            // if ($data['ready_to_avail']) {
+            //     $params = [
+            //         'last_name' => $data['last_name'],
+            //         'first_name' => $data['first_name'],
+            //         'middle_name' => Arr::get($data, 'middle_name', 'N/A'),
+            //         'mobile' => $data['mobile'],
+            //     ];
+            //     return redirect()->to('https://gnc-lazarus.homeful.ph/client-information?' . http_build_query($params));
+            // }
+
+            return redirect()->to($this->campaign->rider_url ?? 'https://homeful.ph/');
+
+            // return null;
         }catch (Exception $e) {
             $this->error=$e->getMessage();
             $this->dispatch('open-modal', id: 'error-modal');

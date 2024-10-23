@@ -65,6 +65,12 @@ class CampaignResource extends Resource
                     ->preload()
                     ->native(false)
                     ->required(),
+                Forms\Components\TextInput::make('rider_url')
+                    ->label('Redirect URL')
+                    ->live()
+                    ->required()
+                    ->maxLength(255)
+                    ->columnSpan(2),
                 FileUpload::make('splash_image')
                     ->required()
                     ->label('Splash Image')
@@ -96,6 +102,9 @@ class CampaignResource extends Resource
                 Tables\Columns\TextColumn::make('campaignType.name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('project.name')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('rider_url')
+                    ->label('Redirect URL')
                     ->searchable(),
                 Tables\Columns\ImageColumn::make('splash_image')
                     ->label('Splash Image'),
