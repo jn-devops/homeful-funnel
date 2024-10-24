@@ -16,6 +16,10 @@ class Dashboard extends \Filament\Pages\Dashboard
 {
     use HasFiltersForm;
 
+    public $campaigns;
+    public $start;
+    public $end;
+
     public function getWidgets(): array
     {
         return [
@@ -42,10 +46,31 @@ class Dashboard extends \Filament\Pages\Dashboard
                         'Pasinaya' => 'Pasinaya',
                         'Pagsikat' => 'Pagsikat',
                         'Pagsibol' => 'Pagsibol',
-                    ]),
-                DatePicker::make('start_date'),
-                DatePicker::make('end_date'),
+                    ])
+                    ->afterStateUpdated(function ($state) {
+                        $this->campaigns = $state;
+                        $this->updateWidgets();
+                    }),
+                DatePicker::make('start_date')
+                        ->afterStateUpdated(function ($state) {
+                            $this->start = $state;
+                            $this->updateWidgets();
+                        }),
+                DatePicker::make('end_date')
+                        ->afterStateUpdated(function ($state) {
+                            $this->end = $state;
+                            $this->updateWidgets();
+                        }),
             ])->columns(3),
+        ]);
+    }
+
+    protected function updateWidgets()
+    {
+        $this->dispatch("filtersUpdated", [
+            'campaigns' => $this->campaigns,
+            'start' => $this->start,
+            'end' => $this->end,
         ]);
     }
 
