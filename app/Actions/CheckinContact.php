@@ -21,6 +21,7 @@ class CheckinContact
             $contact->organization()->associate($organization);
         if ($attribs)
             $contact->update($attribs);
+
         $contact->save();
         $checkin->contact()->associate($contact);
         $checkin->save();

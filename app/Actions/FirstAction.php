@@ -2,6 +2,7 @@
 
 namespace App\Actions;
 
+use http\Client\Request;
 use Lorisleiva\Actions\Concerns\AsAction;
 use Lorisleiva\Actions\ActionRequest;
 use App\Models\Contact;
@@ -12,7 +13,7 @@ class FirstAction
 
     public function handle(string $mobile)
     {
-        $contact = Contact::create(['mobile' => $mobile]);
+        $contact = Contact::updateOrCreate(['mobile' => $mobile]);
         dd($contact);
     }
 

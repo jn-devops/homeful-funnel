@@ -147,9 +147,9 @@ class CreateCheckin extends Component implements HasForms
             //     return redirect()->to('https://gnc-lazarus.homeful.ph/client-information?' . http_build_query($params));
             // }
 
-//            return redirect()->to($this->campaign->rider_url ?? 'https://homeful.ph/');
+            return redirect()->to($this->campaign->rider_url ?? 'https://homeful.ph/');
 
-             return null;
+//             return null;
         }catch (Exception $e) {
             $this->error=$e->getMessage();
             $this->dispatch('open-modal', id: 'error-modal');
