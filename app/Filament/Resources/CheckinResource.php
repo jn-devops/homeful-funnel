@@ -60,6 +60,14 @@ class CheckinResource extends Resource
                     })
                     ->getKeyFromRecordUsing(fn (Model $record): string => $record->created_at)
                     ->collapsible(),
+                Group::make('campaign.project.name')
+                    ->label('Project')
+                    ->getTitleFromRecordUsing(function (Checkin $record): string {
+                        return ucfirst($record->campaign->project->name??'');
+                    })
+                    ->getKeyFromRecordUsing(fn (Model $record): string => $record->created_at)
+                    ->collapsible(),
+
             ])
             ->columns([
                 // Tables\Columns\TextColumn::make('id')
