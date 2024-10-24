@@ -44,6 +44,7 @@ class ContactResource extends Resource
     {
         return $table
             ->defaultSort('created_at', 'desc')
+            ->defaultPaginationPageOption(50)
             ->columns([
                 Tables\Columns\TextColumn::make('id')
                     ->label('ID')
