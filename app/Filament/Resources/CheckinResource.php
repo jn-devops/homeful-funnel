@@ -41,6 +41,7 @@ class CheckinResource extends Resource
         // dd(Checkin::where('id', '9d4f86fc-c4a4-4f1f-8268-604a4b21e506')->first()->contact);
         return $table
             ->defaultSort('created_at', 'desc')
+            ->defaultPaginationPageOption(50)
             ->groups([
                 Group::make('created_at')
                     ->label('Date')
