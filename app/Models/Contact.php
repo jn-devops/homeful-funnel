@@ -112,13 +112,6 @@ class Contact extends Model
 //        );
 //    }
 
-    public function setNameAttribute(string $value): static
-    {
-        $this->getAttribute('meta')->set('name', $value);
-
-        return $this;
-    }
-
     public function getNameAttribute(): ?string
     {
         return $this->getAttribute('meta')->get('name');

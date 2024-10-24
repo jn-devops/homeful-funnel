@@ -4,13 +4,17 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\CheckinResource\Pages;
 use App\Filament\Resources\CheckinResource\RelationManagers;
+use App\Models\Campaign;
 use App\Models\Checkin;
+use App\Models\Contact;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Grouping\Group;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class CheckinResource extends Resource
@@ -37,6 +41,25 @@ class CheckinResource extends Resource
         // dd(Checkin::where('id', '9d4f86fc-c4a4-4f1f-8268-604a4b21e506')->first()->contact);
         return $table
             ->defaultSort('created_at', 'desc')
+            ->groups([
+                Group::make('created_at')
+                    ->label('Date')
+                    ->date(),
+                Group::make('contact.name')
+                    ->label('Name')
+                    ->getTitleFromRecordUsing(function (Checkin $record): string {
+                        return ucfirst($record->contact->name??'');
+                    })
+                    ->getKeyFromRecordUsing(fn (Model $record): string => $record->created_at)
+                    ->collapsible(),
+                Group::make('contact.organization.name')
+                    ->label('Organization')
+                    ->getTitleFromRecordUsing(function (Checkin $record): string {
+                        return ucfirst($record->contact->organization->name??'');
+                    })
+                    ->getKeyFromRecordUsing(fn (Model $record): string => $record->created_at)
+                    ->collapsible(),
+            ])
             ->columns([
                 // Tables\Columns\TextColumn::make('id')
                 //     ->label('ID')
