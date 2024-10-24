@@ -10,6 +10,7 @@ use Filament\Forms\Components\Section;
 use App\Filament\Widgets\StatsOverview;
 use App\Filament\Widgets\CampaignAnalysisChart;
 use App\Filament\Widgets\CampaignsTable;
+use App\Filament\Widgets\StatsOverviewV2;
 
 class Dashboard extends \Filament\Pages\Dashboard
 {
@@ -19,14 +20,15 @@ class Dashboard extends \Filament\Pages\Dashboard
     {
         return [
             CampaignAnalysisChart::class,
-            StatsOverview::class,
+            // StatsOverview::class,
+            StatsOverviewV2::class,
             CampaignsTable::class,
         ];
     }
 
-    public function getColumns(): int
+    public function getColumns(): int | string | array
     {
-        return 5;
+        return 1;
     }
 
     public function filtersForm(Form $form): Form
