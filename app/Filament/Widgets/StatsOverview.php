@@ -153,22 +153,27 @@ class StatsOverview extends BaseWidget
                 Stat::make('Total Accounts', $total_accounts)
                     ->icon('heroicon-s-user-group')
                     ->iconPosition('start')
+                    ->iconColor('warning')
                     ->color('success'),
                 Stat::make('Visited Corp Presentation', $visited_corp_presentation)
                     ->icon('heroicon-c-presentation-chart-bar')
                     ->iconPosition('start')
+                    ->iconColor('success')
                     ->color('success'),
                 Stat::make('Visited Booth', $visited_booth)
                     ->icon('heroicon-m-building-storefront')
                     ->iconPosition('start')
+                    ->iconColor('blue')
                     ->color('success'),
                 Stat::make('Visited Site', $visited_site)
                     ->icon('heroicon-s-map-pin')
                     ->iconPosition('start')
+                    ->iconColor('blue')
                     ->color('success'),
                 Stat::make('Consulted', $consulted)
                     ->icon('heroicon-m-chat-bubble-bottom-center')
                     ->iconPosition('start')
+                    ->iconColor('warning')
                     ->color('success'),
         ];
     }
