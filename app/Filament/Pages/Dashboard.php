@@ -11,6 +11,7 @@ use App\Filament\Widgets\StatsOverview;
 use App\Filament\Widgets\CampaignAnalysisChart;
 use App\Filament\Widgets\CampaignsTable;
 use App\Filament\Widgets\StatsOverviewV2;
+use App\Models\Project;
 
 class Dashboard extends \Filament\Pages\Dashboard
 {
@@ -41,12 +42,7 @@ class Dashboard extends \Filament\Pages\Dashboard
             Section::make('')->schema([
                 Select::make('campaigns')
                     ->multiple()
-                    ->options([
-                        'All' => 'All',
-                        'Pasinaya' => 'Pasinaya',
-                        'Pagsikat' => 'Pagsikat',
-                        'Pagsibol' => 'Pagsibol',
-                    ])
+                    ->options(array_merge(['All' => 'All'], Project::all()->pluck('name', 'name')->toArray()))
                     ->afterStateUpdated(function ($state) {
                         $this->campaigns = $state;
                         $this->updateWidgets();
