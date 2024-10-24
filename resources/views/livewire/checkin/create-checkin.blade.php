@@ -60,7 +60,7 @@
                 <tbody>
                 <tr class="border-b">
                     <td class="px-4 py-2">Name</td>
-                    <td class="px-4 py-2">{{ $data['first_name'] ?? '' }} {{ $data['middle_name'] ?? '' }} {{ $data['last_name'] ?? '' }}</td>
+                    <td class="px-4 py-2">{{ $data['first_name'] ?? '' }} {{ $data['last_name'] ?? '' }}</td>
                 </tr>
                 <tr class="border-b">
                     <td class="px-4 py-2">Mobile Number</td>

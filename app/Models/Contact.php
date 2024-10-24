@@ -114,7 +114,7 @@ class Contact extends Model
 
     public function getNameAttribute(): ?string
     {
-        return $this->getAttribute('meta')->get('name');
+        return $this->getAttribute('meta')->get('name')?? $this->first_name.' '.$this->last_name;
     }
 
     public function setFirstNameAttribute(string $value): static

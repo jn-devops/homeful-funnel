@@ -124,6 +124,7 @@ class CreateCheckin extends Component implements HasForms
                 'mobile' => $data['mobile'],
                 // 'ready_to_avail'=>$data['ready_to_avail'],
                 'meta'=>[
+                    'name'=> $data['first_name'].' '.$data['last_name'],
                     'last_name' => $data['last_name'],
                     'first_name' => $data['first_name'],
                     // 'middle_name' => Arr::get($data, 'middle_name', 'N/A'),
@@ -146,9 +147,9 @@ class CreateCheckin extends Component implements HasForms
             //     return redirect()->to('https://gnc-lazarus.homeful.ph/client-information?' . http_build_query($params));
             // }
 
-            return redirect()->to($this->campaign->rider_url ?? 'https://homeful.ph/');
+//            return redirect()->to($this->campaign->rider_url ?? 'https://homeful.ph/');
 
-            // return null;
+             return null;
         }catch (Exception $e) {
             $this->error=$e->getMessage();
             $this->dispatch('open-modal', id: 'error-modal');
