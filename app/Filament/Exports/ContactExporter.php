@@ -14,7 +14,17 @@ class ContactExporter extends Exporter
     public static function getColumns(): array
     {
         return [
-            //
+//            ExportColumn::make('id')
+//                ->label('ID'),
+            ExportColumn::make('created_at'),
+            ExportColumn::make('contact.name'),
+            ExportColumn::make('contact.mobile'),
+            ExportColumn::make('contact.organization.name'),
+            ExportColumn::make('campaign.name'),
+            ExportColumn::make('campaign.project.name'),
+//            ExportColumn::make('state'),
+//            ExportColumn::make('meta'),
+//            ExportColumn::make('updated_at'),
         ];
     }
 

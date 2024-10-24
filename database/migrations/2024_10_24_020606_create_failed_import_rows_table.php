@@ -11,10 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('contacts', function (Blueprint $table) {
-            if (!Schema::hasColumn('contacts', 'name')) {
-                $table->string('name')->unique();
-            }
+        Schema::create('failed_import_rows', function (Blueprint $table) {
+            $table->id();
+            $table->json('data');
+            $table->foreignId('import_id')->constrained()->cascadeOnDelete();
+            $table->text('validation_error')->nullable();
+            $table->timestamps();
         });
     }
 
@@ -23,8 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('contacts', function (Blueprint $table) {
-            $table->dropColumn('name');
-        });
+        Schema::dropIfExists('failed_import_rows');
     }
 };

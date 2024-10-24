@@ -2,10 +2,12 @@
 
 namespace App\Filament\Resources\CheckinResource\Pages;
 
+use App\Filament\Exports\ContactExporter;
 use App\Filament\Resources\CheckinResource;
 use App\Models\Campaign;
 use App\Models\Organization;
 use Filament\Actions;
+use Filament\Actions\ExportAction;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Get;
@@ -21,6 +23,9 @@ class ManageCheckins extends ManageRecords
     {
         return [
 //            Actions\CreateAction::make(),
+            ExportAction::make()
+                ->exporter(ContactExporter::class)
+                ,
             Actions\Action::make('checkin')
                 ->icon('heroicon-m-qr-code')
                 ->modalIcon('heroicon-m-qr-code')
