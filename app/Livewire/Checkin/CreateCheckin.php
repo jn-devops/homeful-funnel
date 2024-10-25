@@ -7,6 +7,7 @@ use App\Models\Campaign;
 use App\Models\Checkin;
 use App\Models\Contact;
 use App\Models\Organization;
+use App\Models\Project;
 use Exception;
 use Filament\Forms;
 use Filament\Forms\Concerns\InteractsWithForms;
@@ -42,8 +43,35 @@ class CreateCheckin extends Component implements HasForms
         return $form
             ->schema([
                 Forms\Components\Section::make()->schema([
+                    Forms\Components\Select::make('project')
+                        ->label('Choice of Project')
+                        ->required()
+                        ->inlineLabel()
+                        ->options(Project::all()->pluck('name', 'name')->toArray()),
+                    Forms\Components\TextInput::make('first_name')
+                        ->label('First Name: ')
+                        ->required()
+                        ->maxLength(255)
+                        ->inlineLabel(),
+                    // Forms\Components\TextInput::make('middle_name')
+                    //     ->label('Middle Name: ')
+                    //     ->required()
+                    //     ->maxLength(255)
+                    //     ->inlineLabel(),
+                    Forms\Components\TextInput::make('last_name')
+                        ->label('Last Name: ')
+                        ->required()
+                        ->maxLength(255)
+                        ->inlineLabel(),
+                    // Forms\Components\ToggleButtons::make('ready_to_avail')
+                    //     ->label('Ready to avail: ')
+                    //     ->inline()
+                    //     ->inlineLabel()
+                    //     ->required()
+                    //     ->boolean()
+                    //     ->columnSpanFull(),
                     Forms\Components\TextInput::make('mobile')
-                        ->label('Mobile Number: ')
+                        ->label('Mobile Number ')
                         ->required()
                         ->prefix('+63')
                         ->regex("/^[0-9]+$/")
@@ -70,29 +98,11 @@ class CreateCheckin extends Component implements HasForms
                             $livewire->validateOnly($component->getStatePath());
                         })
                         ->inlineLabel(),
-                    Forms\Components\TextInput::make('first_name')
-                        ->label('First Name: ')
+                    Forms\Components\TextInput::make('email')
+                        ->label('Email')
+                        ->email()
+                        ->inlineLabel()
                         ->required()
-                        ->maxLength(255)
-                        ->inlineLabel(),
-                    // Forms\Components\TextInput::make('middle_name')
-                    //     ->label('Middle Name: ')
-                    //     ->required()
-                    //     ->maxLength(255)
-                    //     ->inlineLabel(),
-                    Forms\Components\TextInput::make('last_name')
-                        ->label('Last Name: ')
-                        ->required()
-                        ->maxLength(255)
-                        ->inlineLabel(),
-                    // Forms\Components\ToggleButtons::make('ready_to_avail')
-                    //     ->label('Ready to avail: ')
-                    //     ->inline()
-                    //     ->inlineLabel()
-                    //     ->required()
-                    //     ->boolean()
-                    //     ->columnSpanFull(),
-
                 ]),
             ])
             ->statePath('data')
@@ -123,6 +133,8 @@ class CreateCheckin extends Component implements HasForms
                 // 'middle_name' => Arr::get($data, 'middle_name', 'N/A'),
                 'mobile' => $data['mobile'],
                 // 'ready_to_avail'=>$data['ready_to_avail'],
+                'project' => $data['project'],
+                'email' => $data['email'],
                 'meta'=>[
                     'name'=> $data['first_name'].' '.$data['last_name'],
                     'last_name' => $data['last_name'],
@@ -130,13 +142,15 @@ class CreateCheckin extends Component implements HasForms
                     // 'middle_name' => Arr::get($data, 'middle_name', 'N/A'),
                     'mobile' => $data['mobile'],
                     // 'ready_to_avail' =>$data['ready_to_avail'],
+                    'project' => $data['project'],
+                    'email' => $data['email'],
                 ]
             ]);
 
-//            CheckinContact::dispatch($this->campaign, $contact, $this->organization, $data);
+            // CheckinContact::dispatch($this->campaign, $contact, $this->organization, $data);
 
 
-            $this->dispatch('open-modal', id: 'success-modal');
+            // $this->dispatch('open-modal', id: 'success-modal');
             // if ($data['ready_to_avail']) {
             //     $params = [
             //         'last_name' => $data['last_name'],
@@ -147,9 +161,18 @@ class CreateCheckin extends Component implements HasForms
             //     return redirect()->to('https://gnc-lazarus.homeful.ph/client-information?' . http_build_query($params));
             // }
 
-            return redirect()->to($this->campaign->rider_url ?? 'https://homeful.ph/');
+            // return redirect()->to($this->campaign->rider_url ?? 'https://homeful.ph/');
 
-//             return null;
+            // TODO: edit the array below. no data source
+            return redirect()->to('/checkin/success')->with([
+                'checkin_data' => [
+                    'first_name' => 'Jerome',
+                    'organization' => 'SM Store',
+                    'registration_code' => '0d84jr950',
+                ]
+            ]);
+
+            // return null;
         }catch (Exception $e) {
             $this->error=$e->getMessage();
             $this->dispatch('open-modal', id: 'error-modal');
