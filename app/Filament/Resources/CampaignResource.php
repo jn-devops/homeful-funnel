@@ -107,7 +107,8 @@ class CampaignResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('id')
                     ->label('ID')
-                    ->searchable(),
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('campaignType.name')
@@ -180,7 +181,7 @@ class CampaignResource extends Resource
                 ->modalSubmitAction(false)
                 ->modalCancelAction(false)
                 ->modalWidth(MaxWidth::Small),
-            ])
+            ],Tables\Enums\ActionsPosition::BeforeCells)
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
