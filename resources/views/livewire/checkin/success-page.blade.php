@@ -10,7 +10,7 @@
                 <div>Here is your registration code: </div>
                 <br>
                 <br>
-                <div class="font-semibold text-3xl">{{ substr($checkin->id, -12) ?? ''}}</div>
+                <div class="font-semibold text-3xl">{{ substr($checkin->contact->id, -12) ?? ''}}</div>
             </div>
             <br><br>
             <div class="flex flex-col items-center space-y-4" style="margin-left: 3.5rem; margin-right: 3.5rem;">
