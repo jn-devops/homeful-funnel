@@ -164,7 +164,6 @@ class CreateCheckin extends Component implements HasForms
 
             // return redirect()->to($this->campaign->rider_url ?? 'https://homeful.ph/');
 
-            // TODO: edit the array below. no data source
             return redirect()->route('success_page',['checkin' => $response->json()['id']]);
 
             // return null;

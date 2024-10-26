@@ -43,7 +43,7 @@ class Contact extends Model
 
     const PHONE_SEARCH_FORMAT = PhoneNumberFormat::E164;
     protected $fillable = [
-        'mobile', 'name', 'first_name', 'middle_name', 'last_name'
+        'mobile', 'name', 'first_name', 'middle_name', 'last_name','email'
     ];
 
     protected $casts = [

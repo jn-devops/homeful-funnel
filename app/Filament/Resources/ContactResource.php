@@ -26,6 +26,10 @@ class ContactResource extends Resource
                 Forms\Components\TextInput::make('mobile')
                     ->required()
                     ->maxLength(255),
+                Forms\Components\TextInput::make('email')
+                    ->email()
+                    ->required()
+                    ->maxLength(255),
                 Forms\Components\TextInput::make('name')
                     ->maxLength(255),
 //                Forms\Components\TextInput::make('meta'),
@@ -50,6 +54,8 @@ class ContactResource extends Resource
                     ->label('ID')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('mobile')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('email')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),

@@ -52,6 +52,7 @@ class CheckinContact
             'middle_name' => ['nullable', 'string'],//contact name
             'last_name' => ['nullable', 'string'],//contact name
             'code' => ['nullable', 'string'],//organization code
+            'email'=>['nullable','email']//contact email
         ];
     }
 }
