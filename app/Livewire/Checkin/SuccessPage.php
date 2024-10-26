@@ -2,15 +2,16 @@
 
 namespace App\Livewire\Checkin;
 
+use App\Models\Checkin;
 use Illuminate\Http\Request;
 use Livewire\Component;
 
 class SuccessPage extends Component
 {
-    public $checkin; 
-    public function mount()
+    public $checkin;
+    public function mount(Request $request)
     {
-        $this->checkin = session()->get('checkin_data');
+        $this->checkin = Checkin::findOrFail($request->checkin);
     }
 
     public function render()

@@ -66,6 +66,10 @@
                     <td class="px-4 py-2">Mobile Number</td>
                     <td class="px-4 py-2">{{ $data['mobile'] ?? '' }}</td>
                 </tr>
+                <tr class="border-b">
+                    <td class="px-4 py-2">Email</td>
+                    <td class="px-4 py-2">{{ $data['email'] ?? '' }}</td>
+                </tr>
 
                 </tbody>
             </table>

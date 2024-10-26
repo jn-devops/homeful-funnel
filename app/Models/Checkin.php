@@ -24,6 +24,9 @@ class Checkin extends Model
     use HasFactory;
     use HasUuids;
     use HasMeta;
+    protected $keyType = 'string';
+    public $incrementing = false;
+
     protected $fillable = [
         'campaign_id',
         'contact_id',

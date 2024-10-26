@@ -47,6 +47,7 @@ class CreateCheckin extends Component implements HasForms
                         ->label('Choice of Project')
                         ->required()
                         ->inlineLabel()
+                        ->native(false)
                         ->options(Project::all()->pluck('name', 'name')->toArray()),
                     Forms\Components\TextInput::make('first_name')
                         ->label('First Name: ')
@@ -164,13 +165,7 @@ class CreateCheckin extends Component implements HasForms
             // return redirect()->to($this->campaign->rider_url ?? 'https://homeful.ph/');
 
             // TODO: edit the array below. no data source
-            return redirect()->to('/checkin/success')->with([
-                'checkin_data' => [
-                    'first_name' => 'Jerome',
-                    'organization' => 'SM Store',
-                    'registration_code' => '0d84jr950',
-                ]
-            ]);
+            return redirect()->route('success_page',['checkin' => $response->json()['id']]);
 
             // return null;
         }catch (Exception $e) {

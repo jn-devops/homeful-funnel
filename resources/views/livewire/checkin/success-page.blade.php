@@ -5,23 +5,35 @@
             <div id="lottie-animation" class=" mx-auto" style="width: 12rem;"></div>
             <div class="text-center mx-5 mb-16">
                 <div class="text-3xl font-bold mb-4">Successfully Registered</div>
-                <div>Hi {{$checkin['first_name'] ?? ''}}, Thank you for your Registration from {{$checkin['organization']??''}}. </div>
+                <div>Hi {{$checkin->contact->first_name ?? ''}}, Thank you for your Registration from {{$checkin->contact->organization->name??''}}. </div>
                 <br>
                 <div>Here is your registration code: </div>
-                <div class="font-semibold">{{$checkin['registration_code'] ?? ''}}</div>
+                <br>
+                <br>
+                <div class="font-semibold text-3xl">{{ substr($checkin->id, -12) ?? ''}}</div>
             </div>
-            <br><br><br>
-            <div class="text-center" style="margin-left: 3.5rem; margin-right: 3.5rem;">
-                Should you wish to continue? Click 
-                {{-- TODO: insert redirect link here: --}}
-                <div wire:click="redirect_page_to('')" class="rounded-lg text-white p-5 font-bold" style="background-color: #D97706; padding: 0.5rem; padding: 0.5rem; margin-top: 0.5rem" >
-                    Avail Now
+            <br><br>
+            <div class="flex flex-col items-center space-y-4" style="margin-left: 3.5rem; margin-right: 3.5rem;">
+                <div class="flex flex-col items-center mb-4">
+                    <span class="text-center mb-1">Should you wish to continue? Click</span>
+                    <button wire:click="redirect_page_to('https://homeful.ph')"
+                            class="w-full max-w-xs rounded-lg text-white font-bold p-2"
+                            style="background-color: #D97706;">
+                        Avail Now
+                    </button>
                 </div>
-                <span>Use Registration code to avail</span>
-                <div wire:click="redirect_page_to('https://homeful.ph')" class="rounded-lg text-black p-5 font-bold" style="background-color: white; padding: 0.5rem; padding: 0.5rem; margin-top: 0.5rem; border: 1px solid rgb(212 212 212); margin-top:1rem;">
-                    Not Now
+                <div class="flex flex-col items-center">
+                    <span class="text-center">Use Registration code to avail</span>
+                    <button wire:click="redirect_page_to('/checkin/{{$checkin->campaign->id}}/{{$checkin->contact->organization->id}}')"
+                            class="w-full max-w-xs rounded-lg text-black font-bold p-2 mt-1"
+                            style="background-color: white; border: 1px solid rgb(212, 212, 212);">
+                        Not Now
+                    </button>
                 </div>
+
             </div>
+
+
         </div>
 
     </div>

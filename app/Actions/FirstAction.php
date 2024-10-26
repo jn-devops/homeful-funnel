@@ -14,12 +14,12 @@ class FirstAction
     public function handle(string $mobile)
     {
         $contact = Contact::updateOrCreate(['mobile' => $mobile]);
-        dd($contact);
+        return $contact;
     }
 
     public function asController(ActionRequest $request, string $mobile): \Illuminate\Http\Response
     {
-        $this->handle($mobile);
+        return $this->handle($mobile);
     }
 
     public function rules(): array
