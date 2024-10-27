@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('sms_logs', function (Blueprint $table) {
             $table->id();
+            $table->foreignUuid('contacts_id')->constrained('contacts')->cascadeOnDelete();
+            $table->string('message',510);
+            $table->string('sent_to_mobile')->nullable();
+            $table->string('sent_to_email')->nullable();
             $table->timestamps();
         });
     }

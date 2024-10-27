@@ -99,6 +99,11 @@ class Contact extends Model
         return $this->hasMany(Checkin::class);
     }
 
+    public function smsLogs(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(SmsLogs::class,'contacts_id');
+    }
+
     public function getMobileCountryAttribute(): string
     {
         return 'PH';

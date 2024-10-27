@@ -5,12 +5,19 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\ContactResource\Pages;
 use App\Filament\Resources\ContactResource\RelationManagers;
 use App\Models\Contact;
+use App\Models\SmsLogs;
+use App\Notifications\Adhoc;
 use Filament\Forms;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\Action;
+use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class ContactResource extends Resource
@@ -72,8 +79,8 @@ class ContactResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('organization.name')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('campaign.name')
-                    ->searchable(),
+//                Tables\Columns\TextColumn::make('campaign.name')
+//                    ->searchable(),
             ])
             ->filters([
                 //
@@ -81,10 +88,40 @@ class ContactResource extends Resource
             ->actions([
 //                Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
-            ])
+                Action::make('send')
+                    ->icon('heroicon-m-chat-bubble-left-ellipsis')
+                    ->form([
+                        Textarea::make('message')->required(),
+                    ])
+                    ->action(function (Contact $record, array $data) {
+                        $record->notify(new Adhoc($data['message']));
+                        $record->smsLogs()->create([
+                            'message' => $data['message'],
+                            'sent_to_mobile' => $record->mobile,
+                            'sent_to_email' => $record->email,
+                        ]);
+                    }),
+            ],Tables\Enums\ActionsPosition::BeforeCells)
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    BulkAction::make('sms')
+                        ->label('Send SMS')
+                        ->icon('heroicon-m-chat-bubble-left-ellipsis')
+                        ->form([
+                            Textarea::make('message')->required(),
+                        ])
+                        ->action(function (Collection $records, array $data) {
+                            $records->each(function(Contact $record) use($data) {
+                                $record->notify(new Adhoc($data['message']));
+                                $record->smsLogs()->create([
+                                    'message' => $data['message'],
+                                    'sent_to_mobile' => $record->mobile,
+                                    'sent_to_email' => $record->email,
+                                ]);
+                            });
+                        })
+                        ->deselectRecordsAfterCompletion()
                 ]),
             ]);
     }
