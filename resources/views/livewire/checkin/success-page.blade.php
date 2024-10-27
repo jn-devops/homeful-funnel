@@ -12,24 +12,33 @@
                 <br>
                 <div class="font-semibold text-3xl">{{ substr($checkin->contact->id, -12) ?? ''}}</div>
             </div>
-            <br><br>
             <div class="flex flex-col items-center space-y-4" style="margin-left: 3.5rem; margin-right: 3.5rem;">
-                <div class="flex flex-col items-center mb-4">
-                    <span class="text-center mb-1">Should you wish to continue? Click</span>
                     <button wire:click="redirect_page_to('{{$checkin->redirect_url}}')"
-                            class="w-full max-w-xs rounded-lg text-white font-bold p-2"
-                            style="background-color: #D97706;">
-                        Avail Now
-                    </button>
-                </div>
-                <div class="flex flex-col items-center">
-                    <span class="text-center">Use Registration code to avail</span>
-                    <button wire:click="redirect_page_to('/checkin/{{$checkin->campaign->id}}/{{$checkin->contact->organization->id}}')"
                             class="w-full max-w-xs rounded-lg text-black font-bold p-2 mt-1"
                             style="background-color: white; border: 1px solid rgb(212, 212, 212);">
-                        Not Now
+                        Close
                     </button>
-                </div>
+{{--                <div class="flex flex-col items-center mb-4">--}}
+{{--                    <span class="text-center mb-1">Should you wish to continue? Click</span>--}}
+{{--                    <button wire:click="redirect_page_to('{{$checkin->redirect_url}}')"--}}
+{{--                            class="w-full max-w-xs rounded-lg text-white font-bold p-2"--}}
+{{--                            style="background-color: #D97706;">--}}
+{{--                        Avail Now--}}
+{{--                    </button>--}}
+{{--                </div>--}}
+{{--                <div class="flex flex-col items-center">--}}
+{{--                    <span class="text-center">Use Registration code to avail</span>--}}
+{{--                    <button wire:click="redirect_page_to('/checkin/{{$checkin->campaign->id}}/{{$checkin->contact->organization->id}}')"--}}
+{{--                            class="w-full max-w-xs rounded-lg text-black font-bold p-2 mt-1"--}}
+{{--                            style="background-color: white; border: 1px solid rgb(212, 212, 212);">--}}
+{{--                        Not Now--}}
+{{--                    </button>--}}
+{{--                    <button wire:click="redirect_page_to('https://homeful.ph/')"--}}
+{{--                            class="w-full max-w-xs rounded-lg text-black font-bold p-2 mt-1"--}}
+{{--                            style="background-color: white; border: 1px solid rgb(212, 212, 212);">--}}
+{{--                        Not Now--}}
+{{--                    </button>--}}
+{{--                </div>--}}
 
             </div>
 
