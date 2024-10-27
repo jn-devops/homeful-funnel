@@ -43,12 +43,7 @@ class CreateCheckin extends Component implements HasForms
         return $form
             ->schema([
                 Forms\Components\Section::make()->schema([
-                    Forms\Components\Select::make('project')
-                        ->label('Choice of Project')
-                        ->required()
-                        ->inlineLabel()
-                        ->native(false)
-                        ->options(Project::all()->pluck('name', 'name')->toArray()),
+
                     Forms\Components\TextInput::make('mobile')
                         ->label('Mobile Number ')
                         ->required()
@@ -97,6 +92,12 @@ class CreateCheckin extends Component implements HasForms
                         ->required()
                         ->maxLength(255)
                         ->inlineLabel(),
+                    Forms\Components\Select::make('project')
+                        ->label('Choice of Project')
+                        ->required()
+                        ->inlineLabel()
+                        ->native(false)
+                        ->options(Project::all()->pluck('name', 'name')->toArray()),
                     // Forms\Components\ToggleButtons::make('ready_to_avail')
                     //     ->label('Ready to avail: ')
                     //     ->inline()
