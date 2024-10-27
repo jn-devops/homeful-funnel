@@ -97,7 +97,9 @@ class CreateCheckin extends Component implements HasForms
                         ->required()
                         ->inlineLabel()
                         ->native(false)
-                        ->options(Project::all()->pluck('name', 'name')->toArray()),
+                        ->options(Project::all()->pluck('name', 'name')->toArray())
+                        ->preload()
+                        ->default($this->campaign->project->name),
                     // Forms\Components\ToggleButtons::make('ready_to_avail')
                     //     ->label('Ready to avail: ')
                     //     ->inline()
