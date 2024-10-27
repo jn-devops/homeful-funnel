@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::table('contacts', function (Blueprint $table) {
             if (Schema::hasColumn('contacts', 'name')) {
-                $table->dropUnique('contacts_name_unique');
                 $table->string('name')->nullable()->change();
             }
         });
