@@ -49,6 +49,39 @@ class CreateCheckin extends Component implements HasForms
                         ->inlineLabel()
                         ->native(false)
                         ->options(Project::all()->pluck('name', 'name')->toArray()),
+                    Forms\Components\TextInput::make('mobile')
+                        ->label('Mobile Number ')
+                        ->required()
+                        ->prefix('+63')
+                        ->regex("/^[0-9]+$/")
+                        ->minLength(10)
+                        ->maxLength(10)
+                        ->afterStateUpdated(function(Set $set, String $state=null){
+                            if(strlen($state??'')==10){
+                                $contact = Contact::where('mobile','+63'.$state??'')->first();
+                                if($contact){
+                                    $set('first_name',$contact->first_name??'');
+                                    $set('last_name',$contact->last_name??'');
+                                    $set('email',$contact->email??'');
+
+                                    if (!empty($contact->organization->id) && $contact->organization->id != $this->organization->id) {
+                                        $this->isDifferentCompanyBefore = true;
+                                    }else{
+                                        $this->isDifferentCompanyBefore = false;
+                                    }
+                                }
+                            }
+                        })
+                        ->live()
+                        ->afterStateUpdated(function (Forms\Contracts\HasForms $livewire, Forms\Components\TextInput $component) {
+                            $livewire->validateOnly($component->getStatePath());
+                        })
+                        ->inlineLabel(),
+                    Forms\Components\TextInput::make('email')
+                        ->label('Email')
+                        ->email()
+                        ->inlineLabel()
+                        ->required(),
                     Forms\Components\TextInput::make('first_name')
                         ->label('First Name: ')
                         ->required()
@@ -71,39 +104,7 @@ class CreateCheckin extends Component implements HasForms
                     //     ->required()
                     //     ->boolean()
                     //     ->columnSpanFull(),
-                    Forms\Components\TextInput::make('mobile')
-                        ->label('Mobile Number ')
-                        ->required()
-                        ->prefix('+63')
-                        ->regex("/^[0-9]+$/")
-                        ->minLength(10)
-                        ->maxLength(10)
-                        ->afterStateUpdated(function(Set $set, String $state=null){
-                            if(strlen($state??'')==10){
-                                $contact = Contact::where('mobile','+63'.$state??'')->first();
-                                if($contact){
-                                    $set('first_name',$contact->first_name??'');
-                                    $set('last_name',$contact->last_name??'');
-                                    $set('middle_name',$contact->middle_name??'');
 
-                                    if (!empty($contact->organization->id) && $contact->organization->id != $this->organization->id) {
-                                        $this->isDifferentCompanyBefore = true;
-                                    }else{
-                                        $this->isDifferentCompanyBefore = false;
-                                    }
-                                }
-                            }
-                        })
-                        ->live()
-                        ->afterStateUpdated(function (Forms\Contracts\HasForms $livewire, Forms\Components\TextInput $component) {
-                            $livewire->validateOnly($component->getStatePath());
-                        })
-                        ->inlineLabel(),
-                    Forms\Components\TextInput::make('email')
-                        ->label('Email')
-                        ->email()
-                        ->inlineLabel()
-                        ->required()
                 ]),
             ])
             ->statePath('data')
