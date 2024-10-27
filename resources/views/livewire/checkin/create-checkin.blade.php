@@ -1,7 +1,7 @@
 <div class="flex justify-center items-center min-h-screen" x-data="{ showSplash: true }" x-init="setTimeout(() => showSplash = false, 2500)">
     <!-- Splash Screen -->
     <div x-show="showSplash" class="fixed inset-0 flex justify-center items-center bg-white z-50">
-        <img class="h-full w-full object-cover" src="{{ asset('storage/' . $this->campaign->splash_image) }}" alt="Splash Image">
+        <img class="h-full w-full object-cover" src="{{ $this->campaign->splash_image_url }}" alt="Splash Image">
     </div>
 
     <div  x-show="!showSplash" x-transition class="w-full max-w-lg bg-white p-4 rounded-lg">

@@ -31,6 +31,7 @@ class Campaign extends Model
     protected $fillable = [
         'name',
         'splash_image',
+        'splash_image_url',
         'event_date',
         'event_time_from',
         'event_time_to',
@@ -67,6 +68,17 @@ class Campaign extends Model
     public function getSplashImageAttribute(): ?string
     {
         return $this->meta->get('splash_image');
+    }
+
+    public function setSplashImageUrlAttribute(string $value): static
+    {
+        $this->meta->set('splash_image_url', $value);
+        return $this;
+    }
+
+    public function getSplashImageUrlAttribute(): ?string
+    {
+        return $this->meta->get('splash_image_url');
     }
 
     public function setEventDateAttribute(string $value): static

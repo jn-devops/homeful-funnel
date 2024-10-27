@@ -12,6 +12,7 @@ class SuccessPage extends Component
     public function mount(Request $request)
     {
         $this->checkin = Checkin::findOrFail($request->checkin);
+//        dd($this->checkin);
     }
 
     public function render()

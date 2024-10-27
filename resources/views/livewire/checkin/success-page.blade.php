@@ -13,7 +13,7 @@
                 <div class="font-semibold text-3xl">{{ substr($checkin->contact->id, -12) ?? ''}}</div>
             </div>
             <div class="flex flex-col items-center space-y-4" style="margin-left: 3.5rem; margin-right: 3.5rem;">
-                    <button wire:click="redirect_page_to('{{$checkin->redirect_url}}')"
+                    <button wire:click="redirect_page_to('{{$checkin->campaign->rider_url}}')"
                             class="w-full max-w-xs rounded-lg text-black font-bold p-2 mt-1"
                             style="background-color: white; border: 1px solid rgb(212, 212, 212);">
                         Close

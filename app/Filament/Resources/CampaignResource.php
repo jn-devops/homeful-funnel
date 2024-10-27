@@ -82,21 +82,27 @@ class CampaignResource extends Resource
                     ->columnSpan(2),
                 Forms\Components\TextInput::make('feedback')
                     ->columnSpan(2),
-                FileUpload::make('splash_image')
+                Forms\Components\TextInput::make('splash_image_url')
+                    ->label('Splash Image Url')
+                    ->url()
                     ->required()
-                    ->label('Splash Image')
-                    ->columnSpanFull()
-                    ->image()
-                    ->imageEditor()
-                    ->imageEditorAspectRatios([
-                        null,
-                        '16:9',
-                        '4:3',
-                        '1:1',
-                    ])
-                    ->maxSize(2048)
-                    ->openable()
-                    ->downloadable()
+                    ->columnSpan(2),
+//                FileUpload::make('splash_image')
+//                    ->required()
+//                    ->label('Splash Image')
+//                    ->columnSpanFull()
+//                    ->image()
+//                    ->imageEditor()
+//                    ->imageEditorAspectRatios([
+//                        null,
+//                        '16:9',
+//                        '4:3',
+//                        '1:1',
+//                    ])
+//                    ->maxSize(2048)
+//                    ->openable()
+//                    ->downloadable()
+
             ]);
     }
 
@@ -140,6 +146,7 @@ class CampaignResource extends Resource
                     ->mutateRecordDataUsing(function (array $data,Model $record): array {
                     $data['user_id'] = auth()->id();
                         $data['splash_image']=$record->meta->get('splash_image');
+                        $data['splash_image_url']=$record->meta->get('splash_image_url');
                         $data['event_date']=$record->meta->get('event_date');
                         $data['event_time_from']=$record->meta->get('event_time_from');
                         $data['event_time_to']=$record->meta->get('event_time_to');
