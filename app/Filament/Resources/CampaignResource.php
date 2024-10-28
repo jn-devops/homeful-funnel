@@ -127,7 +127,7 @@ class CampaignResource extends Resource
                 // Tables\Columns\TextColumn::make('feedback')
                 //     ->label('Feedback')
                 //     ->searchable(),
-                Tables\Columns\ImageColumn::make('splash_image')
+                Tables\Columns\ImageColumn::make('splash_image_url')
                     ->label('Splash Image'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
