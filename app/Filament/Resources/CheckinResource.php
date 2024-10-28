@@ -11,6 +11,8 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\Layout\Split;
+use Filament\Tables\Columns\Layout\Stack;
 use Filament\Tables\Grouping\Group;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -74,7 +76,10 @@ class CheckinResource extends Resource
                 //     ->label('ID')
                 //     ->searchable(),
                 Tables\Columns\TextColumn::make('contact.name')
-                    ->searchable(),
+                    ->formatStateUsing(function ($record) {
+                        return "{$record->contact->name}\n{$record->contact->mobile}";
+                    })
+                    ->extraAttributes(['style' => 'white-space: pre-line']),
                 Tables\Columns\TextColumn::make('contact.organization.name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('campaign.name')
