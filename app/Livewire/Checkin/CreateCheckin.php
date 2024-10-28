@@ -99,7 +99,7 @@ class CreateCheckin extends Component implements HasForms
                         ->native(false)
                         ->options(Project::all()->pluck('name', 'name')->toArray())
                         ->preload()
-                        ->default($this->campaign->project->name),
+                        ->placeholder('Choose your preferred project')
                     // Forms\Components\ToggleButtons::make('ready_to_avail')
                     //     ->label('Ready to avail: ')
                     //     ->inline()

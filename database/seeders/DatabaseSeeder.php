@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
 //            CampaignSeeder::class,
             OrganizationSeeder::class,
-            ProjectSeeder::class,
+//            ProjectSeeder::class,
             CampaignTypeSeeder::class,
         ]);
     }
