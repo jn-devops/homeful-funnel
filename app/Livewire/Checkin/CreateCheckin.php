@@ -13,7 +13,9 @@ use Filament\Forms;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
 use Filament\Forms\Set;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Http;
 use Livewire\Component;
@@ -27,13 +29,19 @@ class CreateCheckin extends Component implements HasForms
 
     public ?array $data = [];
     public Campaign $campaign;
-    public Organization $organization;
+    public ?Organization $organization;
     public String $error = '';
     public bool $isDifferentCompanyBefore=false;
+    public bool $isOrganizationEmpty=true;
+    public string $organization_default='';
 
-    public function mount(Campaign $campaign ,Organization $organization): void
+    public function mount(Campaign $campaign ,Request $request): void
     {
-        $this->organization=$organization;
+        if (!empty($request->organization)){
+            $this->isOrganizationEmpty=false;
+            $this->organization=Organization::find($request->organization)??null;
+            $this->organization_default=$this->organization->name;
+        }
         $this->campaign=$campaign;
         $this->form->fill();
     }
@@ -58,8 +66,9 @@ class CreateCheckin extends Component implements HasForms
                                     $set('first_name',$contact->first_name??'');
                                     $set('last_name',$contact->last_name??'');
                                     $set('email',$contact->email??'');
+                                    $set('organization',$contact->organization->name??'');
 
-                                    if (!empty($contact->organization->id) && $contact->organization->id != $this->organization->id) {
+                                    if (!empty($contact->organization->id) && $contact->organization->id && !$this->isOrganizationEmpty) {
                                         $this->isDifferentCompanyBefore = true;
                                     }else{
                                         $this->isDifferentCompanyBefore = false;
@@ -92,6 +101,30 @@ class CreateCheckin extends Component implements HasForms
                         ->required()
                         ->maxLength(255)
                         ->inlineLabel(),
+                    Forms\Components\Select::make('organization')
+                        ->label('Organization')
+                        ->required()
+                        ->inlineLabel()
+                        ->native(false)
+                        ->searchable()
+                        ->options(Organization::all()
+                                ->sortBy('name', SORT_REGULAR, false)
+                                ->pluck('name', 'name')
+                                ->toArray() + ['other' => 'Other'])
+                        ->preload()
+                        ->live()
+                        ->default($this->organization_default)
+                        ->disabled(!$this->isOrganizationEmpty)
+                        ->optionsLimit(Organization::count()+1)
+                        ->placeholder('Select your organization')
+                        ->dehydrated(fn($state)=>$state!=='other'),
+                    Forms\Components\TextInput::make('organization_other')
+                        ->label('Other Organization: ')
+                        ->visible(fn(Get $get):bool=>$get('organization')=='other')
+                        ->requiredIf('organization','other')
+                        ->maxLength(255)
+                        ->inlineLabel(),
+
                     Forms\Components\Select::make('project')
                         ->label('Choice of Project')
                         ->required()
@@ -128,6 +161,9 @@ class CreateCheckin extends Component implements HasForms
 //                'meta' => $data,
 //                'contact_id' => $contact->id,
 //            ]);
+            $this->organization = $data['organization']=='other'?
+                Organization::firstOrCreate(['name'=>$data['organization_other']]):
+                Organization::where('name',$data['organization'])->first();
 
             $url = route('checkin-contact', ['campaign' => $this->campaign->id, 'contact' => $data['mobile']]);
           $response =  Http::post($url, [

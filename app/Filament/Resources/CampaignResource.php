@@ -29,7 +29,10 @@ class CampaignResource extends Resource
     protected static ?string $model = Campaign::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
     public static function form(Form $form): Form
     {
         return $form
@@ -171,19 +174,29 @@ class CampaignResource extends Resource
                             ->options(Organization::query()->pluck('name', 'id'))
                             ->searchable()
                             ->live()
-                            ->required(),
+                            ->debounce(100),
                         Placeholder::make('qr_code')
                             ->label('QR Code')
                             ->content(function (Get $get, Model $record) {
                                 return \LaraZeus\Qr\Facades\Qr::render(
-                                    data:  config('app.url').'/checkin/'.$record->id.'/'. $get('organization'), // This is your model. We are passing the personalizations. If you want the default just comment it out.
+                                    data:  sprintf(
+                                        '%s/checkin/%s%s',
+                                        config('app.url'),
+                                        $record->id,
+                                        $get('organization') ? '?organization=' . $get('organization') : ''
+                                    ), // This is your model. We are passing the personalizations. If you want the default just comment it out.
                                 );
-                        })->hidden(fn (Get $get):bool=>$get('organization')==null),
+                        }),
                         Placeholder::make('link')
                             ->content(function (Get $get, Model $record) {
-                                $url = config('app.url') . '/checkin/' . $record->id . '/' . $get('organization');
+                                $url = sprintf(
+                                    '%s/checkin/%s%s',
+                                    config('app.url'),
+                                    $record->id,
+                                    $get('organization') ? '?organization=' . $get('organization') : ''
+                                );
                                 return new HtmlString('<a href="' . $url . '" target="_blank" rel="noopener noreferrer" class="text-blue-500 underline">' . $url . '</a>');
-                            })->hidden(fn (Get $get):bool=>$get('organization')==null),
+                            }),
 
 
     //                        ->formatStateUsing(function (string $state, $record) {

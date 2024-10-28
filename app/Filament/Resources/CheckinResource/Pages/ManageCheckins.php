@@ -36,24 +36,35 @@ class ManageCheckins extends ManageRecords
                         ->options(Campaign::query()->pluck('name', 'id'))
                         ->searchable()
                         ->live()
-                        ->required(),
+                        ->required()
+                        ->debounce(100),
                     Select::make('organization')
                         ->options(Organization::query()->pluck('name', 'id'))
                         ->searchable()
                         ->live()
-                        ->required(),
+                        ->debounce(100),
                     Placeholder::make('qr_code')
                         ->label('QR Code')
                         ->content(function (Get $get) {
                             return \LaraZeus\Qr\Facades\Qr::render(
-                                data:  config('app.url').'/checkin/'.$get('campaign').'/'. $get('organization'), // This is your model. We are passing the personalizations. If you want the default just comment it out.
+                                data:  sprintf(
+                                    '%s/checkin/%s%s',
+                                    config('app.url'),
+                                    $get('campaign'),
+                                    $get('organization') ? '?organization=' . $get('organization') : ''
+                                ), // This is your model. We are passing the personalizations. If you want the default just comment it out.
                             );
-                    })->hidden(fn (Get $get):bool=>$get('campaign')==null||$get('organization')==null),
+                    })->hidden(fn (Get $get):bool=>$get('campaign')==null),
                     Placeholder::make('link')
                         ->content(function (Get $get) {
-                            $url = config('app.url') . '/checkin/' . $get('campaign') . '/' . $get('organization');
+                            $url = sprintf(
+                                '%s/checkin/%s%s',
+                                config('app.url'),
+                                $get('campaign'),
+                                $get('organization') ? '?organization=' . $get('organization') : ''
+                            );
                             return new HtmlString('<a href="' . $url . '" target="_blank" rel="noopener noreferrer" class="text-blue-500 underline">' . $url . '</a>');
-                        })->hidden(fn (Get $get):bool=>$get('campaign')==null||$get('organization')==null),
+                        })->hidden(fn (Get $get):bool=>$get('campaign')==null ),
 //                        ->formatStateUsing(function (string $state, $record) {
 //                            return \LaraZeus\Qr\Facades\Qr::render(
 //                                data: $state,

@@ -17,7 +17,7 @@
             </div>
             <div  class="flex justify-center ">
                 <p class="text-m  leading-tight text-gray-800 mb-4 text-center">
-                    {{$this->organization->name}}
+                    {{$this->organization->name??''}}
                 </p>
             </div>
 
