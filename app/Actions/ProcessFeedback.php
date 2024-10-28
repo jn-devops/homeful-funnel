@@ -19,7 +19,8 @@ class ProcessFeedback
                 'mobile' => phone($contact->mobile, 'PH')->formatNational(),
                 'name' => $contact->name??'',
                 'organization' => $contact->organization->name??'',
-                'campaign' => $checkin->campaign->name??''
+                'campaign' => $checkin->campaign->name??'',
+                'registration_code' => $checkin->registration_code??'',
             ]);
         }
     }
