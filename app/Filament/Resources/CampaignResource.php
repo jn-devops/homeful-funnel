@@ -82,13 +82,13 @@ class CampaignResource extends Resource
                     ->columnSpan(2),
                 Forms\Components\MarkdownEditor::make('feedback')
                     ->helperText(new HtmlString('
-                      <ul>
-                            <li><strong>@mobile</strong>: Formatted national contact number.</li>
-                            <li><strong>@name</strong>: Contact\'s name.</li>
-                            <li><strong>@organization</strong>: Contact\'s organization name.</li>
-                            <li><strong>@campaign</strong>: Campaign associated with the check-in.</li>
-                            <li><strong>@registration_code</strong>: Unique code for registration.</li>
-                            <li><strong>@campaign_type</strong>: Type of campaign associated with the check-in.</li>
+                       <ul>
+                            <li><strong>@mobile:</strong> Contact’s mobile number.</li>
+                            <li><strong>@name:</strong> Contact\'s name.</li>
+                            <li><strong>@organization:</strong> Contact\'s organization name.</li>
+                            <li><strong>@campaign:</strong> Campaign associated with the check-in.</li>
+                            <li><strong>@registration_code:</strong> Generated unique code after registration.</li>
+                            <li><strong>@campaign_type:</strong> Type of campaign associated with the check-in.</li>
                         </ul>
                     '))
                     ->columnSpan(2),
