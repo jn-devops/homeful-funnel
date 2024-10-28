@@ -21,6 +21,7 @@ class ProcessFeedback
                 'organization' => $contact->organization->name??'',
                 'campaign' => $checkin->campaign->name??'',
                 'registration_code' => $checkin->registration_code??'',
+                'campaign_type' => $checkin->campaign->campaignType??'',
             ]);
         }
     }
