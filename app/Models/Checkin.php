@@ -15,6 +15,7 @@ use Homeful\Common\Traits\HasMeta;
  * @property Contact $contact
  * @property Campaign $campaign
  * @property SchemalessAttributes $meta
+ * @property string registration_code
  *
  * @method int getKey()
  */
@@ -41,5 +42,14 @@ class Checkin extends Model
     public function campaign(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Campaign::class);
+    }
+
+    public function getRegistrationCodeAttribute(): string
+    {
+        $campaign_codes = [];
+        $code = $this->id;
+        preg_match('/(.*)-(.*)-(.*)-(.*)-(.*)/', $code, $campaign_codes);
+
+        return $campaign_codes[5];
     }
 }
