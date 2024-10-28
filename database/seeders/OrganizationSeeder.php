@@ -16,7 +16,7 @@ class OrganizationSeeder extends Seeder
         $data = [
             "Owens Asia",
             "Aprio Philippines",
-            "Aidea Technologies Inc",
+            "Aidea Technologies Inc.",
             "Hexaware Technologies",
             "Ozland Command Center",
             "Bases Conversion and Development Authority (BCDA)",
