@@ -28,6 +28,14 @@ class ProjectResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
+                Forms\Components\TextInput::make('seller_code')
+                    ->label('Seller Code')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('product_code')
+                    ->label('Product Code')
+                    ->required()
+                    ->maxLength(255),
                 FileUpload::make('project_image')
                     ->required()
                     ->label('Image')
@@ -43,7 +51,7 @@ class ProjectResource extends Resource
                     ->maxSize(2048)
                     ->openable()
                     ->downloadable()
-            ]);
+            ])->columns(3);
     }
 
     public static function table(Table $table): Table
@@ -73,7 +81,9 @@ class ProjectResource extends Resource
                 Tables\Actions\EditAction::make()
                     ->mutateRecordDataUsing(function (array $data,Model $record): array {
                     $data['user_id'] = auth()->id();
-                    $data['project_image']=$record->meta->get('project_image');
+                        $data['project_image']=$record->meta->get('project_image');
+                        $data['seller_code']=$record->meta->get('seller_code');
+                        $data['product_code']=$record->meta->get('product_code');
                     return $data;
                 }),
                 Tables\Actions\DeleteAction::make(),

@@ -28,7 +28,9 @@ class Project extends Model
 
     protected $fillable = [
         'name',
-        'project_image'
+        'project_image',
+        'seller_code',
+        'product_code'
     ];
     public function setProjectImageAttribute(string $value): static
     {
