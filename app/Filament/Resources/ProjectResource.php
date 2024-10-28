@@ -63,6 +63,12 @@ class ProjectResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('seller_code')
+                    ->label('Seller Code')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('product_code')
+                    ->label('Product Code')
+                    ->searchable(),
                 Tables\Columns\ImageColumn::make('project_image')
                     ->label('Image'),
                 Tables\Columns\TextColumn::make('created_at')
