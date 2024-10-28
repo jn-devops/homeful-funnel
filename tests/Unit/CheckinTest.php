@@ -30,5 +30,5 @@ test('checkin has registration code', function () {
     $code = $checkin->id;
     preg_match('/(.*)-(.*)-(.*)-(.*)-(.*)/', $code, $campaign_codes);
 
-    expect($checkin->registration_code)->toBe($campaign_codes[5]);
+    expect($checkin->registration_code)->toBe(substr($campaign_codes[Checkin::REG_CODE_UUID_GROUP_INDEX], Checkin::REG_CODE_SUBSTRING_COUNT));
 });

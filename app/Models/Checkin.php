@@ -25,6 +25,10 @@ class Checkin extends Model
     use HasFactory;
     use HasUuids;
     use HasMeta;
+
+    const REG_CODE_UUID_GROUP_INDEX = 5;
+    const REG_CODE_SUBSTRING_COUNT = 6;
+
     protected $keyType = 'string';
     public $incrementing = false;
 
@@ -32,7 +36,6 @@ class Checkin extends Model
         'campaign_id',
         'contact_id',
     ];
-
 
     public function contact(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
@@ -50,6 +53,6 @@ class Checkin extends Model
         $code = $this->id;
         preg_match('/(.*)-(.*)-(.*)-(.*)-(.*)/', $code, $campaign_codes);
 
-        return $campaign_codes[5];
+        return substr($campaign_codes[self::REG_CODE_UUID_GROUP_INDEX], self::REG_CODE_SUBSTRING_COUNT);
     }
 }

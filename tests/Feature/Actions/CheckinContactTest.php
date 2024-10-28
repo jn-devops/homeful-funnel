@@ -34,7 +34,8 @@ test('checkin contact has end point', function () {
     $contact = Contact::fromMobile($mobile);
     expect($checkin)->toBeInstanceOf(Checkin::class);
     expect($checkin->campaign->is($campaign))->toBeTrue();
-    expect($contact->name)->toBe($name);
+//    expect($contact->name)->toBe($name);
+    expect($contact->name)->toBe($first_name . ' ' . $last_name);
     expect($contact->first_name)->toBe($first_name);
     expect($contact->middle_name)->toBe($middle_name);
     expect($contact->last_name)->toBe($last_name);
