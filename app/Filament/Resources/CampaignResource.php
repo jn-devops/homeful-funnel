@@ -80,7 +80,7 @@ class CampaignResource extends Resource
                     ->required()
                     ->maxLength(255)
                     ->columnSpan(2),
-                Forms\Components\Textarea::make('feedback')
+                Forms\Components\MarkdownEditor::make('feedback')
                     ->columnSpan(2),
                 Forms\Components\TextInput::make('splash_image_url')
                     ->label('Splash Image Url')
