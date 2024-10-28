@@ -17,9 +17,9 @@ class DatabaseSeeder extends Seeder
         $this->call([
             UserSeeder::class,
 //            CampaignSeeder::class,
-            OrganizationSeeder::class,
+//            OrganizationSeeder::class,
 //            ProjectSeeder::class,
-            CampaignTypeSeeder::class,
+//            CampaignTypeSeeder::class,
         ]);
     }
 }
