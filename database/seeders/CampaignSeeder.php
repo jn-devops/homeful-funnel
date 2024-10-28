@@ -13,16 +13,16 @@ class CampaignSeeder extends Seeder
      */
     public function run(): void
     {
-        $data=[
-            'Seminar',
-            'Conference',
-            'Workshop',
-            'Meeting',
-            'Training',
-            'Webinar',
-        ];
-        foreach ($data as $index => $d) {
-            Campaign::updateOrCreate( ['name' => $d]);
-        }
+//        $data=[
+//            'Seminar',
+//            'Conference',
+//            'Workshop',
+//            'Meeting',
+//            'Training',
+//            'Webinar',
+//        ];
+//        foreach ($data as $index => $d) {
+//            Campaign::updateOrCreate( ['name' => $d]);
+//        }
     }
 }
