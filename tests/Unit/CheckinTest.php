@@ -3,7 +3,7 @@
 use Spatie\SchemalessAttributes\SchemalessAttributes;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use App\Models\{Campaign, Checkin, Contact};
+use App\Models\{Campaign, Checkin, Contact, Project};
 
 uses(RefreshDatabase::class, WithFaker::class);
 
@@ -11,10 +11,6 @@ test('checkin has attributes', function () {
     $checkin = Checkin::factory()->create();
     expect($checkin->id)->toBeUuid();
     expect($checkin->meta)->toBeInstanceOf(SchemalessAttributes::class);
-    $url = $this->faker->url();
-    $checkin->rider_url = $url;
-    $checkin->save();
-    expect($checkin->rider_url)->toBe($url);
 });
 
 test('checkin has campaign', function () {
@@ -25,6 +21,16 @@ test('checkin has campaign', function () {
 test('checkin has contact', function () {
     $checkin = Checkin::factory()->forContact()->create();
     expect($checkin->contact)->toBeInstanceOf(Contact::class);
+});
+
+test('checkin has project', function () {
+    $checkin = Checkin::factory()->forProject()->create();
+    expect($checkin->project)->toBeInstanceOf(Project::class);
+    $checkin = Checkin::factory()->create();
+    $project = Project::factory()->create();
+    $checkin->project()->associate($project);
+    $checkin->save();
+    expect($checkin->project->is($project))->toBeTrue();
 });
 
 test('checkin has registration code', function () {

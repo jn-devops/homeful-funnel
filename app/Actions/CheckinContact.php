@@ -8,6 +8,7 @@ use Lorisleiva\Actions\Concerns\AsAction;
 use Lorisleiva\Actions\ActionRequest;
 use App\Models\Organization;
 use Illuminate\Support\Arr;
+use App\Models\Project;
 
 class CheckinContact
 {
@@ -24,6 +25,12 @@ class CheckinContact
 
         $contact->save();
         $checkin->contact()->associate($contact);
+        if ($project_name = Arr::get($attribs, 'project')) {
+            $project = Project::where('name', $project_name)->firstOrFail();
+            if ($project instanceof Project) {
+                $checkin->rider_url = $project->rider_url;
+            }
+        }
         $checkin->save();
 //        $contact->notify(new AcknowledgeAvailmentNotification('Thank you for checking in. Here is your check-in reference code: '.substr($contact->id, -12).'
 //

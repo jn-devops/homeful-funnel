@@ -16,7 +16,7 @@ use Homeful\Common\Traits\HasMeta;
  * @property Campaign $campaign
  * @property SchemalessAttributes $meta
  * @property string registration_code
- * @property string $rider_url
+ * @property Project $project
  *
  * @method int getKey()
  */
@@ -56,6 +56,11 @@ class Checkin extends Model
         preg_match('/(.*)-(.*)-(.*)-(.*)-(.*)/', $code, $campaign_codes);
 
         return substr($campaign_codes[self::REG_CODE_UUID_GROUP_INDEX], self::REG_CODE_SUBSTRING_COUNT);
+    }
+
+    public function project(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Project::class);
     }
 
     public function setRiderUrlAttribute(string $value): static
