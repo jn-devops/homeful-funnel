@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Model;
 use libphonenumber\PhoneNumberFormat;
 use Homeful\Common\Traits\HasMeta;
 use Spatie\ModelStates\HasStates;
+use Illuminate\Support\Carbon;
 use App\States\ContactState;
 
 /**
@@ -29,6 +30,8 @@ use App\States\ContactState;
  * @property string $first_name
  * @property string $middle_name
  * @property string $last_name
+ * @property Carbon $availed_at
+ * @property bool $availed
  *
  * @method int getKey()
  */
@@ -156,5 +159,18 @@ class Contact extends Model
     public function getLastNameAttribute(): ?string
     {
         return $this->getAttribute('meta')->get('last_name');
+    }
+
+    public function setAvailedAttribute(bool $value): self
+    {
+        $this->setAttribute('availed_at', $value ? now() : null);
+
+        return $this;
+    }
+
+    public function getAvailedAttribute(): bool
+    {
+        return $this->getAttribute('availed_at')
+            && $this->getAttribute('availed_at') <= now();
     }
 }

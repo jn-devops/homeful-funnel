@@ -30,6 +30,7 @@ test('contact has attributes', function () {
 test('contact has default values', function () {
     $contact = Contact::factory()->create();
     expect($contact->mobile_country)->toBe('PH');
+    expect($contact->availed)->toBeFalse();
 });
 
 test('contact can be persisted from a mobile number', function () {
@@ -60,6 +61,13 @@ test('contact has checkins', function () {
     expect($checkin1->contact->id)->toBe($checkin2->contact->id);
     $contact = $checkin1->contact;
     expect($contact->checkins)->toHaveCount(2);
+});
+
+test('contact dated status', function () {
+    $contact = Contact::factory()->create();
+    expect($contact->availed)->toBeFalse();
+    $contact->availed = true;
+    expect($contact->availed)->toBeTrue();
 });
 
 //test('contact has route model binding from existing record', function () {
