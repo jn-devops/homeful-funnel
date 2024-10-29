@@ -12,4 +12,8 @@ test('project has attributes', function () {
     expect($project->id)->toBeUuid();
     expect($project->name)->toBeString();
     expect($project->meta)->toBeInstanceOf(SchemalessAttributes::class);
+    $url = $this->faker->url();
+    $project->rider_url = $url;
+    $project->save();
+    expect($project->rider_url)->toBe($url);
 });

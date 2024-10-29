@@ -16,6 +16,7 @@ use Homeful\Common\Traits\HasMeta;
  * @property SchemalessAttributes $meta
  * @property string $seller_code
  * @property string $product_code
+ * @property string $rider_url
  *
  * @method int getKey()
  */
@@ -30,8 +31,14 @@ class Project extends Model
         'name',
         'project_image',
         'seller_code',
-        'product_code'
+        'product_code',
+        'rider_url',
     ];
+
+    protected $appends = [
+        'rider_url',
+    ];
+
     public function setProjectImageAttribute(string $value): static
     {
         $this->meta->set('project_image', $value);
@@ -63,5 +70,16 @@ class Project extends Model
     public function getProductCodeAttribute(): ?string
     {
         return $this->meta->get('product_code');
+    }
+
+    public function setRiderUrlAttribute(string $value): static
+    {
+        $this->meta->set('rider_url', $value);
+        return $this;
+    }
+
+    public function getRiderUrlAttribute(): ?string
+    {
+        return $this->meta->get('rider_url');
     }
 }
