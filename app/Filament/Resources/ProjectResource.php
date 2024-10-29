@@ -53,7 +53,12 @@ class ProjectResource extends Resource
                     ])
                     ->maxSize(2048)
                     ->openable()
-                    ->downloadable()
+                    ->downloadable(),
+                Forms\Components\TextInput::make('rider_url')
+                    ->label('Redirect URL')
+                    ->required()
+                    ->maxLength(255)
+                    ->columnSpanFull(),
             ])->columns(3);
     }
 

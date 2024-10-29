@@ -90,7 +90,7 @@ class CheckinResource extends Resource
                 Tables\Columns\TextColumn::make('campaign.campaignType.name')
                         ->label('Campaign Type')
                         ->searchable(),
-                Tables\Columns\TextColumn::make('campaign.project.name')
+                Tables\Columns\TextColumn::make('project.name')
                         ->label('Project')
                         ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')

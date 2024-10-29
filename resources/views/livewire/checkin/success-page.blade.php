@@ -36,7 +36,7 @@
                        Schedule Visit
                    </button> --}}
                    {{-- <span class="text-center">Use Registration code to avail</span> --}}
-                   <button wire:click="redirect_page_to('{{$checkin->campaign->project->rider_url}}')"
+                   <button wire:click="redirect_page_to('{{$checkin->project->rider_url}}')"
                            class="w-full max-w-xs rounded-lg text-black font-bold p-2 mt-1"
                            style="background-color: white; border: 1px solid rgb(212, 212, 212);">
                        Not Now

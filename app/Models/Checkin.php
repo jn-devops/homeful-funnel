@@ -37,6 +37,8 @@ class Checkin extends Model
         'campaign_id',
         'contact_id',
         'rider_url',
+        'project_id',
+
     ];
 
     public function contact(): \Illuminate\Database\Eloquent\Relations\BelongsTo
