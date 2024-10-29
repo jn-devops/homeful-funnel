@@ -16,6 +16,7 @@ use Homeful\Common\Traits\HasMeta;
  * @property Campaign $campaign
  * @property SchemalessAttributes $meta
  * @property string registration_code
+ * @property string $rider_url
  *
  * @method int getKey()
  */
@@ -35,6 +36,7 @@ class Checkin extends Model
     protected $fillable = [
         'campaign_id',
         'contact_id',
+        'rider_url',
     ];
 
     public function contact(): \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -54,5 +56,16 @@ class Checkin extends Model
         preg_match('/(.*)-(.*)-(.*)-(.*)-(.*)/', $code, $campaign_codes);
 
         return substr($campaign_codes[self::REG_CODE_UUID_GROUP_INDEX], self::REG_CODE_SUBSTRING_COUNT);
+    }
+
+    public function setRiderUrlAttribute(string $value): static
+    {
+        $this->meta->set('rider_url', $value);
+        return $this;
+    }
+
+    public function getRiderUrlAttribute(): ?string
+    {
+        return $this->meta->get('rider_url');
     }
 }

@@ -11,6 +11,10 @@ test('checkin has attributes', function () {
     $checkin = Checkin::factory()->create();
     expect($checkin->id)->toBeUuid();
     expect($checkin->meta)->toBeInstanceOf(SchemalessAttributes::class);
+    $url = $this->faker->url();
+    $checkin->rider_url = $url;
+    $checkin->save();
+    expect($checkin->rider_url)->toBe($url);
 });
 
 test('checkin has campaign', function () {
