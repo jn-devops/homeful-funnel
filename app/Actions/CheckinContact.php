@@ -28,7 +28,7 @@ class CheckinContact
         if ($project_name = Arr::get($attribs, 'project')) {
             $project = Project::where('name', $project_name)->firstOrFail();
             if ($project instanceof Project) {
-                $checkin->rider_url = $project->rider_url;
+                $checkin->project()->associate($project);
             }
         }
         $checkin->save();
