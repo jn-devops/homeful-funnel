@@ -27,9 +27,7 @@ class CheckinContact
         $checkin->contact()->associate($contact);
         if ($project_name = Arr::get($attribs, 'project')) {
             $project = Project::where('name', $project_name)->firstOrFail();
-            if ($project instanceof Project) {
-                $checkin->project()->associate($project);
-            }
+            $checkin->project()->associate($project);
         }
         $checkin->save();
 //        $contact->notify(new AcknowledgeAvailmentNotification('Thank you for checking in. Here is your check-in reference code: '.substr($contact->id, -12).'
