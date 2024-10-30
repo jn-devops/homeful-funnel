@@ -100,6 +100,14 @@ class CampaignResource extends Resource
                     ->url()
                     ->required()
                     ->columnSpan(2),
+                Forms\Components\Select::make('organizations')
+                    ->label('Organization List')
+                    ->required()
+                    ->relationship('organizations', 'name')
+                    ->multiple()
+                    ->searchable()
+                    ->columnSpanFull()
+                    ->preload(),
 //                FileUpload::make('splash_image')
 //                    ->required()
 //                    ->label('Splash Image')
