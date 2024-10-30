@@ -6,6 +6,6 @@ class TrippingConfirmed extends ContactState
 {
     public function name(): string
     {
-        return 'tripping contacted';
+        return 'Tripping Contacted';
     }
 }

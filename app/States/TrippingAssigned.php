@@ -6,6 +6,6 @@ class TrippingAssigned extends ContactState
 {
     public function name(): string
     {
-        return 'tripping assigned';
+        return 'Tripping Assigned';
     }
 }
