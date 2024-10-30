@@ -65,12 +65,25 @@ class ContactResource extends Resource
                     ->label('ID')
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('mobile')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('email')
-                    ->searchable(),
                 Tables\Columns\TextColumn::make('name')
+                    ->formatStateUsing(function ($record) {
+                        return "{$record->name}\n{$record->mobile}\n{$record->email}";
+                    })
+                    ->extraAttributes(['style' => 'white-space: pre-line'])
+                    ->searchable(['name','mobile','email']),
+                Tables\Columns\TextColumn::make('organization.name')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('checkins')
+                    ->label('Last Checkin Project')
+                    ->formatStateUsing(function ($record) {
+                        return $record->checkins()->latest()->first()->project->name;
+                    }),
+//                Tables\Columns\TextColumn::make('mobile')
+//                    ->searchable(),
+//                Tables\Columns\TextColumn::make('email')
+//                    ->searchable(),
+//                Tables\Columns\TextColumn::make('name')
+//                    ->searchable(),
                 Tables\Columns\TextColumn::make('state')
                     ->formatStateUsing(fn(Contact $record)=>$record->state->name())
                     ->searchable(),
@@ -82,8 +95,7 @@ class ContactResource extends Resource
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('organization.name')
-                    ->searchable(),
+
 //                Tables\Columns\TextColumn::make('campaign.name')
 //                    ->searchable(),
             ])
