@@ -12,6 +12,8 @@ use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
 use Livewire\Component;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Redirector;
 
 class CreateTrip extends Component implements HasForms
 {
@@ -24,8 +26,10 @@ class CreateTrip extends Component implements HasForms
     public String $project;
 
 
-    public function mount($campaign,$contact,$project): void
+    public function mount(Request $request): void
     {
+        $this->campaign = Campaign::find($request->campaign_id);
+        $this->contact = Contact::find($request->contact_id);
         $this->form->fill();
     }
 
@@ -33,12 +37,12 @@ class CreateTrip extends Component implements HasForms
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('project')
+                Forms\Components\Select::make('project_id')
                     ->label('Choice of Project')
                     ->required()
                     ->inlineLabel()
                     ->native(false)
-                    ->options(Project::all()->pluck('name', 'name')->toArray())
+                    ->options(Project::all()->pluck('name', 'id')->toArray())
                     ->preload()
                     ->placeholder('Choose your preferred project'),
                 Forms\Components\DatePicker::make('preferred_date')
@@ -51,8 +55,9 @@ class CreateTrip extends Component implements HasForms
                     ->seconds(false)
                     ->minutesStep(00)
                     ->native(false)
-                    ->displayFormat('H i a')
-                    ->inlineLabel(),
+                    ->displayFormat('h i a')
+                    ->inlineLabel()
+                    ->format('H:i:s'),
                 Forms\Components\Textarea::make('remarks')
                     ->maxLength(255),
             ])
@@ -60,13 +65,15 @@ class CreateTrip extends Component implements HasForms
             ->model(Trips::class);
     }
 
-    public function create(): void
+    public function save(): Redirector|null
     {
         $data = $this->form->getState();
-
+        $data['campaign_id'] = $this->campaign->id;
+        $data['contact_id'] = $this->contact->id;
         $record = Trips::create($data);
+        // $this->form->model($record)->saveRelationships();
+        return redirect()->route('schedule.success_page',['trip' => $record->id]);
 
-        $this->form->model($record)->saveRelationships();
     }
 
     public function render(): View

@@ -17,7 +17,7 @@ class Trips extends Model
 
     protected $casts = [
         'preferred_date' => 'date',
-        'preferred_time' => 'time',
+        // 'preferred_time' => 'time',
     ];
 
     public function contact()

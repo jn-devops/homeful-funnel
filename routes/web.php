@@ -12,9 +12,10 @@ use Illuminate\Support\Facades\Route;
 //Route::resource('contacts', \App\Http\Controllers\ContactController::class);
 
 Route::get('checkin/{campaign}',App\Livewire\Checkin\CreateCheckin::class, )->name('Checkin');
-Route::get('checkin-success', App\Livewire\Checkin\SuccessPage::class )->name('success_page');
+Route::get('checkin-success', App\Livewire\Checkin\SuccessPage::class )->name('checkin.success_page');
 
-Route::get('schedule-trip/{campaign}/{contact}/{project}',App\Livewire\Trips\CreateTrip::class, )->name('schedule_trip');
+Route::get('schedule-trip/',App\Livewire\Trips\CreateTrip::class, )->name('schedule_trip');
+Route::get('schedule-trip-success', App\Livewire\Trips\SuccessPage::class )->name('schedule.success_page');
 
 //Route::get('checkin-success',function (Request $request){
 //    dd($request->all());
