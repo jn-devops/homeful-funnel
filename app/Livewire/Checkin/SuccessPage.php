@@ -3,6 +3,9 @@
 namespace App\Livewire\Checkin;
 
 use App\Models\Checkin;
+use App\States\Availed;
+use App\States\Registered;
+use App\States\Undecided;
 use Illuminate\Http\Request;
 use Livewire\Component;
 
@@ -19,6 +22,22 @@ class SuccessPage extends Component
         return view('livewire.checkin.success-page', [
             'success_lottiefile' => asset('animation/SuccessAnimation.json'),
         ]);
+    }
+
+    public function availed()
+    {
+        if( $this->checkin->contact->state instanceof Registered){
+            $this->checkin->contact->state->transitionTo(Availed::class);
+        }
+        return redirect()->to(config('kwyc-check.campaign_url') . '?email=' . $this->checkin->contact->email . '&mobile=' . $this->checkin->contact->mobile . '&identifier='.$this->checkin->registration_code.'&code='.$this->checkin->campaign->project->seller_code.'&choice='.$this->checkin->campaign->project->product_code );
+    }
+
+    public function not_now()
+    {
+        if( $this->checkin->contact->state instanceof Registered){
+            $this->checkin->contact->state->transitionTo(Undecided::class);
+        }
+        return redirect()->to($this->checkin->project->rider_url);
     }
 
     public function redirect_page_to($url){

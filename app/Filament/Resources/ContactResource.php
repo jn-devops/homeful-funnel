@@ -18,6 +18,7 @@ use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class ContactResource extends Resource
@@ -71,6 +72,7 @@ class ContactResource extends Resource
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('state')
+                    ->formatStateUsing(fn(Contact $record)=>$record->state->name())
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()

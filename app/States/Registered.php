@@ -6,6 +6,6 @@ class Registered extends ContactState
 {
     public function name(): string
     {
-        return 'registered';
+        return 'Registered';
     }
 }
