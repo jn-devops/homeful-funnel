@@ -158,9 +158,15 @@ class CreateCheckin extends Component implements HasForms
 //                'meta' => $data,
 //                'contact_id' => $contact->id,
 //            ]);
-            $this->organization = $data['organization']=='other'?
-                Organization::firstOrCreate(['name'=>$data['organization_other']]):
-                Organization::where('name',$data['organization'])->first();
+            if (array_key_exists('organization_other', $data)) {
+
+                $this->organization=Organization::firstOrCreate(['name'=>$data['organization_other']]);
+            }else{
+                $this->organization= Organization::where('name',$data['organization'])->first();
+            }
+//            $this->organization = $data['organization']=='other'?
+//                Organization::firstOrCreate(['name'=>$data['organization_other']]):
+//                Organization::where('name',$data['organization'])->first();
 
             $url = route('checkin-contact', ['campaign' => $this->campaign->id, 'contact' => $data['mobile']]);
           $response =  Http::post($url, [
