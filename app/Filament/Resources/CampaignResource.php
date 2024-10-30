@@ -179,7 +179,9 @@ class CampaignResource extends Resource
                     ->modalIcon('heroicon-m-qr-code')
                     ->form([
                         Select::make('organization')
-                            ->options(Organization::query()->pluck('name', 'id'))
+                            ->options(function (Get $get, Campaign $record) {
+                                return $record->organizations()->get()->pluck('name', 'id');
+                            })
                             ->searchable()
                             ->live()
                             ->debounce(100),

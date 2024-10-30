@@ -39,7 +39,13 @@ class ManageCheckins extends ManageRecords
                         ->required()
                         ->debounce(100),
                     Select::make('organization')
-                        ->options(Organization::query()->pluck('name', 'id'))
+                        ->options(function (Get $get) {
+                            $campaign = Campaign::find($get('campaign'));
+                            if (!$campaign) {
+                                return [];
+                            }
+                            return $campaign->organizations()->get()->pluck('name', 'id');
+                        })
                         ->searchable()
                         ->live()
                         ->debounce(100),
