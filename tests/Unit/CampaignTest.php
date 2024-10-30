@@ -1,9 +1,9 @@
 <?php
 
+use App\Models\{Campaign, CampaignType, Checkin, Organization, Project};
 use Spatie\SchemalessAttributes\SchemalessAttributes;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use App\Models\{Campaign, CampaignType, Checkin, Project};
 use App\Models\Contact;
 
 uses(RefreshDatabase::class, WithFaker::class);
@@ -46,4 +46,14 @@ test('campaign has campaign types', function () {
     $campaignType = CampaignType::factory()->create();
     $campaign->campaignType()->associate($campaignType);
     expect($campaign->campaignType()->is($campaignType))->toBeTrue();
+});
+
+test('campaign belongs to many organizations', function () {
+    $campaign = Campaign::factory()->create();
+    expect($campaign->organizations)->toHaveCount(0);
+    [$organization1, $organization12] = Organization::factory(2)->create();
+    $campaign->organizations()->saveMany([$organization1, $organization12]);
+    $campaign->save();
+    $campaign->refresh();
+    expect($campaign->organizations)->toHaveCount(2);
 });

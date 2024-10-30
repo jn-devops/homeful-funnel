@@ -42,4 +42,9 @@ class Organization extends Model
     {
         return $this->hasMany(Contact::class);
     }
+
+    public function campaigns(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(Campaign::class);
+    }
 }

@@ -54,6 +54,11 @@ class Campaign extends Model
         return $this->belongsTo(Project::class);
     }
 
+    public function organizations(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(Organization::class);
+    }
+
     public function campaignType(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(CampaignType::class);

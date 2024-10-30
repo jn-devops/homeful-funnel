@@ -2,8 +2,8 @@
 
 use Spatie\SchemalessAttributes\SchemalessAttributes;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Models\{Campaign, Contact, Organization};
 use Illuminate\Foundation\Testing\WithFaker;
-use App\Models\{Contact, Organization};
 
 uses(RefreshDatabase::class, WithFaker::class);
 
@@ -29,4 +29,14 @@ test('organization has contacts', function () {
     expect($contact1->organization->id)->toBe($contact2->organization->id);
     $organization = $contact1->organization;
     expect($organization->contacts)->toHaveCount(2);
+});
+
+test('organization belongs to many campaigns', function () {
+    $organization = Organization::factory()->create();
+    expect($organization->campaigns)->toHaveCount(0);
+    [$campaigns1, $campaigns2] = Campaign::factory(2)->create();
+    $organization->campaigns()->saveMany([$campaigns1, $campaigns2]);
+    $organization->save();
+    $organization->refresh();
+    expect($organization->campaigns)->toHaveCount(2);
 });
