@@ -32,7 +32,7 @@
                    <span class="text-center">Use the registration code to avail</span>
                </div>
                <div class="flex flex-col items-center w-full">
-                   <button wire:click="redirect_page_to('{{ config('app.url') }}/schedule-trip?campaign_id={{ $checkin->campaign->id }}&contact_id={{ $checkin->contact->id }}&checkin_id={{ $checkin->id }}')"
+                   <button wire:click="trip()"
                    class="w-full max-w-xs rounded-lg text-white font-bold p-2 mb-2 items-center justify-center flex gap-2"
                            style="background-color: #16A34A;">
                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5 mr-2">

@@ -4,6 +4,7 @@ namespace App\Livewire\Checkin;
 
 use App\Models\Checkin;
 use App\States\Availed;
+use App\States\ForTripping;
 use App\States\Registered;
 use App\States\Undecided;
 use Illuminate\Http\Request;
@@ -30,6 +31,13 @@ class SuccessPage extends Component
             $this->checkin->contact->state->transitionTo(Availed::class);
         }
         return redirect()->to(config('kwyc-check.campaign_url') . '?email=' . $this->checkin->contact->email . '&mobile=' . $this->checkin->contact->mobile . '&identifier='.$this->checkin->registration_code.'&code='.$this->checkin->campaign->project->seller_code.'&choice='.$this->checkin->campaign->project->product_code );
+    }
+
+    public function trip(){
+        if( $this->checkin->contact->state instanceof Registered){
+            $this->checkin->contact->state->transitionTo(ForTripping::class);
+        }
+        return redirect()->to(config('app.url') .'/schedule-trip?campaign_id='.$this->checkin->campaign->id .'&contact_id='. $this->checkin->contact->id.' &checkin_id='.$this->checkin->id);
     }
 
     public function not_now()
