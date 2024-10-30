@@ -72,6 +72,7 @@ class ContactResource extends Resource
                     ->extraAttributes(['style' => 'white-space: pre-line'])
                     ->searchable(['name','mobile','email']),
                 Tables\Columns\TextColumn::make('organization.name')
+                    ->wrap()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('checkins')
                     ->label('Last Checkin Project')
