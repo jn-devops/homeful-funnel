@@ -2,10 +2,10 @@
 
 namespace App\States;
 
-class SecondState extends ContactState
+class ForTripping extends ContactState
 {
     public function name(): string
     {
-        return 'second';
+        return 'for tripping';
     }
 }

@@ -2,10 +2,10 @@
 
 namespace App\States;
 
-class FourthState extends ContactState
+class Registered extends ContactState
 {
     public function name(): string
     {
-        return 'fourth';
+        return 'registered';
     }
 }

@@ -2,10 +2,10 @@
 
 namespace App\States;
 
-class FirstState extends ContactState
+class TrippingAssigned extends ContactState
 {
     public function name(): string
     {
-        return 'first';
+        return 'tripping assigned';
     }
 }

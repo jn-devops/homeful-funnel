@@ -14,10 +14,14 @@ abstract class ContactState extends State
     public static function config(): StateConfig
     {
         return parent::config()
-            ->default(FirstState::class)
-            ->allowTransition(FirstState::class, SecondState::class)
-            ->allowTransition(SecondState::class, ThirdState::class)
-            ->allowTransition(ThirdState::class, FourthState::class)
+            ->default(Registered::class)
+            ->allowTransition(Registered::class, Availed::class)
+            ->allowTransition(Registered::class, Undecided::class)
+            ->allowTransition(Registered::class, ForTripping::class)
+            ->allowTransition(ForTripping::class, TrippingAssigned::class)
+            ->allowTransition(TrippingAssigned::class, TrippingConfirmed::class)
+            ->allowTransition(TrippingConfirmed::class, TrippingCompleted::class)
+            ->allowTransition(TrippingCompleted::class, Availed::class)
             ;
     }
 }

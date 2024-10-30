@@ -1,6 +1,6 @@
 <?php
 
-use App\States\{FirstState, SecondState, ThirdState, FourthState};
+use App\States\{Registered, Undecided, ForTripping, Availed};
 use Propaganistas\LaravelPhone\Exceptions\NumberParseException;
 use Spatie\SchemalessAttributes\SchemalessAttributes;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -42,13 +42,13 @@ test('contact can be persisted from a mobile number', function () {
 
 test('contact has states', function () {
     $contact = Contact::factory()->create();
-    expect($contact->state)->toBeInstanceOf(FirstState::class);
-    $contact->state->transitionTo(SecondState::class);
-    expect($contact->state)->toBeInstanceOf(SecondState::class);
-    $contact->state->transitionTo(ThirdState::class);
-    expect($contact->state)->toBeInstanceOf(ThirdState::class);
-    $contact->state->transitionTo(FourthState::class);
-    expect($contact->state)->toBeInstanceOf(FourthState::class);
+    expect($contact->state)->toBeInstanceOf(Registered::class);
+    $contact->state->transitionTo(Undecided::class);
+    expect($contact->state)->toBeInstanceOf(Undecided::class);
+    $contact->state->transitionTo(ForTripping::class);
+    expect($contact->state)->toBeInstanceOf(ForTripping::class);
+    $contact->state->transitionTo(Availed::class);
+    expect($contact->state)->toBeInstanceOf(Availed::class);
 });
 
 test('contact has an organization', function () {
