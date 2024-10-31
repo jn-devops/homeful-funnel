@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\CheckinResource\Pages;
 
+use App\Filament\Exports\CheckinExporter;
 use App\Filament\Exports\ContactExporter;
 use App\Filament\Resources\CheckinResource;
 use App\Models\Campaign;
@@ -25,7 +26,8 @@ class ManageCheckins extends ManageRecords
     {
         return [
 //            Actions\CreateAction::make(),
-
+            ExportAction::make()
+                ->exporter(CheckinExporter::class),
             Actions\Action::make('checkin')
                 ->icon('heroicon-m-qr-code')
                 ->modalIcon('heroicon-m-qr-code')
