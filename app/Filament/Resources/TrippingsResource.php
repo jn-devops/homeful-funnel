@@ -41,8 +41,12 @@ class TrippingsResource extends Resource
                 TextColumn::make('created_at')
                     ->date()
                     ->label('Created Date'),
+                TextColumn::make('contact.name')
+                    ->label('Name')
+                    ->searchable(),
                 TextColumn::make('project.name')
-                    ->label('Project Name'),
+                    ->label('Project Name')
+                    ->searchable(),
                 TextColumn::make('preferred_date')
                     ->label('Preferred Date')
                     ->formatStateUsing(function ($record) {
@@ -51,7 +55,7 @@ class TrippingsResource extends Resource
                 TextColumn::make('preferred_time')
                     ->label('Preferred Time')
                     ->formatStateUsing(function ($record) {
-                        return Carbon::parse($record->preferred_time)->format('H:i A');
+                        return Carbon::parse($record->preferred_time)->format('h:i A');
                     }),
                 TextColumn::make('remarks')
                     ->label('Remarks'),
