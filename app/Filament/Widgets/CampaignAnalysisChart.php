@@ -4,6 +4,11 @@ namespace App\Filament\Widgets;
 
 use App\Models\CampaignType;
 use App\Models\Checkin;
+use App\States\Availed;
+use App\States\FirstState;
+use App\States\ForTripping;
+use App\States\Registered;
+use App\States\Undecided;
 use Filament\Widgets\ChartWidget;
 use Filament\Widgets\Concerns\InteractsWithPageFilters;
 
@@ -17,153 +22,85 @@ class CampaignAnalysisChart extends ChartWidget
     protected function getData(): array
     {
         // Form
-        $campaigns = $this->filters['campaigns'] ?? null;
-        $start = $this->filters['start_date'] ?? null;
-        $end = $this->filters['end_date'] ?? null;
+        $data_campaigns = $this->filters['campaigns'] ?? null;
+        $data_start = $this->filters['start_date'] ?? null;
+        $data_end = $this->filters['end_date'] ?? null;
 
-        // Stats
-        $total_accounts = 0;
-        $visited_corp_presentation = 0;
-        $visited_booth = 0;
-        $visited_site = 0;
-        $consulted = 0; // TODO: No Data Source
+         // Stats
+         $total_accounts = 0;
+         $registered = 0;
+         $not_now = 0;
+         $for_tripping = 0;
+         $availed = 0;
+         $consulted = 0;
 
-        // Campaign Type Ids
-        $presentation_id = CampaignType::where('name', 'Presentation')->first()->id;
-        $booth_id = CampaignType::where('name', 'Booth')->first()->id;
-        $site_id = CampaignType::where('name', 'Site Visit')->first()->id;
+         $total_accounts_percent = 0;
+         $registered_percent = 0;
+         $not_now_percent = 0;
+         $for_tripping_percent = 0;
+         $availed_percent = 0;
+         $consulted_percent = 0;
+ 
+         // Campaign Type Ids
+         $presentation_id = CampaignType::where('name', 'Presentation')->first()->id;
+         $booth_id = CampaignType::where('name', 'Booth')->first()->id;
+         $site_id = CampaignType::where('name', 'Site Visit')->first()->id;
 
-        if (!empty($campaigns)){
-            if (in_array('All', $campaigns)) { // All Campaign
-                $model = new Checkin();
-                if($start != null && $end != null){ // All Campaign with date filter
-                    $total_accounts = $model->whereBetween('created_at', [$start.' 00:00:00', $end.' 23:59:59'])->get()->count();
-                    $visited_corp_presentation = $model->whereBetween('created_at', [$start.' 00:00:00', $end.' 23:59:59'])
-                                                    ->whereHas('campaign', function ($query) use($presentation_id) {
-                                                        $query->where('campaign_type_id', $presentation_id);
-                                                    })->get()->count();
-                    $visited_booth = $model->whereBetween('created_at', [$start.' 00:00:00', $end.' 23:59:59'])
-                                                    ->whereHas('campaign', function ($query) use($booth_id) {
-                                                        $query->where('campaign_type_id', $booth_id);
-                                                    })->get()->count();
-                    $visited_site = $model->whereBetween('created_at', [$start.' 00:00:00', $end.' 23:59:59'])
-                                                    ->whereHas('campaign', function ($query) use($site_id) {
-                                                        $query->where('campaign_type_id', $site_id);
-                                                    })->get()->count();
+         $model = new Checkin();
+
+         if (!empty($data_campaigns)){
+            if (in_array('All', $data_campaigns)) { // All Campaign
+                if($data_start != null && $data_end != null){ // All Campaign with date filter
                 }else{ // All Campaign without date filter
-                    $total_accounts = $model->all()->count();
-                    $visited_corp_presentation = $model->whereHas('campaign', function ($query) use($presentation_id) {
-                                                    $query->where('campaign_type_id', $presentation_id);
-                                                })->get()->count();
-                    $visited_booth = $model->whereHas('campaign', function ($query) use($booth_id) {
-                                                    $query->where('campaign_type_id', $booth_id);
-                                                })->get()->count();
-                    $visited_site = $model->whereHas('campaign', function ($query) use($site_id) {
-                                                    $query->where('campaign_type_id', $site_id);
-                                                })->get()->count();
                 }
             }else{ // Selected Campaign
-                $model = new Checkin();
-                if($start != null && $end != null){ // Selected Campaign with date filter
-                    $total_accounts = $model->whereBetween('created_at', [$start.' 00:00:00', $end.' 23:59:59'])
-                                            ->whereHas('campaign', function ($query) use($campaigns) {
-                                                $query->whereHas('project', function ($query2) use($campaigns) {
-                                                    $query2->whereIn('name', $campaigns);
-                                                });
-                                            })->get()->count();
-                    $visited_corp_presentation = $model->whereBetween('created_at', [$start.' 00:00:00', $end.' 23:59:59'])
-                                                    ->whereHas('campaign', function ($query) use($campaigns, $presentation_id) {
-                                                        $query->whereHas('project', function ($query2) use($campaigns) {
-                                                                    $query2->whereIn('name', $campaigns);
-                                                                })
-                                                                ->where('campaign_type_id', $presentation_id);
-                                                    })->get()->count();
-                    $visited_booth = $model->whereBetween('created_at', [$start.' 00:00:00', $end.' 23:59:59'])
-                                                    ->whereHas('campaign', function ($query) use($campaigns, $booth_id) {
-                                                        $query->whereHas('project', function ($query2) use($campaigns) {
-                                                                    $query2->whereIn('name', $campaigns);
-                                                                })
-                                                                ->where('campaign_type_id', $booth_id);
-                                                    })->get()->count();
-                    $visited_site = $model->whereBetween('created_at', [$start.' 00:00:00', $end.' 23:59:59'])
-                                                    ->whereHas('campaign', function ($query) use($campaigns, $site_id) {
-                                                        $query->whereHas('project', function ($query2) use($campaigns) {
-                                                                    $query2->whereIn('name', $campaigns);
-                                                                })
-                                                                ->where('campaign_type_id', $site_id);
-                                                    })->get()->count();
-
+                if($data_start != null && $data_end != null){ // Selected Campaign with date filter
                 }else{ // Selected Campaign without date filter
-                    $total_accounts = $model->whereHas('campaign', function ($query) use($campaigns) {
-                                                $query->whereHas('project', function ($query2) use($campaigns) {
-                                                    $query2->whereIn('name', $campaigns);
-                                                });
-                                            })->get()->count();
-                    $visited_corp_presentation = $model->whereHas('campaign', function ($query) use($campaigns, $presentation_id) {
-                                                    $query->whereHas('project', function ($query2) use($campaigns) {
-                                                                $query2->whereIn('name', $campaigns);
-                                                            })
-                                                            ->where('campaign_type_id', $presentation_id);
-                                                })->get()->count();
-                    $visited_booth = $model->whereHas('campaign', function ($query) use($campaigns, $booth_id) {
-                                                    $query->whereHas('project', function ($query2) use($campaigns) {
-                                                                $query2->whereIn('name', $campaigns);
-                                                            })
-                                                            ->where('campaign_type_id', $booth_id);
-                                                })->get()->count();
-                    $visited_site = $model->whereHas('campaign', function ($query) use($campaigns, $site_id) {
-                                                    $query->whereHas('project', function ($query2) use($campaigns) {
-                                                                $query2->whereIn('name', $campaigns);
-                                                            })
-                                                            ->where('campaign_type_id', $site_id);
-                                                })->get()->count();
                 }
-
-
             }
-        }else if($start != null && $end != null){ // Date filter only
-            $model = new Checkin();
-            $model = $model->whereBetween('created_at', [$start.' 00:00:00', $end.' 23:59:59']);
-            $total_accounts = $model->get()->count();
-            $visited_corp_presentation = $model->whereHas('campaign', function ($query) use ($presentation_id) {
-                                        $query->where('campaign_type_id', $presentation_id);
-                                    })->get()->count();
-            $visited_booth = $model->whereHas('campaign', function ($query) use ($booth_id) {
-                                        $query->where('campaign_type_id', $booth_id);
-                                    })->get()->count();
-            $visited_site = $model->whereHas('campaign', function ($query) use ($site_id) {
-                                        $query->where('campaign_type_id', $site_id);
-                                    })->get()->count();
+        }else if($data_start != null && $data_end != null){ // Date filter only
         }else{ // Default
-            $model = new Checkin();
-            $total_accounts = $model->all()->count();
-            $visited_corp_presentation = $model->whereHas('campaign', function ($query) use ($presentation_id) {
-                                        $query->where('campaign_type_id', $presentation_id);
-                                    })->get()->count();
-            $visited_booth = $model->whereHas('campaign', function ($query) use ($booth_id) {
-                                        $query->where('campaign_type_id', $booth_id);
-                                    })->get()->count();
-            $visited_site = $model->whereHas('campaign', function ($query) use ($site_id) {
-                                        $query->where('campaign_type_id', $site_id);
-                                    })->get()->count();
+            $registered = $model->whereHas('contact', function ($q) {
+                                $q->whereIn('state', [Registered::class, FirstState::class]);
+                            })->count();
+            $not_now = $model->whereHas('contact', function ($q) {
+                                $q->where('state', Undecided::class);
+                            })->count();
+            $for_tripping = $model->whereHas('contact', function ($q) {
+                                $q->where('state', ForTripping::class);
+                            })->count();
+            $availed = $model->whereHas('contact', function ($q) {
+                                $q->where('state', Availed::class);
+                            })->count();
+            $consulted = 0; // TODO: Data source for consulted. No State for consulted
         }
 
-        $total_accounts += $consulted;
+        $total_accounts = $registered + $not_now + $for_tripping + $availed + $consulted;
+
+        if($total_accounts){
+            $registered_percent = number_format(($registered / $total_accounts) * 100, 1);
+            $not_now_percent = number_format(($not_now / $total_accounts) * 100, 1);
+            $for_tripping_percent = number_format(($for_tripping / $total_accounts) * 100, 1);
+            $availed_percent = number_format(($availed / $total_accounts) * 100, 1);
+            $consulted_percent = number_format(($consulted / $total_accounts) * 100, 1);
+        }
 
         return [
             'labels' => [
-                'Visited Corp Presentation',
-                'Visited Booth',
-                'Visited Site',
+                'Registered',
+                'Not Now',
+                'For Tripping',
+                'Availed',
                 'Consulted',
             ],
             'datasets' => [
                 [
                     'label' => 'My First Dataset',
-                    'data' => [$visited_corp_presentation, $visited_booth, $visited_site, $consulted],
+                    'data' => [$registered, $not_now, $for_tripping, $availed, $consulted],
                     'backgroundColor' => [
                         'rgba(76, 175, 80, 1)',
                         'rgba(24, 104, 255, 1)',
+                        'rgba(252, 177, 21, 1)',
                         'rgba(174, 60, 216, 1)',
                         'rgba(225, 112, 85, 1)',
                     ],

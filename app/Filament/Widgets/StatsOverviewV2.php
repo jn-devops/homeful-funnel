@@ -54,14 +54,14 @@ class StatsOverviewV2 extends Widget
          // Stats
          $total_accounts = 0;
          $registered = 0;
-         $undecided = 0;
+         $not_now = 0;
          $for_tripping = 0;
          $availed = 0;
          $consulted = 0;
 
          $total_accounts_percent = 0;
          $registered_percent = 0;
-         $undecided_percent = 0;
+         $not_now_percent = 0;
          $for_tripping_percent = 0;
          $availed_percent = 0;
          $consulted_percent = 0;
@@ -88,7 +88,7 @@ class StatsOverviewV2 extends Widget
             $registered = $model->whereHas('contact', function ($q) {
                                 $q->whereIn('state', [Registered::class, FirstState::class]);
                             })->count();
-            $undecided = $model->whereHas('contact', function ($q) {
+            $not_now = $model->whereHas('contact', function ($q) {
                                 $q->where('state', Undecided::class);
                             })->count();
             $for_tripping = $model->whereHas('contact', function ($q) {
@@ -100,11 +100,11 @@ class StatsOverviewV2 extends Widget
             $consulted = 0; // TODO: Data source for consulted. No State for consulted
         }
 
-        $total_accounts = $registered + $undecided + $for_tripping + $availed + $consulted;
+        $total_accounts = $registered + $not_now + $for_tripping + $availed + $consulted;
 
         if($total_accounts){
             $registered_percent = number_format(($registered / $total_accounts) * 100, 1);
-            $undecided_percent = number_format(($undecided / $total_accounts) * 100, 1);
+            $not_now_percent = number_format(($not_now / $total_accounts) * 100, 1);
             $for_tripping_percent = number_format(($for_tripping / $total_accounts) * 100, 1);
             $availed_percent = number_format(($availed / $total_accounts) * 100, 1);
             $consulted_percent = number_format(($consulted / $total_accounts) * 100, 1);
@@ -113,8 +113,8 @@ class StatsOverviewV2 extends Widget
         $this->data['total_accounts'] = $total_accounts;
         $this->data['registered'] = $registered;
         $this->data['registered_percent'] = $registered_percent;
-        $this->data['undecided'] = $undecided;
-        $this->data['undecided_percent'] = $undecided_percent;
+        $this->data['not_now'] = $not_now;
+        $this->data['not_now_percent'] = $not_now_percent;
         $this->data['for_tripping'] = $for_tripping;
         $this->data['for_tripping_percent'] = $for_tripping_percent;
         $this->data['availed'] = $availed;
