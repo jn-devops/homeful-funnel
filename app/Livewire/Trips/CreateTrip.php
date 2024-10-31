@@ -3,9 +3,11 @@
 namespace App\Livewire\Trips;
 
 use App\Models\Campaign;
+use App\Models\Checkin;
 use App\Models\Contact;
 use App\Models\Project;
 use App\Models\Trips;
+use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
@@ -23,6 +25,7 @@ class CreateTrip extends Component implements HasForms
     public String $error = '';
     public Campaign $campaign;
     public Contact $contact;
+    public Checkin $checkin;
     public String $project;
 
 
@@ -30,7 +33,10 @@ class CreateTrip extends Component implements HasForms
     {
         $this->campaign = Campaign::find($request->campaign_id);
         $this->contact = Contact::find($request->contact_id);
-        $this->form->fill();
+        $this->checkin = Checkin::find($request->checkin_id);
+        $this->form->fill([
+            'project_id' => $this->checkin->project->id,
+        ]);
     }
 
     public function form(Form $form): Form
@@ -49,12 +55,13 @@ class CreateTrip extends Component implements HasForms
                     ->required()
                     ->inlineLabel()
                     ->displayFormat('M d, Y')
+                    ->minDate(Carbon::today())
                     ->native(false),
                 Forms\Components\TimePicker::make('preferred_time')
                     ->required()
                     ->seconds(false)
                     ->minutesStep(00)
-                    ->native(false)
+                    ->native(true)
                     ->displayFormat('h i a')
                     ->inlineLabel()
                     ->format('H:i:s'),
