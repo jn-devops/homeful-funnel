@@ -2,9 +2,11 @@
 
 namespace App\Filament\Resources\ContactResource\Pages;
 
+use App\Filament\Exports\ContactExporter;
 use App\Filament\Resources\ContactResource;
 use App\Filament\Resources\ContactResource\Widgets\ContactStateSummary;
 use Filament\Actions;
+use Filament\Actions\ExportAction;
 use Filament\Resources\Pages\ManageRecords;
 
 class ManageContacts extends ManageRecords
@@ -15,7 +17,9 @@ class ManageContacts extends ManageRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            ExportAction::make()
+                ->exporter(ContactExporter::class),
+//            Actions\CreateAction::make(),
         ];
     }
 

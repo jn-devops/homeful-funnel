@@ -25,9 +25,7 @@ class ManageCheckins extends ManageRecords
     {
         return [
 //            Actions\CreateAction::make(),
-            ExportAction::make()
-                ->exporter(ContactExporter::class)
-                ,
+
             Actions\Action::make('checkin')
                 ->icon('heroicon-m-qr-code')
                 ->modalIcon('heroicon-m-qr-code')

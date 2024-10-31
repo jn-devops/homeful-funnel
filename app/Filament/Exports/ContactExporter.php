@@ -17,11 +17,22 @@ class ContactExporter extends Exporter
 //            ExportColumn::make('id')
 //                ->label('ID'),
             ExportColumn::make('created_at'),
-            ExportColumn::make('contact.name'),
-            ExportColumn::make('contact.mobile'),
-            ExportColumn::make('contact.organization.name'),
-            ExportColumn::make('campaign.name'),
-            ExportColumn::make('campaign.project.name'),
+            ExportColumn::make('name'),
+            ExportColumn::make('mobile'),
+            ExportColumn::make('email'),
+            ExportColumn::make('organization.name'),
+            ExportColumn::make('campaign')
+                ->label('Latest Campaign')
+                ->formatStateUsing(function (Contact $record) {
+                    return $record->checkins()->latest()->first()->campaign->name;
+                }),
+            ExportColumn::make('checkins')
+                ->label('Latest Checkin Project')
+                ->formatStateUsing(function (Contact $record) {
+                    return $record->checkins()->latest()->first()->project->name;
+                }),
+            ExportColumn::make('state')
+                ->formatStateUsing(fn(Contact $record)=>$record->state->name()),
 //            ExportColumn::make('state'),
 //            ExportColumn::make('meta'),
 //            ExportColumn::make('updated_at'),
