@@ -4,9 +4,12 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ContactResource\Pages;
 use App\Filament\Resources\ContactResource\RelationManagers;
+use App\Filament\Resources\ContactResource\Widgets\ContactStateSummary;
 use App\Models\Contact;
 use App\Models\SmsLogs;
 use App\Notifications\Adhoc;
+use App\States\ContactState;
+use App\States\Registered;
 use Filament\Forms;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -16,10 +19,8 @@ use Filament\Tables;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Tables\Columns\Summarizers\Count;
+use Illuminate\Database\Query\Builder;
 
 class ContactResource extends Resource
 {
@@ -30,6 +31,7 @@ class ContactResource extends Resource
     {
         return static::getModel()::count();
     }
+
     public static function form(Form $form): Form
     {
         return $form
@@ -99,6 +101,7 @@ class ContactResource extends Resource
 
 //                Tables\Columns\TextColumn::make('campaign.name')
 //                    ->searchable(),
+
             ])
             ->filters([
                 //
@@ -150,4 +153,5 @@ class ContactResource extends Resource
             'index' => Pages\ManageContacts::route('/'),
         ];
     }
+
 }

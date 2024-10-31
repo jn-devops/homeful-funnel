@@ -8,6 +8,15 @@ use Spatie\ModelStates\State;
 
 abstract class ContactState extends State
 {
+    public const STATES = [
+        Registered::class,
+        Availed::class,
+        Undecided::class,
+        ForTripping::class,
+        TrippingAssigned::class,
+        TrippingConfirmed::class,
+        TrippingCompleted::class,
+    ];
     /**
      * @throws InvalidConfig
      */
