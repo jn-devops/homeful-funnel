@@ -80,7 +80,7 @@ class CheckinResource extends Resource
                 //     ->searchable(),
                 Tables\Columns\TextColumn::make('contact.name')
                     ->formatStateUsing(function ($record) {
-                        return "{$record->contact->name}\n{$record->contact->mobile}";
+                        return "{$record->contact->name}\n{$record->contact->mobile}\n{$record->contact->email}";
                     })
                     ->extraAttributes(['style' => 'white-space: pre-line']),
                 Tables\Columns\TextColumn::make('contact.organization.name')

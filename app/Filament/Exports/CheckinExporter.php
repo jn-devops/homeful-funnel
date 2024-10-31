@@ -25,6 +25,8 @@ class CheckinExporter extends Exporter
                 ->label('email'),
             ExportColumn::make('campaign.name')
                 ->label('campaign'),
+            ExportColumn::make('campaign.campaignType.name')
+                ->label('campaign type'),
             ExportColumn::make('project.name')
                 ->label('project'),
 //            ExportColumn::make('updated_at'),
