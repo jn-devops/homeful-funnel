@@ -24,6 +24,7 @@ class CheckinResource extends Resource
     protected static ?string $model = Checkin::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $modelLabel = 'Prospect';
     public static function getNavigationBadge(): ?string
     {
         return static::getModel()::count();
@@ -82,17 +83,22 @@ class CheckinResource extends Resource
                     ->formatStateUsing(function ($record) {
                         return "{$record->contact->name}\n{$record->contact->mobile}\n{$record->contact->email}";
                     })
-                    ->extraAttributes(['style' => 'white-space: pre-line']),
-                Tables\Columns\TextColumn::make('contact.organization.name')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('campaign.name')
-                    ->searchable(),
+                    ->extraAttributes(['style' => 'white-space: pre-line'])
+                    ->searchable(query: function (Builder $query, string $search): Builder {
+                        return $query->whereHas('contact', function ($q) use ($search) {
+                            $q->where('name', 'like', "%{$search}%");
+                        });
+                    }),
+                Tables\Columns\TextColumn::make('contact.organization.name'),
+                    // ->searchable(),
+                Tables\Columns\TextColumn::make('campaign.name'),
+                    // ->searchable(),
                 Tables\Columns\TextColumn::make('campaign.campaignType.name')
-                        ->label('Campaign Type')
-                        ->searchable(),
+                        ->label('Campaign Type'),
+                        // ->searchable(),
                 Tables\Columns\TextColumn::make('project.name')
-                        ->label('Project')
-                        ->searchable(),
+                        ->label('Project'),
+                        // ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
