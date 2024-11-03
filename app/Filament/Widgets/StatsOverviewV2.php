@@ -39,8 +39,8 @@ class StatsOverviewV2 extends Widget
     public function updateFilters($filters)
     {
         $this->campaigns = $this->filters['campaigns'] ?? null;
-        $this->start = $this->filters['start'] ?? null;
-        $this->end = $this->filters['end'] ?? null;
+        $this->start = $this->filters['start_date'] ?? null;
+        $this->end = $this->filters['end_date'] ?? null;
 
         $this->data_update();
     }
@@ -59,31 +59,115 @@ class StatsOverviewV2 extends Widget
          $availed = 0;
          $consulted = 0;
 
-         $total_accounts_percent = 0;
          $registered_percent = 0;
          $not_now_percent = 0;
          $for_tripping_percent = 0;
          $availed_percent = 0;
          $consulted_percent = 0;
  
-         // Campaign Type Ids
-         $presentation_id = CampaignType::where('name', 'Presentation')->first()->id;
-         $booth_id = CampaignType::where('name', 'Booth')->first()->id;
-         $site_id = CampaignType::where('name', 'Site Visit')->first()->id;
-
          $model = new Checkin();
 
          if (!empty($data_campaigns)){
             if (in_array('All', $data_campaigns)) { // All Campaign
                 if($data_start != null && $data_end != null){ // All Campaign with date filter
+                    $registered = $model->whereBetween('created_at', [$data_start.' 00:00:00', $data_end.' 23:59:59'])
+                            ->whereHas('contact', function ($q) {
+                                    $q->whereIn('state', [Registered::class, FirstState::class]);
+                                })->count();
+                    $not_now = $model->whereBetween('created_at', [$data_start.' 00:00:00', $data_end.' 23:59:59'])
+                            ->whereHas('contact', function ($q) {
+                                    $q->where('state', Undecided::class);
+                                })->count();
+                    $for_tripping = $model->whereBetween('created_at', [$data_start.' 00:00:00', $data_end.' 23:59:59'])
+                            ->whereHas('contact', function ($q) {
+                                    $q->where('state', ForTripping::class);
+                                })->count();
+                    $availed = $model->whereBetween('created_at', [$data_start.' 00:00:00', $data_end.' 23:59:59'])
+                            ->whereHas('contact', function ($q) {
+                                    $q->where('state', Availed::class);
+                                })->count();
+                    $consulted = 0; // TODO: Data source for consulted. No State for consulted
                 }else{ // All Campaign without date filter
+                    $registered = $model->whereHas('contact', function ($q) {
+                                        $q->whereIn('state', [Registered::class, FirstState::class]);
+                                    })->count();
+                    $not_now = $model->whereHas('contact', function ($q) {
+                                        $q->where('state', Undecided::class);
+                                    })->count();
+                    $for_tripping = $model->whereHas('contact', function ($q) {
+                                        $q->where('state', ForTripping::class);
+                                    })->count();
+                    $availed = $model->whereHas('contact', function ($q) {
+                                        $q->where('state', Availed::class);
+                                    })->count();
+                    $consulted = 0; // TODO: Data source for consulted. No State for consulted
                 }
             }else{ // Selected Campaign
                 if($data_start != null && $data_end != null){ // Selected Campaign with date filter
+                    $date_filtered_model = $model->whereBetween('created_at', [$data_start.' 00:00:00', $data_end.' 23:59:59']);
+                    $registered = $date_filtered_model->whereHas('contact', function ($q) {
+                                        $q->whereIn('state', [Registered::class, FirstState::class]);
+                                    })->whereHas('campaign', function ($query) use($data_campaigns) {
+                                        $query->whereIn('id', $data_campaigns);
+                                    })->count();
+                    $not_now = $date_filtered_model->whereHas('contact', function ($q) {
+                                        $q->where('state', Undecided::class);
+                                    })->whereHas('campaign', function ($query) use($data_campaigns) {
+                                        $query->whereIn('id', $data_campaigns);
+                                    })->count();
+                    $for_tripping = $date_filtered_model->whereHas('contact', function ($q) {
+                                        $q->where('state', ForTripping::class);
+                                    })->whereHas('campaign', function ($query) use($data_campaigns) {
+                                        $query->whereIn('id', $data_campaigns);
+                                    })->count();
+                    $availed = $date_filtered_model->whereHas('contact', function ($q) {
+                                        $q->where('state', Availed::class);
+                                    })->whereHas('campaign', function ($query) use($data_campaigns) {
+                                        $query->whereIn('id', $data_campaigns);
+                                    })->count();
+                    $consulted = 0; // TODO: Data source for consulted. No State for consulted
                 }else{ // Selected Campaign without date filter
+                    $registered = $model->whereHas('contact', function ($q) {
+                                        $q->whereIn('state', [Registered::class, FirstState::class]);
+                                    })->whereHas('campaign', function ($query) use($data_campaigns) {
+                                        $query->whereIn('id', $data_campaigns);
+                                    })->count();
+                    $not_now = $model->whereHas('contact', function ($q) {
+                                        $q->where('state', Undecided::class);
+                                    })->whereHas('campaign', function ($query) use($data_campaigns) {
+                                        $query->whereIn('id', $data_campaigns);
+                                    })->count();
+                    $for_tripping = $model->whereHas('contact', function ($q) {
+                                        $q->where('state', ForTripping::class);
+                                    })->whereHas('campaign', function ($query) use($data_campaigns) {
+                                        $query->whereIn('id', $data_campaigns);
+                                    })->count();
+                    $availed = $model->whereHas('contact', function ($q) {
+                                        $q->where('state', Availed::class);
+                                    })->whereHas('campaign', function ($query) use($data_campaigns) {
+                                        $query->whereIn('id', $data_campaigns);
+                                    })->count();
+                    $consulted = 0; // TODO: Data source for consulted. No State for consulted
                 }
             }
         }else if($data_start != null && $data_end != null){ // Date filter only
+            $registered = $model->whereBetween('created_at', [$data_start.' 00:00:00', $data_end.' 23:59:59'])
+                            ->whereHas('contact', function ($q) {
+                                $q->whereIn('state', [Registered::class, FirstState::class]);
+                            })->count();
+            $not_now = $model->whereBetween('created_at', [$data_start.' 00:00:00', $data_end.' 23:59:59'])
+                            ->whereHas('contact', function ($q) {
+                                $q->where('state', Undecided::class);
+                            })->count();
+            $for_tripping = $model->whereBetween('created_at', [$data_start.' 00:00:00', $data_end.' 23:59:59'])
+                            ->whereHas('contact', function ($q) {
+                                $q->where('state', ForTripping::class);
+                            })->count();
+            $availed = $model->whereBetween('created_at', [$data_start.' 00:00:00', $data_end.' 23:59:59'])
+                            ->whereHas('contact', function ($q) {
+                                $q->where('state', Availed::class);
+                            })->count();
+            $consulted = 0; // TODO: Data source for consulted. No State for consulted
         }else{ // Default
             $registered = $model->whereHas('contact', function ($q) {
                                 $q->whereIn('state', [Registered::class, FirstState::class]);
