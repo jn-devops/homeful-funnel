@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class OrganizationResource extends Resource
 {
     protected static ?string $model = Organization::class;
+    protected static ?string $navigationGroup = 'Dropdowns';
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     public static function getNavigationBadge(): ?string

@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class CampaignTypeResource extends Resource
 {
     protected static ?string $model = CampaignType::class;
+    protected static ?string $navigationGroup = 'Dropdowns';
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     public static function getNavigationBadge(): ?string

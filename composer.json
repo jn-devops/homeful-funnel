@@ -6,9 +6,11 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "bezhansalleh/filament-shield": "^3.2",
         "eightynine/filament-advanced-widgets": "^3.0",
         "filament/filament": "^3.2",
         "filament/notifications": "^3.2",
+        "howdu/filament-record-switcher": "^1.0",
         "jn-devops/common": "^1.1",
         "lara-zeus/qr": "^1.1",
         "laravel/framework": "^11.9",
