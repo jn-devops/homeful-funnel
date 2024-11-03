@@ -11,13 +11,14 @@ use App\Filament\Widgets\StatsOverview;
 use App\Filament\Widgets\CampaignAnalysisChart;
 use App\Filament\Widgets\CampaignsTable;
 use App\Filament\Widgets\StatsOverviewV2;
+use App\Models\Campaign;
 use App\Models\Project;
 
 class Dashboard extends \Filament\Pages\Dashboard
 {
     use HasFiltersForm;
 
-    public $campaigns;
+    public $projects;
     public $start;
     public $end;
 
@@ -42,9 +43,9 @@ class Dashboard extends \Filament\Pages\Dashboard
             Section::make('')->schema([
                 Select::make('campaigns')
                     ->multiple()
-                    ->options(array_merge(['All' => 'All'], Project::all()->pluck('name', 'name')->toArray()))
+                    ->options(array_merge(['All' => 'All'], Campaign::all()->pluck('name', 'id')->toArray()))
                     ->afterStateUpdated(function ($state) {
-                        $this->campaigns = $state;
+                        $this->projects = $state;
                         $this->updateWidgets();
                     }),
                 DatePicker::make('start_date')
@@ -64,7 +65,7 @@ class Dashboard extends \Filament\Pages\Dashboard
     protected function updateWidgets()
     {
         $this->dispatch("filtersUpdated", [
-            'campaigns' => $this->campaigns,
+            'projects' => $this->projects,
             'start' => $this->start,
             'end' => $this->end,
         ]);
