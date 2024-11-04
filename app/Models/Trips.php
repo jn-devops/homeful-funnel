@@ -10,6 +10,7 @@ class Trips extends Model
         'campaign_id',
         'contact_id',
         'project_id',
+        'checkin_id',
         'preferred_date',
         'preferred_time',
         'remarks',
@@ -33,5 +34,9 @@ class Trips extends Model
     public function project()
     {
         return $this->belongsTo(Project::class);
+    }
+    public function checkin()
+    {
+        return $this->belongsTo(Checkin::class);
     }
 }
