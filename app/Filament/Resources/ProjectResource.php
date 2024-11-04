@@ -60,6 +60,45 @@ class ProjectResource extends Resource
                     ->required()
                     ->maxLength(255)
                     ->columnSpanFull(),
+                Forms\Components\TextInput::make('default_product')
+                    ->label('Default Product')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('minimum_salary')
+                    ->label('Minimum Salary')
+                    ->numeric()
+                    ->required(),
+                Forms\Components\TextInput::make('default_price')
+                    ->label('Default Price')
+                    ->numeric()
+                    ->required(),
+                Forms\Components\TextInput::make('default_percent_down_payment')
+                    ->label('Default Percent Downpayment')
+                    ->numeric()
+                    ->prefix('%')
+                    ->required(),
+                Forms\Components\TextInput::make('default_percent_miscellaneous_fees')
+                    ->label('Default Percent Miscellaneous Fees')
+                    ->numeric()
+                    ->prefix('%')
+                    ->required(),
+                Forms\Components\TextInput::make('default_down_payment_term')
+                    ->label('Default Percent Downpayment Term')
+                    ->numeric()
+                    ->required(),
+                Forms\Components\TextInput::make('default_balance_payment_term')
+                    ->label('Default Balance Payment Term')
+                    ->numeric()
+                    ->required(),
+                Forms\Components\TextInput::make('default_balance_payment_interest_rate')
+                    ->label('Default Balance Payment Interest Rate')
+                    ->numeric()
+                    ->prefix('%')
+                    ->required(),
+                Forms\Components\TextInput::make('default_seller_commission_code')
+                    ->label('Default Seller Commission Code')
+                    ->required()
+                    ->maxLength(255),
             ])->columns(3);
     }
 
@@ -100,6 +139,15 @@ class ProjectResource extends Resource
                         $data['project_image']=$record->meta->get('project_image');
                         $data['seller_code']=$record->meta->get('seller_code');
                         $data['product_code']=$record->meta->get('product_code');
+                        $data['default_product']=$record->meta->get('default_product');
+                        $data['minimum_salary']=$record->meta->get('minimum_salary');
+                        $data['default_price']=$record->meta->get('default_price');
+                        $data['default_percent_down_payment']=$record->meta->get('default_percent_down_payment');
+                        $data['default_percent_miscellaneous_fees']=$record->meta->get('default_percent_miscellaneous_fees');
+                        $data['default_down_payment_term']=$record->meta->get('default_down_payment_term');
+                        $data['default_balance_payment_term']=$record->meta->get('default_balance_payment_term');
+                        $data['default_balance_payment_interest_rate']=$record->meta->get('default_balance_payment_interest_rate');
+                        $data['default_seller_commission_code']=$record->meta->get('default_seller_commission_code');
                     return $data;
                 }),
                 Tables\Actions\DeleteAction::make(),

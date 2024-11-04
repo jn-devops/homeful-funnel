@@ -42,7 +42,15 @@ class Project extends Model
         'seller_code',
         'product_code',
         'rider_url',
-        'default_product'
+        'default_product',
+        'minimum_salary',
+        'default_price',
+        'default_percent_down_payment',
+        'default_percent_miscellaneous_fees',
+        'default_down_payment_term',
+        'default_balance_payment_term',
+        'default_balance_payment_interest_rate',
+        'default_seller_commission_code',
     ];
 
     protected $appends = [

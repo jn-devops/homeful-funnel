@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Checkin;
 
+use App\Actions\GetReferenceCode;
 use App\Models\Checkin;
 use App\States\Availed;
 use App\States\ForTripping;
@@ -30,7 +31,10 @@ class SuccessPage extends Component
         if( $this->checkin->contact->state instanceof Registered){
             $this->checkin->contact->state->transitionTo(Availed::class);
         }
-        return redirect()->to(config('kwyc-check.campaign_url') . '?email=' . $this->checkin->contact->email . '&mobile=' . $this->checkin->contact->mobile . '&identifier='.$this->checkin->registration_code.'&code='.$this->checkin->campaign->project->seller_code.'&choice='.$this->checkin->campaign->project->product_code );
+        $reference_code = app(GetReferenceCode::class)->run($this->checkin);
+//        dd($reference_code);
+//        return redirect()->to(config('kwyc-check.campaign_url') . '?email=' . $this->checkin->contact->email . '&mobile=' . $this->checkin->contact->mobile . '&identifier='.$this->checkin->registration_code.'&code='.$this->checkin->campaign->project->seller_code.'&choice='.$this->checkin->campaign->project->product_code );
+        return redirect()->to(config('kwyc-check.campaign_url') . '?email=' . $this->checkin->contact->email . '&mobile=' . $this->checkin->contact->mobile . '&identifier='.$reference_code.'&code='.$this->checkin->campaign->project->seller_code.'&choice='.$this->checkin->campaign->project->product_code );
     }
 
     public function trip(){
