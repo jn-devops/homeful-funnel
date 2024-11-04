@@ -77,6 +77,7 @@ class CreateTrip extends Component implements HasForms
         $data = $this->form->getState();
         $data['campaign_id'] = $this->campaign->id;
         $data['contact_id'] = $this->contact->id;
+        $data['checkin_id'] = $this->checkin->id;
         $record = Trips::create($data);
         // $this->form->model($record)->saveRelationships();
         return redirect()->route('schedule.success_page',['trip' => $record->id]);

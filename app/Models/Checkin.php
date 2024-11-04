@@ -65,6 +65,11 @@ class Checkin extends Model
         return $this->belongsTo(Project::class);
     }
 
+    public function trip(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(Trips::class);
+    }
+
     public function setRiderUrlAttribute(string $value): static
     {
         $this->meta->set('rider_url', $value);

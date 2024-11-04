@@ -8,6 +8,7 @@ use App\States\FirstState;
 use App\States\ForTripping;
 use App\States\Registered;
 use App\States\Undecided;
+use Carbon\Carbon;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Tables\Actions\Action;
@@ -35,78 +36,198 @@ class StateModal extends Component implements HasForms, HasTable
 
     public function table(Table $table): Table
     {
-        return $table
-            ->query(function (): Builder {
-                switch ($this->state){
-                    case 'Registered':
-                        return $this->campaign->checkins()
-                                        ->whereHas('contact', function ($q) {
-                                                $q->whereIn('state', [Registered::class, FirstState::class]);
-                                        })
-                                        ->getQuery();
-                        break;
-                    case 'For Tripping':
-                        return $this->campaign->checkins()
-                                        ->whereHas('contact', function ($q) {
-                                                $q->where('state', ForTripping::class);
-                                        })
-                                        ->getQuery();
-                        break;
-                    case 'Availed':
-                        return $this->campaign->checkins()
-                                        ->whereHas('contact', function ($q) {
-                                                $q->where('state', Availed::class);
-                                        })
-                                        ->getQuery();
-                        break;
-                    case 'Not Now':
-                        return $this->campaign->checkins()
-                                        ->whereHas('contact', function ($q) {
-                                                $q->where('state', Undecided::class);
-                                        })
-                                        ->getQuery();
-                        break;
-                    default:
-                        return $this->campaign->checkins()
-                                        ->whereHas('contact', function ($q) {
-                                                $q->whereIn('state', [Registered::class, FirstState::class]);
-                                        })
-                                        ->getQuery();
-                        break;
-                }
-            })
-            ->columns([
-                TextColumn::make('contact.name')
-                    ->label('Name')
-                    ->searchable(query: function (Builder $query, string $search): Builder {
-                        return $query->whereHas('contact', function ($q) use ($search) {
-                            $q->where('name', 'like', "%{$search}%");
-                        });
-                    }),
-                TextColumn::make('contact.mobile')
-                    ->label('Contact Number'),
-                TextColumn::make('contact.organization.name')
-                    ->label('Organization'),
-                TextColumn::make('campaign.name')
-                    ->label('Campaign'),
-                TextColumn::make('project.name')
-                    ->label('Project Interested'),
-            ])
-            ->filters([
-                // ...
-            ])
-            ->actions([
-                Action::make('view_profile')
-                    ->label('View Profile')
-                    ->url(function ($record){
-                        return 'checkins?tableSearch='.$record->contact->name ?? ''; // TODO: Must be in directed to Prospect's infolist
-                    }) 
-                    ->openUrlInNewTab()
-                    ->icon('heroicon-s-eye')
-            ])
-            ->bulkActions([
-                // ...
-            ]);
+        if($this->state == 'Registered'){ // Registered
+            return $table
+                ->query(function (): Builder {
+                    return $this->campaign->checkins()
+                                    ->whereHas('contact', function ($q) {
+                                            $q->whereIn('state', [Registered::class, FirstState::class]);
+                                    })
+                                    ->getQuery();
+                })
+                ->columns([
+                    TextColumn::make('contact.name')
+                        ->label('Name')
+                        ->searchable(query: function (Builder $query, string $search): Builder {
+                            return $query->whereHas('contact', function ($q) use ($search) {
+                                $q->where('name', 'like', "%{$search}%");
+                            });
+                        }),
+                    TextColumn::make('contact.mobile')
+                        ->label('Contact Number'),
+                    TextColumn::make('contact.organization.name')
+                        ->label('Organization'),
+                    TextColumn::make('campaign.name')
+                        ->label('Campaign'),
+                    TextColumn::make('project.name')
+                        ->label('Project Interested'),
+                    TextColumn::make('created_at')
+                        ->formatStateUsing(function ($record) {
+                            return Carbon::parse($record->created_at)->format('F d, Y');
+                        })
+                        ->label('Date Registered'),
+                ])
+                ->filters([
+                    // ...
+                ])
+                ->actions([
+                    Action::make('view_profile')
+                        ->label('View Profile')
+                        ->url(function ($record){
+                            return 'checkins?tableSearch='.$record->contact->name ?? ''; // TODO: Must be in directed to Prospect's infolist
+                        }) 
+                        ->openUrlInNewTab()
+                        ->icon('heroicon-s-eye')
+                ])
+                ->bulkActions([
+                    // ...
+                ]);
+        }elseif($this->state == 'For Tripping'){ // For Tripping
+            return $table
+                ->query(function (): Builder {
+                    return $this->campaign->checkins()
+                                    ->whereHas('contact', function ($q) {
+                                        $q->where('state', ForTripping::class);
+                                    })
+                                    ->getQuery();
+                })
+                ->columns([
+                    TextColumn::make('contact.name')
+                        ->label('Name')
+                        ->searchable(query: function (Builder $query, string $search): Builder {
+                            return $query->whereHas('contact', function ($q) use ($search) {
+                                $q->where('name', 'like', "%{$search}%");
+                            });
+                        }),
+                    TextColumn::make('contact.mobile')
+                        ->label('Contact Number'),
+                    TextColumn::make('project.name')
+                            ->label('Project Interested'),
+                    TextColumn::make('contact.organization.name')
+                        ->label('Organization'),
+                    TextColumn::make('trip.preferred_date')
+                        ->formatStateUsing(function ($record) {
+                            return Carbon::parse($record->trip->preferred_date)->format('F d, Y');
+                        })
+                        ->label('Preferred Date'),
+                    TextColumn::make('trip.preferred_time')
+                        ->formatStateUsing(function ($record) {
+                            return Carbon::parse($record->trip->preferred_time)->format('h:i A');
+                        })
+                        ->label('Preferred Date'),
+                    TextColumn::make('trip.remarks')
+                        ->label('Remarks')
+                        ->wrap()
+                        ->lineClamp(2),
+                ])
+                ->filters([
+                    // ...
+                ])
+                ->actions([
+                    Action::make('view_profile')
+                        ->label('View Profile')
+                        ->url(function ($record){
+                            return 'checkins?tableSearch='.$record->contact->name ?? ''; // TODO: Must be in directed to Prospect's infolist
+                        }) 
+                        ->openUrlInNewTab()
+                        ->icon('heroicon-s-eye')
+                ])
+                ->bulkActions([
+                    // ...
+                ]);
+        }elseif($this->state == 'Availed'){ // Availed
+            return $table
+                ->query(function (): Builder {
+                    return $this->campaign->checkins()
+                                    ->whereHas('contact', function ($q) {
+                                        $q->where('state', Availed::class);
+                                    })
+                                    ->getQuery();
+                })
+                ->columns([
+                    TextColumn::make('contact.name')
+                        ->label('Name')
+                        ->searchable(query: function (Builder $query, string $search): Builder {
+                            return $query->whereHas('contact', function ($q) use ($search) {
+                                $q->where('name', 'like', "%{$search}%");
+                            });
+                        }),
+                    TextColumn::make('contact.mobile')
+                        ->label('Contact Number'),
+                    TextColumn::make('contact.organization.name')
+                        ->label('Organization'),
+                    TextColumn::make('campaign.name')
+                        ->label('Campaign'),
+                    TextColumn::make('project.name')
+                        ->label('Project Interested'),
+                    TextColumn::make('contact.availed_at')
+                        ->formatStateUsing(function ($record) {
+                            return Carbon::parse($record->created_at)->format('F d, Y');
+                        })
+                        ->label('Date Availed'),
+                ])
+                ->filters([
+                    // ...
+                ])
+                ->actions([
+                    Action::make('view_profile')
+                        ->label('View Profile')
+                        ->url(function ($record){
+                            return 'checkins?tableSearch='.$record->contact->name ?? ''; // TODO: Must be in directed to Prospect's infolist
+                        }) 
+                        ->openUrlInNewTab()
+                        ->icon('heroicon-s-eye')
+                ])
+                ->bulkActions([
+                    // ...
+                ]);
+        }elseif($this->state == 'Not Now'){ // Not Now
+            return $table
+                ->query(function (): Builder {
+                    return $this->campaign->checkins()
+                                    ->whereHas('contact', function ($q) {
+                                        $q->where('state', Undecided::class);
+                                    })
+                                    ->getQuery();
+                })
+                ->columns([
+                    TextColumn::make('contact.name')
+                        ->label('Name')
+                        ->searchable(query: function (Builder $query, string $search): Builder {
+                            return $query->whereHas('contact', function ($q) use ($search) {
+                                $q->where('name', 'like', "%{$search}%");
+                            });
+                        }),
+                    TextColumn::make('contact.mobile')
+                        ->label('Contact Number'),
+                    TextColumn::make('contact.organization.name')
+                        ->label('Organization'),
+                    TextColumn::make('campaign.name')
+                        ->label('Campaign'),
+                    TextColumn::make('project.name')
+                        ->label('Project Interested'),
+                    TextColumn::make('created_at')
+                        ->formatStateUsing(function ($record) {
+                            return Carbon::parse($record->created_at)->format('F d, Y');
+                        })
+                        ->label('Date Clicked "Not Now"'),
+                ])
+                ->filters([
+                    // ...
+                ])
+                ->actions([
+                    Action::make('view_profile')
+                        ->label('View Profile')
+                        ->url(function ($record){
+                            return 'checkins?tableSearch='.$record->contact->name ?? ''; // TODO: Must be in directed to Prospect's infolist
+                        }) 
+                        ->openUrlInNewTab()
+                        ->icon('heroicon-s-eye')
+                ])
+                ->bulkActions([
+                    // ...
+                ]);
+        }
     }
 
     public function render()

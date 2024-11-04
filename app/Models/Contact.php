@@ -22,6 +22,7 @@ use App\States\ContactState;
  * @property string $id
  * @property string $mobile
  * @property string $mobile_country
+ * @property string $email
  * @property ContactState $state
  * @property Organization $organization
  * @property Campaign $campaign

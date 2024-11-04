@@ -1,9 +1,9 @@
 <?php
 
 use Spatie\SchemalessAttributes\SchemalessAttributes;
+use App\Models\{Campaign, Checkin, Contact, Project};
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use App\Models\{Campaign, Checkin, Contact, Project};
 
 uses(RefreshDatabase::class, WithFaker::class);
 
