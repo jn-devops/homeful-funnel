@@ -24,7 +24,6 @@ class CheckinResource extends Resource
     protected static ?string $model = Checkin::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-    protected static ?string $modelLabel = 'Prospect';
     public static function getNavigationBadge(): ?string
     {
         return static::getModel()::count();
