@@ -1,66 +1,32 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Livewire;
 
-use App\Filament\Resources\ContactResource\Pages;
-use App\Filament\Resources\ContactResource\RelationManagers;
-use App\Filament\Resources\ContactResource\Widgets\ContactStateSummary;
 use App\Models\Contact;
-use App\Models\SmsLogs;
 use App\Notifications\Adhoc;
-use App\States\ContactState;
-use App\States\Registered;
-use Filament\Forms;
 use Filament\Forms\Components\Textarea;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
+use Filament\Forms\Concerns\InteractsWithForms;
+use Filament\Forms\Contracts\HasForms;
 use Filament\Tables;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\BulkAction;
+use Filament\Tables\Concerns\InteractsWithTable;
+use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
-use Filament\Tables\Columns\Summarizers\Count;
-use Illuminate\Database\Query\Builder;
+use Illuminate\Support\Collection;
+use Livewire\Component;
+use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Builder;
 
-class ContactResource extends Resource
+class ContactTable extends Component implements HasForms, HasTable
 {
-    protected static ?string $model = Contact::class;
-
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-    protected static ?string $modelLabel = 'Prospect';
-    public static function getNavigationBadge(): ?string
-    {
-        return static::getModel()::count();
-    }
-
-    public static function form(Form $form): Form
-    {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make('mobile')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('email')
-                    ->email()
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('name')
-                    ->maxLength(255),
-//                Forms\Components\TextInput::make('meta'),
-                Forms\Components\Select::make('organization_id')
-                    ->preload()
-                    ->relationship('organization', 'name')
-                    ->searchable(),
-//                Forms\Components\Select::make('campaign_id')
-//                    ->preload()
-//                    ->relationship('campaign', 'name')
-//                    ->searchable(),
-            ]);
-    }
+    use InteractsWithForms;
+    use InteractsWithTable;
 
     public static function table(Table $table): Table
     {
         return $table
+            ->query(Contact::query())
             ->defaultSort('created_at', 'desc')
             ->defaultPaginationPageOption(50)
             ->columns([
@@ -148,11 +114,8 @@ class ContactResource extends Resource
             ]);
     }
 
-    public static function getPages(): array
+    public function render(): View
     {
-        return [
-            'index' => Pages\ManageContacts::route('/'),
-        ];
+        return view('livewire.contact-table');
     }
-
 }

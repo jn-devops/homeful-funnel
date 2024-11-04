@@ -1,50 +1,31 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Livewire;
 
-use App\Filament\Resources\CheckinResource\Pages;
-use App\Filament\Resources\CheckinResource\RelationManagers;
-use App\Models\Campaign;
 use App\Models\Checkin;
 use App\Models\Contact;
-use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
+use Filament\Forms\Concerns\InteractsWithForms;
+use Filament\Forms\Contracts\HasForms;
 use Filament\Tables;
-use Filament\Tables\Columns\Layout\Split;
-use Filament\Tables\Columns\Layout\Stack;
+use Filament\Tables\Concerns\InteractsWithTable;
+use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Grouping\Group;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Livewire\Component;
+use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Builder;
 
-class CheckinResource extends Resource
+class CheckinTable extends Component implements HasForms, HasTable
 {
-    protected static ?string $model = Checkin::class;
-
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-    public static function getNavigationBadge(): ?string
-    {
-        return static::getModel()::count();
-    }
-    public static function form(Form $form): Form
-    {
-        return $form
-            ->schema([
-//                Forms\Components\Select::make('contact_id')
-//                    ->relationship('contact', 'id'),
-//                Forms\Components\TextInput::make('contact.name'),
-
-                Forms\Components\Select::make('campaign_id')
-                    ->relationship('campaign', 'name'),
-            ]);
-    }
+    use InteractsWithForms;
+    use InteractsWithTable;
 
     public static function table(Table $table): Table
     {
         // dd(Checkin::where('id', '9d4f86fc-c4a4-4f1f-8268-604a4b21e506')->first()->contact);
         return $table
+            ->query(Checkin::query())
             ->defaultSort('created_at', 'desc')
             ->defaultPaginationPageOption(50)
             ->groups([
@@ -89,15 +70,15 @@ class CheckinResource extends Resource
                         });
                     }),
                 Tables\Columns\TextColumn::make('contact.organization.name'),
-                    // ->searchable(),
+                // ->searchable(),
                 Tables\Columns\TextColumn::make('campaign.name'),
-                    // ->searchable(),
+                // ->searchable(),
                 Tables\Columns\TextColumn::make('campaign.campaignType.name')
-                        ->label('Campaign Type'),
-                        // ->searchable(),
+                    ->label('Campaign Type'),
+                // ->searchable(),
                 Tables\Columns\TextColumn::make('project.name')
-                        ->label('Project'),
-                        // ->searchable(),
+                    ->label('Project'),
+                // ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -121,10 +102,8 @@ class CheckinResource extends Resource
             ]);
     }
 
-    public static function getPages(): array
+    public function render(): View
     {
-        return [
-            'index' => Pages\ManageCheckins::route('/'),
-        ];
+        return view('livewire.checkin-table');
     }
 }
