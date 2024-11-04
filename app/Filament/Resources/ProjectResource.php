@@ -67,38 +67,31 @@ class ProjectResource extends Resource
                 Forms\Components\TextInput::make('minimum_salary')
                     ->label('Minimum Salary')
                     ->numeric()
-                    ->required()
-                    ->maxLength(255),
+                    ->required(),
                 Forms\Components\TextInput::make('default_price')
                     ->label('Default Price')
                     ->numeric()
-                    ->required()
-                    ->maxLength(255),
+                    ->required(),
                 Forms\Components\TextInput::make('default_percent_down_payment')
                     ->label('Default Percent Downpayment')
                     ->numeric()
-                    ->required()
-                    ->maxLength(255),
+                    ->required(),
                 Forms\Components\TextInput::make('default_percent_miscellaneous_fees')
                     ->label('Default Percent Miscellaneous Fees')
                     ->numeric()
-                    ->required()
-                    ->maxLength(255),
+                    ->required(),
                 Forms\Components\TextInput::make('default_down_payment_term')
                     ->label('Default Percent Downpayment Term')
                     ->numeric()
-                    ->required()
-                    ->maxLength(255),
+                    ->required(),
                 Forms\Components\TextInput::make('default_balance_payment_term')
                     ->label('Default Balance Payment Term')
                     ->numeric()
-                    ->required()
-                    ->maxLength(255),
+                    ->required(),
                 Forms\Components\TextInput::make('default_balance_payment_interest_rate')
                     ->label('Default Balance Payment Interest Rate')
                     ->numeric()
-                    ->required()
-                    ->maxLength(255),
+                    ->required(),
                 Forms\Components\TextInput::make('default_seller_commission_code')
                     ->label('Default Seller Commission Code')
                     ->required()
