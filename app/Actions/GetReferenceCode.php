@@ -17,13 +17,13 @@ class GetReferenceCode
 
         $response = Http::withHeader('accept', 'application/json')->post(url: $booking_server_url, data: [
             InputFieldName::SKU => $checkin->project->product_code,
-            InputFieldName::WAGES => 15000,
-            InputFieldName::TCP => 850000,
-            InputFieldName::PERCENT_DP => 0.10,
-            InputFieldName::PERCENT_MF => 0.085,
-            InputFieldName::DP_TERM => 24,
-            InputFieldName::BP_TERM => 30,
-            InputFieldName::BP_INTEREST_RATE => 0.065,
+            InputFieldName::WAGES => $checkin->project->minimum_salary,
+            InputFieldName::TCP => $checkin->project->default_price,
+            InputFieldName::PERCENT_DP => $checkin->project->default_percent_down_payment,
+            InputFieldName::PERCENT_MF => $checkin->project->default_percent_miscellaneous_fees,
+            InputFieldName::DP_TERM => $checkin->project->default_down_payment_term,
+            InputFieldName::BP_TERM => $checkin->project->default_balance_payment_term,
+            InputFieldName::BP_INTEREST_RATE => $checkin->project->default_balance_payment_interest_rate,
             InputFieldName::SELLER_COMMISSION_CODE => $checkin->project->default_seller_commission_code,
             InputFieldName::PROMO_CODE => $checkin->registration_code,
         ]);

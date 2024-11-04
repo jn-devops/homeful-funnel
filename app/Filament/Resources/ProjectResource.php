@@ -101,7 +101,6 @@ class ProjectResource extends Resource
                     ->maxLength(255),
                 Forms\Components\TextInput::make('default_seller_commission_code')
                     ->label('Default Seller Commission Code')
-                    ->numeric()
                     ->required()
                     ->maxLength(255),
             ])->columns(3);
