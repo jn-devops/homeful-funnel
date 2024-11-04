@@ -18,9 +18,12 @@ class Prospects extends Page
     public $activeTab ='prospects';
     protected function getHeaderWidgets(): array
     {
-        return [
-            ContactStateSummary::class,
-        ];
+        if($this->activeTab=='prospects'){
+            return [
+                ContactStateSummary::class,
+            ];
+        }
+       return [];
     }
 
 //    public function mount()
