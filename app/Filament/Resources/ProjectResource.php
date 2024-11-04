@@ -75,10 +75,12 @@ class ProjectResource extends Resource
                 Forms\Components\TextInput::make('default_percent_down_payment')
                     ->label('Default Percent Downpayment')
                     ->numeric()
+                    ->prefix('%')
                     ->required(),
                 Forms\Components\TextInput::make('default_percent_miscellaneous_fees')
                     ->label('Default Percent Miscellaneous Fees')
                     ->numeric()
+                    ->prefix('%')
                     ->required(),
                 Forms\Components\TextInput::make('default_down_payment_term')
                     ->label('Default Percent Downpayment Term')
@@ -91,6 +93,7 @@ class ProjectResource extends Resource
                 Forms\Components\TextInput::make('default_balance_payment_interest_rate')
                     ->label('Default Balance Payment Interest Rate')
                     ->numeric()
+                    ->prefix('%')
                     ->required(),
                 Forms\Components\TextInput::make('default_seller_commission_code')
                     ->label('Default Seller Commission Code')
