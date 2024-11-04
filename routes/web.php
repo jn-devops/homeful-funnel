@@ -21,3 +21,4 @@ Route::get('schedule-trip-success', App\Livewire\Trips\SuccessPage::class )->nam
 //    dd($request->all());
 //});
 
+Route::get('avail/{checkin}', \App\Http\Controllers\AvailController::class)->name('avail');
