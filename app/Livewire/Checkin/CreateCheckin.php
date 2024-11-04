@@ -107,7 +107,7 @@ class CreateCheckin extends Component implements HasForms
                         ->inlineLabel()
                         ->native(false)
                         ->searchable()
-                        ->options($this->campaign->organizations()->pluck('name', 'name')->toArray() + ['other' => 'Other'])
+                        ->options($this->campaign->organizations()->pluck('name', 'name')->toArray() + ['other' => 'Others'])
                         ->preload()
                         ->live()
                         ->default($this->organization_default)
