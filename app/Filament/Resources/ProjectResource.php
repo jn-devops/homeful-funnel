@@ -67,10 +67,14 @@ class ProjectResource extends Resource
                 Forms\Components\TextInput::make('minimum_salary')
                     ->label('Minimum Salary')
                     ->numeric()
+                    ->maxValue(120000)
+                    ->minValue(10000)
                     ->required(),
                 Forms\Components\TextInput::make('default_price')
                     ->label('Default Price')
                     ->numeric()
+                    ->maxValue(10000000)
+                    ->minValue(500000)
                     ->required(),
                 Forms\Components\TextInput::make('default_percent_down_payment')
                     ->label('Default Percent Downpayment')
@@ -81,19 +85,23 @@ class ProjectResource extends Resource
                     ->label('Default Percent Miscellaneous Fees')
                     ->numeric()
                     ->prefix('%')
+                    ->maxValue(15)
                     ->required(),
                 Forms\Components\TextInput::make('default_down_payment_term')
-                    ->label('Default Percent Downpayment Term')
+                    ->label('Default Percent Downpayment Term(In Months)')
                     ->numeric()
+                    ->maxValue(24)
                     ->required(),
                 Forms\Components\TextInput::make('default_balance_payment_term')
-                    ->label('Default Balance Payment Term')
+                    ->label('Default Balance Payment Term(In Years)')
                     ->numeric()
+                    ->maxValue(30)
                     ->required(),
                 Forms\Components\TextInput::make('default_balance_payment_interest_rate')
                     ->label('Default Balance Payment Interest Rate')
                     ->numeric()
                     ->prefix('%')
+                    ->maxValue(20)
                     ->required(),
                 Forms\Components\TextInput::make('default_seller_commission_code')
                     ->label('Default Seller Commission Code')
