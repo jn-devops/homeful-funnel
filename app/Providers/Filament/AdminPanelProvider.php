@@ -13,6 +13,7 @@ use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
 use Filament\Widgets;
+use Howdu\FilamentRecordSwitcher\FilamentRecordSwitcherPlugin;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -63,6 +64,7 @@ class AdminPanelProvider extends PanelProvider
                 Authenticate::class,
             ])->plugins([
                 \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make(),
+                FilamentRecordSwitcherPlugin::make(),
             ]);
     }
 }
