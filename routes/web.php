@@ -1,9 +1,8 @@
 <?php
 
-use App\Http\Controllers\CheckinController;
-use App\Models\Checkin;
-use Illuminate\Http\Request;
+use App\Http\Controllers\LinkController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 
 //Route::get('/', function () {
 //    return view('welcome');
@@ -22,3 +21,4 @@ Route::get('schedule-trip-success', App\Livewire\Trips\SuccessPage::class )->nam
 //});
 
 Route::get('avail/{checkin}', \App\Http\Controllers\AvailController::class)->name('avail');
+Route::get('/537/{shortUrl}', [LinkController::class, 'show'])->name('link.show');

@@ -3,6 +3,7 @@
 namespace App\Actions;
 
 use Lorisleiva\Actions\Concerns\AsAction;
+use App\Actions\GenerateAvailUrl;
 use App\Models\Checkin;
 use App\Models\Contact;
 
@@ -22,7 +23,7 @@ class ProcessFeedback
                 'campaign' => $checkin->campaign->name??'',
                 'registration_code' => $checkin->registration_code??'',
                 'campaign_type' => $checkin->campaign->campaignType->name??'',
-                'avail_url' => route('avail', ['checkin' => $checkin->id])
+                'avail_url' => app(GenerateAvailUrl::class)->run($checkin)
             ]);
         }
     }
