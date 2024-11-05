@@ -25,7 +25,7 @@ class AvailController extends Controller
     protected function getBookingUrl(): string
     {
         return __('https://kwyc-check.net/campaign-checkin/:campaign_code', [
-            'campaign_code' => '9ccef822-4209-4e0a-bb40-232da5cafdf1'
+            'campaign_code' => '9d45e2fc-4d4a-4905-ab53-5ff8599f77ff'
         ]);
     }
 
