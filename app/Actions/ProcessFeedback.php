@@ -22,6 +22,7 @@ class ProcessFeedback
                 'campaign' => $checkin->campaign->name??'',
                 'registration_code' => $checkin->registration_code??'',
                 'campaign_type' => $checkin->campaign->campaignType->name??'',
+                'rider_url' => route('avail', ['checkin' => $checkin->id])
             ]);
         }
     }
