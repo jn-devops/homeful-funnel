@@ -92,6 +92,7 @@ class CampaignResource extends Resource
                             <li><strong>@campaign:</strong> Campaign associated with the check-in.</li>
                             <li><strong>@registration_code:</strong> Generated unique code after registration.</li>
                             <li><strong>@campaign_type:</strong> Type of campaign associated with the check-in.</li>
+                            <li><strong>@rider_url:</strong> Link to Avail(Kwyc).</li>
                         </ul>
                     '))
                     ->columnSpan(2),
