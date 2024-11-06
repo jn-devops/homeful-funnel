@@ -52,6 +52,7 @@ class Project extends Model
         'default_balance_payment_term',
         'default_balance_payment_interest_rate',
         'default_seller_commission_code',
+        'kwyc_check_campaign_code',
     ];
 
     protected $appends = [
