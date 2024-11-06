@@ -28,7 +28,9 @@ class GenerateAvailUrl
     protected function getBookingUrl(Checkin $checkin): string
     {
         return __('https://kwyc-check.net/campaign-checkin/:campaign_code', [
-            'campaign_code' => $checkin->campaign?->project?->kwyc_check_campaign_code ?: config('funnel.kwyc-check.campaign_code')
+            'campaign_code' => $checkin->campaign?->project?->kwyc_check_campaign_code
+                ? $checkin->campaign->project->kwyc_check_campaign_code
+                : config('funnel.kwyc-check.campaign_code')
         ]);
     }
 
