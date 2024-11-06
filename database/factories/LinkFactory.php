@@ -17,7 +17,8 @@ class LinkFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'original_url' => $this->faker->url(),
+            'short_url' => $this->faker->url()
         ];
     }
 }

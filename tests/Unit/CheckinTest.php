@@ -1,7 +1,7 @@
 <?php
 
+use App\Models\{Campaign, Checkin, Contact, Link, Project};
 use Spatie\SchemalessAttributes\SchemalessAttributes;
-use App\Models\{Campaign, Checkin, Contact, Project};
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 
@@ -41,4 +41,27 @@ test('checkin has registration code', function () {
     preg_match('/(.*)-(.*)-(.*)-(.*)-(.*)/', $code, $campaign_codes);
 
     expect($checkin->registration_code)->toBe(substr($campaign_codes[Checkin::REG_CODE_UUID_GROUP_INDEX], Checkin::REG_CODE_SUBSTRING_COUNT));
+});
+
+test('checkin has one link', function (){
+    $checkin = Checkin::factory()->create();
+    expect($checkin->link)->toBeNull();
+    $link_attributes = Link::factory()->definition();
+    $checkin->link()->create($link_attributes);
+    $checkin->save();
+    $checkin->refresh();
+    expect($checkin->link)->toBeInstanceOf(Link::class);
+    expect($checkin->link->only(['original_url', 'short_url']))->toBe($link_attributes);
+});
+
+test('checkin can get or generation avail url', function () {
+    $checkin = Checkin::factory()->forContact()->forProject()->create();
+    expect(Link::all())->toHaveCount(0);
+    $url1 = $checkin->getOrGenerateAvailUrl();
+    expect(Link::all())->toHaveCount(1);
+    $checkin->refresh();
+    $url2 = $checkin->getOrGenerateAvailUrl();
+    expect(Link::all())->toHaveCount(1);
+    $checkin->refresh();
+    expect($url2)->toBe($url1);
 });

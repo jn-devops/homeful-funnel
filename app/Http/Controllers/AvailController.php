@@ -15,7 +15,7 @@ class AvailController extends Controller
 
     public function __invoke(Request $request, Checkin $checkin): \Illuminate\Http\RedirectResponse
     {
-        $path = app(GenerateAvailUrl::class)->run($checkin);
+        $path = $checkin->getOrGenerateAvailUrl();
 
         return redirect()->away($path);
     }

@@ -12,6 +12,7 @@ use Vinkla\Hashids\Facades\Hashids;
  * @property int $id
  * @property string $original_url
  * @property string $short_url
+ * @property Checkin $checkin
  *
  * @method int getKey()
  */
@@ -40,5 +41,10 @@ class Link extends Model
         $link = self::find($linkId)->first();
 
         return $link ? $link->original_url : null;
+    }
+
+    public function checkin(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Checkin::class);
     }
 }

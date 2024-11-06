@@ -7,6 +7,7 @@ use Spatie\SchemalessAttributes\SchemalessAttributes;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Homeful\Common\Traits\HasMeta;
+use App\Actions\GenerateAvailUrl;
 
 /**
  * Class Checkin
@@ -17,6 +18,7 @@ use Homeful\Common\Traits\HasMeta;
  * @property SchemalessAttributes $meta
  * @property string registration_code
  * @property Project $project
+ * @property Link $link
  *
  * @method int getKey()
  */
@@ -79,5 +81,18 @@ class Checkin extends Model
     public function getRiderUrlAttribute(): ?string
     {
         return $this->meta->get('rider_url');
+    }
+
+    public function link(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(Link::class, 'checkin_id', 'id');
+    }
+
+    public function getOrGenerateAvailUrl(): string
+    {
+        return null == $this->link
+            ? app(GenerateAvailUrl::class)->run($this)
+            : route('link.show', ['shortUrl' => $this->link->short_url])
+            ;
     }
 }

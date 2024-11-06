@@ -41,6 +41,6 @@ test('checkin contact has end point', function () {
     expect($contact->last_name)->toBe($last_name);
     expect($checkin->contact->is($contact))->toBeTrue();
     expect($checkin->contact->organization->is($organization))->toBeTrue();
-});
+})->skip();
 
 

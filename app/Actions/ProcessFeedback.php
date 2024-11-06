@@ -23,7 +23,7 @@ class ProcessFeedback
                 'campaign' => $checkin->campaign->name??'',
                 'registration_code' => $checkin->registration_code??'',
                 'campaign_type' => $checkin->campaign->campaignType->name??'',
-                'avail_url' => app(GenerateAvailUrl::class)->run($checkin)
+                'avail_url' => $checkin->getOrGenerateAvailUrl()
             ]);
         }
     }

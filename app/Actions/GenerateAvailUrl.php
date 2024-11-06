@@ -19,6 +19,8 @@ class GenerateAvailUrl
             'identifier' => $this->getReferenceCode($checkin),
         ]);
         $link = Link::shortenUrl($url->toString());
+        $link->checkin()->associate($checkin);
+        $link->save();
 
         return route('link.show', ['shortUrl' => $link->short_url]);
     }
