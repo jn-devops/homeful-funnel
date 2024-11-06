@@ -27,7 +27,8 @@ class ProjectFactory extends Factory
             'default_down_payment_term' => $this->faker->numberBetween(0,24),
             'default_balance_payment_term' => $this->faker->numberBetween(0,30),
             'default_balance_payment_interest_rate' => $this->faker->numberBetween(3,8) / 100,
-            'default_seller_commission_code' => $this->faker->word()
+            'default_seller_commission_code' => $this->faker->word(),
+            'kwyc_check_campaign_code' => $this->faker->word()
         ];
     }
 }

@@ -12,7 +12,7 @@ class GenerateAvailUrl
 
     public function handle(Checkin $checkin): string
     {
-        $url = Url::parse(url: $this->getBookingUrl());
+        $url = Url::parse(url: $this->getBookingUrl($checkin));
         $url->queryArray(query: [
             'mobile' => $checkin->contact->mobile,
             'email' => $checkin->contact->email,
@@ -25,10 +25,10 @@ class GenerateAvailUrl
         return route('link.show', ['shortUrl' => $link->short_url]);
     }
 
-    protected function getBookingUrl(): string
+    protected function getBookingUrl(Checkin $checkin): string
     {
         return __('https://kwyc-check.net/campaign-checkin/:campaign_code', [
-            'campaign_code' => config('funnel.kwyc-check.campaign_code')
+            'campaign_code' => $checkin->campaign?->project?->kwyc_check_campaign_code ?: config('funnel.kwyc-check.campaign_code')
         ]);
     }
 

@@ -20,6 +20,7 @@ test('project has attributes', function () {
     expect($project->default_balance_payment_term)->toBeInt();
     expect($project->default_balance_payment_interest_rate)->toBeFloat();
     expect($project->default_seller_commission_code)->toBeString();
+    expect($project->kwyc_check_campaign_code)->toBeString();
     expect($project->meta)->toBeInstanceOf(SchemalessAttributes::class);
     $url = $this->faker->url();
     $project->rider_url = $url;

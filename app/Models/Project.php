@@ -26,6 +26,7 @@ use Homeful\Common\Traits\HasMeta;
  * @property int $default_balance_payment_term
  * @property float $default_balance_payment_interest_rate
  * @property string $default_seller_commission_code
+ * @property string $kwyc_check_campaign_code
  *
  * @method int getKey()
  */
@@ -198,5 +199,16 @@ class Project extends Model
     public function getDefaultSellerCommissionCodeAttribute(): ?string
     {
         return $this->meta->get('default_seller_commission_code');
+    }
+
+    public function setKwycCheckCampaignCodeAttribute(string $value): static
+    {
+        $this->meta->set('kwyc_check_campaign_code', $value);
+        return $this;
+    }
+
+    public function getKwycCheckCampaignCodeAttribute(): ?string
+    {
+        return $this->meta->get('kwyc_check_campaign_code');
     }
 }
