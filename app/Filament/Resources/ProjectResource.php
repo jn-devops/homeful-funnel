@@ -60,6 +60,11 @@ class ProjectResource extends Resource
                     ->required()
                     ->maxLength(255)
                     ->columnSpanFull(),
+                Forms\Components\TextInput::make('kwyc_check_campaign_code')
+                    ->label('KWYC Campaign Code')
+                    ->required()
+                    ->maxLength(255)
+                    ->columnSpanFull(),
                 Forms\Components\TextInput::make('default_product')
                     ->label('Default Product')
                     ->required()
@@ -156,6 +161,7 @@ class ProjectResource extends Resource
                         $data['default_balance_payment_term']=$record->meta->get('default_balance_payment_term');
                         $data['default_balance_payment_interest_rate']=$record->meta->get('default_balance_payment_interest_rate');
                         $data['default_seller_commission_code']=$record->meta->get('default_seller_commission_code');
+                        $data['kwyc_check_campaign_code']=$record->meta->get('kwyc_check_campaign_code');
                     return $data;
                 }),
                 Tables\Actions\DeleteAction::make(),
