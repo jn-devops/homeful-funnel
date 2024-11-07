@@ -32,7 +32,10 @@ class GenerateAvailUrl
 
     protected function getBookingUrl(Checkin $checkin): string
     {
-        return __('https://kwyc-check.net/campaign-checkin/:campaign_code', [
+        $authentication_server = config('funnel.defaults.authentication_server');
+        $authentication_url = 'https://' . $authentication_server . '/campaign-checkin/:campaign_code';
+
+        return __($authentication_url, [
             'campaign_code' => $checkin->project?->kwyc_check_campaign_code
                 ? $checkin->project->kwyc_check_campaign_code
                 : config('funnel.kwyc-check.campaign_code')

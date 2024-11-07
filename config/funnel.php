@@ -8,6 +8,7 @@ return [
 //    ],
     'defaults' => [
         'booking_server' => env('DEFAULT_BOOKING_SERVER'),
+        'authentication_server' => env('DEFAULT_AUTHENTICATION_SERVER', 'kwyc-check.net'),
         'sales_unit' => SalesUnit::tryFrom(env('DEFAULT_SALES_UNIT', SalesUnit::default()->value))
     ],
     'campaign_code' => [
