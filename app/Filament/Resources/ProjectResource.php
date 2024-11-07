@@ -78,6 +78,7 @@ class ProjectResource extends Resource
                     ->required(),
                 Forms\Components\Select::make('sales_unit')
                     ->label('Sales Unit')
+                    ->native(false)
                     ->options(function () {
                         $data = array_map(fn($case) => [
                             'value' => $case->value,
