@@ -37,7 +37,7 @@ class GenerateAvailUrl
 
         return __($authentication_url, [
             'campaign_code' => $checkin->project?->kwyc_check_campaign_code
-                ? $checkin->project->kwyc_check_campaign_code
+                ? $checkin->project->sales_unit->campaign_code()
                 : config('funnel.kwyc-check.campaign_code')
         ]);
     }
