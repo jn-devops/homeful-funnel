@@ -31,7 +31,6 @@ class SuccessPage extends Component
         if( $this->checkin->contact->state instanceof Registered){
             $this->checkin->contact->state->transitionTo(Availed::class);
         }
-        dd($this->checkin->getOrGenerateAvailUrl());
         return redirect()->to($this->checkin->getOrGenerateAvailUrl());
     }
 
