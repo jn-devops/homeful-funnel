@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\SalesUnit;
 use App\Filament\Resources\ProjectResource\Pages;
 use App\Filament\Resources\ProjectResource\RelationManagers;
 use App\Models\Project;
@@ -74,6 +75,18 @@ class ProjectResource extends Resource
                     ->numeric()
                     ->maxValue(120000)
                     ->minValue(10000)
+                    ->required(),
+                Forms\Components\Select::make('sales_unit')
+                    ->label('Sales Unit')
+                    ->options(function () {
+                        $data = array_map(fn($case) => [
+                            'value' => $case->value,
+                            'label' => $case->name,
+                        ], SalesUnit::cases());
+                        $values = array_column($data, 'value');
+                        $labels = array_column($data, 'label');
+                        return array_combine($values, $labels);
+                    })
                     ->required(),
                 Forms\Components\TextInput::make('default_price')
                     ->label('Default Price')
@@ -162,6 +175,7 @@ class ProjectResource extends Resource
                         $data['default_balance_payment_interest_rate']=$record->meta->get('default_balance_payment_interest_rate');
                         $data['default_seller_commission_code']=$record->meta->get('default_seller_commission_code');
                         $data['kwyc_check_campaign_code']=$record->meta->get('kwyc_check_campaign_code');
+                        $data['sales_unit']=$record->meta->get('sales_unit');
                     return $data;
                 }),
                 Tables\Actions\DeleteAction::make(),
