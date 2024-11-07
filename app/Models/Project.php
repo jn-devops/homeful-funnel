@@ -238,6 +238,6 @@ class Project extends Model
     {
         $value = $this->meta->get('sales_unit');
 
-        return SalesUnit::tryFrom($value);
+        return SalesUnit::tryFrom($value) ?: config('funnel.defaults.sales_unit');
     }
 }

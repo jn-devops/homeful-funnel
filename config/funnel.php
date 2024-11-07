@@ -7,7 +7,8 @@ return [
 //        'campaign_code' => env('CAMPAIGN_CODE', '9d45e2fc-4d4a-4905-ab53-5ff8599f77ff"')
 //    ],
     'defaults' => [
-        'booking_server' => env('DEFAULT_BOOKING_SERVER')
+        'booking_server' => env('DEFAULT_BOOKING_SERVER'),
+        'sales_unit' => SalesUnit::tryFrom(env('DEFAULT_SALES_UNIT', SalesUnit::default()->value))
     ],
     'campaign_code' => [
         SalesUnit::EXE->name => env('CAMPAIGN_CODE_EXE', '9d6c449e-1fd2-404f-a436-efd0b2d1ac2d'),

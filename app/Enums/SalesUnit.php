@@ -32,4 +32,9 @@ enum SalesUnit: string
 
         return self::cases()[rand(0, $count)];
     }
+
+    public static function default(): self
+    {
+        return SalesUnit::EXE;
+    }
 }
