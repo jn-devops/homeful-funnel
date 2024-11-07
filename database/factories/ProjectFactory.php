@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Enums\SalesUnit;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Project>
@@ -28,7 +29,9 @@ class ProjectFactory extends Factory
             'default_balance_payment_term' => $this->faker->numberBetween(0,30),
             'default_balance_payment_interest_rate' => $this->faker->numberBetween(3,8) / 100,
             'default_seller_commission_code' => $this->faker->word(),
-            'kwyc_check_campaign_code' => $this->faker->word()
+            'kwyc_check_campaign_code' => $this->faker->word(),
+            'booking_server' => $this->faker->domainName(),
+            'sales_unit' => SalesUnit::random()
         ];
     }
 }

@@ -1,22 +1,21 @@
 <?php
 
+use App\Actions\{GenerateAvailUrl, GetReferenceCode};
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use App\Models\{Checkin, Contact, Link};
-use Illuminate\Support\Facades\Http;
-use App\Actions\GenerateAvailUrl;
 use Crwlr\Url\Url;
 
 uses(RefreshDatabase::class, WithFaker::class);
 
 test('generate avail url works', function () {
-    Http::fake([
-        'https://elanvital-booking.homeful.ph/api/create-reference' => Http::response(['reference_code' => 'JN-123456'], 200)
-    ]);
     $checkin = Checkin::factory()->forProject()->for(Contact::factory()->state([
         'mobile' => '09171234567',
         'email' => 'john@doe.com'
     ]), 'contact')->create();
+
+    GetReferenceCode::mock()->shouldReceive('run')->with($checkin)->andReturn('JN-123456');
+
     $action = app(GenerateAvailUrl::class);
     $url = $action->run($checkin);
     $link = substr($url, strrpos($url, '/' )+1);

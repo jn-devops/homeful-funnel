@@ -14,7 +14,9 @@ class GetReferenceCode
 
     public function handle(Checkin $checkin)
     {
-        $booking_server_url = 'https://elanvital-booking.homeful.ph/api/create-reference';
+//        $booking_server_url = 'https://elanvital-booking.homeful.ph/api/create-reference';
+        $booking_server = $checkin->project->sales_unit->booking_server();
+        $booking_server_url = 'https://' . $booking_server . '/api/create-reference';
 
         $data = [
             InputFieldName::SKU => $checkin->project->product_code,

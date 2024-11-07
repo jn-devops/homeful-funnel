@@ -7,6 +7,7 @@ use Spatie\SchemalessAttributes\SchemalessAttributes;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Homeful\Common\Traits\HasMeta;
+use App\Enums\SalesUnit;
 
 /**
  * Class Campaign
@@ -27,6 +28,8 @@ use Homeful\Common\Traits\HasMeta;
  * @property float $default_balance_payment_interest_rate
  * @property string $default_seller_commission_code
  * @property string $kwyc_check_campaign_code
+ * @property string $booking_server
+ * @property SalesUnit $sales_unit
  *
  * @method int getKey()
  */
@@ -53,6 +56,7 @@ class Project extends Model
         'default_balance_payment_interest_rate',
         'default_seller_commission_code',
         'kwyc_check_campaign_code',
+        'sales_unit'
     ];
 
     protected $appends = [
@@ -211,5 +215,29 @@ class Project extends Model
     public function getKwycCheckCampaignCodeAttribute(): ?string
     {
         return $this->meta->get('kwyc_check_campaign_code');
+    }
+
+    public function setBookingServerAttribute(string $value): static
+    {
+        $this->meta->set('booking_server', $value);
+        return $this;
+    }
+
+    public function getBookingServerAttribute(): ?string
+    {
+        return $this->meta->get('booking_server');
+    }
+
+    public function setSalesUnitAttribute(SalesUnit|string $value): static
+    {
+        $this->meta->set('sales_unit', $value instanceof SalesUnit ? $value->value: $value);
+        return $this;
+    }
+
+    public function getSalesUnitAttribute(): ?SalesUnit
+    {
+        $value = $this->meta->get('sales_unit');
+
+        return SalesUnit::tryFrom($value);
     }
 }
