@@ -86,7 +86,7 @@ class ProjectResource extends Resource
                         ], SalesUnit::cases());
                         $values = array_column($data, 'value');
                         $labels = array_column($data, 'label');
-                        return array_combine($labels, $values);
+                        return array_combine($values, $values);
                     })
                     ->required(),
                 Forms\Components\TextInput::make('default_price')
