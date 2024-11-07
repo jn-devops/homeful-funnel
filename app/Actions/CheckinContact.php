@@ -9,6 +9,8 @@ use Lorisleiva\Actions\ActionRequest;
 use App\Models\Organization;
 use Illuminate\Support\Arr;
 use App\Models\Project;
+use Mockery\Exception;
+use function PHPUnit\Framework\throwException;
 
 class CheckinContact
 {
@@ -16,27 +18,28 @@ class CheckinContact
 
     public function handle(Campaign $campaign, Contact $contact, Organization $organization = null, array $attribs = [])
     {
-        $checkin = new Checkin;
-        $checkin->campaign()->associate($campaign);
-        if ($organization)
-            $contact->organization()->associate($organization);
-        if ($attribs)
-            $contact->update($attribs);
+        try {
+            $checkin = new Checkin;
+            $checkin->campaign()->associate($campaign);
+            if ($organization)
+                $contact->organization()->associate($organization);
+            if ($attribs)
+                $contact->update($attribs);
 
-        $contact->save();
-        $checkin->contact()->associate($contact);
-        if ($project_name = Arr::get($attribs, 'project')) {
-            $project = Project::where('name', $project_name)->firstOrFail();
-            $checkin->project()->associate($project);
+            $contact->save();
+
+            $checkin->contact()->associate($contact);
+            if ($project_name = Arr::get($attribs, 'project')) {
+                $project = Project::where('name', $project_name)->firstOrFail();
+                $checkin->project()->associate($project);
+            }
+            $checkin->save();
+            $contact->notify(new AcknowledgeAvailmentNotification($checkin));
+            return $checkin;
+
+        }catch (Exception $e){
+            throwException($e);
         }
-        $checkin->save();
-//        $contact->notify(new AcknowledgeAvailmentNotification('Thank you for checking in. Here is your check-in reference code: '.substr($contact->id, -12).'
-//
-//If you are ready to secure the unit, kindly click on the link provided below:
-//https://www.homeful.ph/pagsikat/availnow/promocode=?pasinaya'.substr($contact->id, -12)));
-        $contact->notify(new AcknowledgeAvailmentNotification($checkin));
-
-        return $checkin;
     }
 
     public function asController(ActionRequest $request, Campaign $campaign, Contact $contact)

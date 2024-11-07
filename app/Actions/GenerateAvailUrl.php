@@ -5,6 +5,7 @@ namespace App\Actions;
 use Lorisleiva\Actions\Concerns\AsAction;
 use App\Models\{Checkin, Link};
 use Crwlr\Url\Url;
+use function PHPUnit\Framework\throwException;
 
 class GenerateAvailUrl
 {
@@ -12,17 +13,21 @@ class GenerateAvailUrl
 
     public function handle(Checkin $checkin): string
     {
-        $url = Url::parse(url: $this->getBookingUrl($checkin));
-        $url->queryArray(query: [
-            'mobile' => $checkin->contact->mobile,
-            'email' => $checkin->contact->email,
-            'identifier' => $this->getReferenceCode($checkin),
-        ]);
-        $link = Link::shortenUrl($url->toString());
-        $link->checkin()->associate($checkin);
-        $link->save();
+	    try {
+		    $url = Url::parse(url: $this->getBookingUrl($checkin));
+		    $url->queryArray(query: [
+			    'mobile' => $checkin->contact->mobile,
+			    'email' => $checkin->contact->email,
+			    'identifier' => $this->getReferenceCode($checkin),
+		    ]);
+		    $link = Link::shortenUrl($url->toString());
+		    $link->checkin()->associate($checkin);
+		    $link->save();
 
-        return route('link.show', ['shortUrl' => $link->short_url]);
+	    }catch (\Exception $exception){
+		    throwException($exception);
+	    }
+	    return route('link.show', ['shortUrl' => $link->short_url]);
     }
 
     protected function getBookingUrl(Checkin $checkin): string
