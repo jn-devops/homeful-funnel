@@ -74,15 +74,16 @@ class CheckinTable extends Component implements HasForms, HasTable
                 Tables\Columns\TextColumn::make('campaign.name'),
                 // ->searchable(),
                 Tables\Columns\TextColumn::make('campaign.campaignType.name')
-                    ->label('Campaign Type'),
+                    ->label('Campaign Type')
+                    ->toggleable(isToggledHiddenByDefault: true),
                 // ->searchable(),
                 Tables\Columns\TextColumn::make('project.name')
                     ->label('Project'),
                 // ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->label('Date Joined')
+                    ->dateTime('M d Y h:i A')
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
