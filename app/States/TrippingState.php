@@ -9,7 +9,7 @@ use Spatie\ModelStates\State;
 abstract class TrippingState extends State
 {
     public const STATES = [
-        ForTripping::class,
+        TrippingRequested::class,
         TrippingAssigned::class,
         TrippingConfirmed::class,
         TrippingCompleted::class,
@@ -21,8 +21,8 @@ abstract class TrippingState extends State
     public static function config(): StateConfig
     {
         return parent::config()
-            ->default(ForTripping::class)
-            ->allowTransition(ForTripping::class, TrippingAssigned::class)
+            ->default(TrippingRequested::class)
+            ->allowTransition(TrippingRequested::class, TrippingAssigned::class)
             ->allowTransition(TrippingAssigned::class, TrippingConfirmed::class)
             ->allowTransition(TrippingAssigned::class, TrippingCancelled::class)
             ->allowTransition(TrippingConfirmed::class, TrippingCompleted::class)

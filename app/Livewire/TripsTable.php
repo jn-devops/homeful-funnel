@@ -50,7 +50,13 @@ class TripsTable extends Component implements HasForms, HasTable
             ])
             ->defaultSort('created_at', 'desc')
             ->filters([
-                //
+                Tables\Filters\SelectFilter::make('state')
+                    ->label('Status')
+                    ->options([
+                        'draft' => 'Draft',
+                        'reviewing' => 'Reviewing',
+                        'published' => 'Published',
+                    ])
             ])
             ->actions([
                 // Tables\Actions\EditAction::make(),

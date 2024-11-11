@@ -2,7 +2,7 @@
 
 namespace App\States;
 
-class TrippingAssigned extends ContactState
+class TrippingAssigned extends TrippingState
 {
     public function name(): string
     {
