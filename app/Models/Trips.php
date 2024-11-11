@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\States\TrippingState;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\ModelStates\HasStates;
 
@@ -21,6 +22,7 @@ class Trips extends Model
     protected $casts = [
         'preferred_date' => 'date',
         // 'preferred_time' => 'time',
+        'state' => TrippingState::class
     ];
 
     public function contact()
