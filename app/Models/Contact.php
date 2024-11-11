@@ -103,6 +103,21 @@ class Contact extends Model
         return $this->hasMany(Checkin::class);
     }
 
+    public function lastest_checkin(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->checkins()->latest();
+    }
+
+    public function trips(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Trips::class,'contact_id','id');
+    }
+
+    public function latest_trip(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->trips()->latest();
+    }
+
     public function smsLogs(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(SmsLogs::class,'contacts_id');

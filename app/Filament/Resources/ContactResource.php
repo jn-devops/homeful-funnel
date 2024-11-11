@@ -4,23 +4,22 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ContactResource\Pages;
 use App\Filament\Resources\ContactResource\RelationManagers;
-use App\Filament\Resources\ContactResource\Widgets\ContactStateSummary;
+use App\Models\Checkin;
 use App\Models\Contact;
-use App\Models\SmsLogs;
 use App\Notifications\Adhoc;
-use App\States\ContactState;
-use App\States\Registered;
-use Filament\Forms;
 use Filament\Forms\Components\Textarea;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Form;
+use Filament\Infolists\Components\Fieldset;
+use Filament\Infolists\Components\RepeatableEntry;
+use Filament\Infolists\Components\Section;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Table;
-use Filament\Tables\Columns\Summarizers\Count;
-use Illuminate\Database\Query\Builder;
+use Illuminate\Support\HtmlString;
+use phpDocumentor\Reflection\Types\True_;
 
 class ContactResource extends Resource
 {
@@ -28,35 +27,147 @@ class ContactResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     protected static ?string $modelLabel = 'Prospect';
+    protected static ?string $recordTitleAttribute = 'name';
     public static function getNavigationBadge(): ?string
     {
         return static::getModel()::count();
     }
 
-    public static function form(Form $form): Form
+    public static function infolist(Infolist $infolist): Infolist
     {
-        return $form
+        return $infolist
+            ->inlineLabel(true)
             ->schema([
-                Forms\Components\TextInput::make('mobile')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('email')
-                    ->email()
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('name')
-                    ->maxLength(255),
-//                Forms\Components\TextInput::make('meta'),
-                Forms\Components\Select::make('organization_id')
-                    ->preload()
-                    ->relationship('organization', 'name')
-                    ->searchable(),
-//                Forms\Components\Select::make('campaign_id')
-//                    ->preload()
-//                    ->relationship('campaign', 'name')
-//                    ->searchable(),
-            ]);
+                Section::make()
+                    ->schema([
+                        Fieldset::make('Personal Information')
+                            ->schema([
+                                TextEntry::make('first_name')
+                                    ->label('First Name'),
+                                TextEntry::make('last_name')
+                                    ->label('Last Name'),
+                                TextEntry::make('email'),
+                                TextEntry::make('mobile'),
+                                TextEntry::make('organization.name'),
+                            ])
+                            ->columns(1)
+                            ->columnSpan(1),
+                        Fieldset::make('Campaign attended')
+                            ->schema([
+                                TextEntry::make('lastest_checkin.campaign.name')
+                                    ->label('Campaign'),
+                                TextEntry::make('lastest_checkin.campaign.type')
+                                    ->label('Type'),
+                                TextEntry::make('lastest_checkin.project.name')
+                                    ->label('Project Interested'),
+                            ])
+                            ->columns(1)
+                            ->columnSpan(1),
+                        Fieldset::make('Trips')
+                            ->schema([
+                                TextEntry::make('latest_trip.preferred_date')
+                                    ->label('Date')
+                                    ->date('M d, Y')
+                                    ->inlineLabel(true),
+                                TextEntry::make('latest_trip.preferred_time')
+                                    ->label('Time')
+                                    ->time('h:i A')
+                                    ->inlineLabel(true),
+                                TextEntry::make('latest_trip.project.name')
+                                    ->label('Project')
+                                    ->inlineLabel(true),
+                                TextEntry::make('latest_trip.remarks')
+                                    ->label('Remarks')
+                                    ->inlineLabel(true),
+                            ])
+                            ->columns(1)
+                            ->columnSpan(1)
+
+                    ])
+                    ->columns(2)
+                    ->columnSpan(2),
+                Section::make()
+                    ->schema([
+                        TextEntry::make('latest_trip.state')
+                            ->label('Status')
+                            ->inlineLabel(false)
+                            ->badge(),
+                        TextEntry::make('created_at')
+                            ->label('Date Registered')
+                            ->inlineLabel(false)
+                            ->dateTime('M d, Y h:i A')
+                            ->hint(fn($record)=>$record->created_at->diffForHumans()),
+                    ])
+                    ->columns(1)
+                    ->columnSpan(1),
+        ])->columns(3);
     }
+
+//    public static function form(Form $form): Form
+//    {
+//        return $form
+//            ->schema([
+//                Forms\Components\Group::make()
+//                    ->schema([
+//                        Forms\Components\Section::make('Personal Information')
+//                            ->inlineLabel(true)
+//                            ->schema([
+//                                Forms\Components\Group::make()
+//                                    ->schema([
+//                                        Forms\Components\TextInput::make('first_name')
+//                                            ->maxLength(255),
+//                                        Forms\Components\TextInput::make('last_name')
+//                                            ->maxLength(255),
+//                                        Forms\Components\TextInput::make('email')
+//                                            ->maxLength(255),
+//                                        Forms\Components\TextInput::make('mobile')
+//                                            ->maxLength(255),
+//                                        Forms\Components\Select::make('organization_id')
+//                                            ->preload()
+//                                            ->relationship('organization', 'name')
+//                                            ->searchable(),
+//                                    ])
+//                                    ->columns(1),
+//                                Forms\Components\Group::make()
+//                                    ->schema([
+//                                        Forms\Components\Select::make('campaign_id')
+//                                            ->preload()
+//                                            ->relationship('campaign', 'name')
+//                                            ->searchable(),
+//                                        Forms\Components\TextInput::make('campaign.name')
+//                                            ->maxLength(255),
+//                                        Forms\Components\TextInput::make('campaign.type')
+//                                            ->maxLength(255),
+//
+//                                    ])
+//                                    ->columns(1),
+//
+//                            ])->columnSpan(2)->columns(2),
+//                        Forms\Components\Section::make()
+//                            ->schema([
+//
+//                            ])->columnSpan(1),
+//                    ])->columns(3)->columnSpanFull(),
+//
+////                Forms\Components\TextInput::make('mobile')
+////                    ->required()
+////                    ->maxLength(255),
+////                Forms\Components\TextInput::make('email')
+////                    ->email()
+////                    ->required()
+////                    ->maxLength(255),
+////
+//////                Forms\Components\TextInput::make('meta'),
+////                Forms\Components\Select::make('organization_id')
+////                    ->preload()
+////                    ->relationship('organization', 'name')
+////                    ->searchable(),
+////                Forms\Components\Select::make('campaign_id')
+////                    ->preload()
+////                    ->relationship('campaign', 'name')
+////                    ->searchable(),
+//            ]);
+//    }
 
     public static function table(Table $table): Table
     {
@@ -108,7 +219,24 @@ class ContactResource extends Resource
                 //
             ])
             ->actions([
-//                Tables\Actions\EditAction::make(),
+//                Tables\Actions\ViewAction::make()
+//                    ->mutateFormDataUsing(function (Contact $record, array $data):array{
+//                        $data['personal_details']=[
+//                            [
+//                                'first_name'=>$record->first_name,
+//                                'last_name'=>$record->last_name,
+//                                'email'=>$record->email,
+//                                'mobile'=>$record->mobile,
+//                                'organization'=>$record->organization->name,
+//                            ]
+//                        ];
+//                        return $data;
+//                    })
+//                    ->mutateRecordDataUsing(function (array $data): array {
+//                        $data['user_id'] = auth()->id();
+//                        dd($data);
+//                        return $data;
+//                    }),
                 Tables\Actions\DeleteAction::make(),
                 Action::make('send')
                     ->icon('heroicon-m-chat-bubble-left-ellipsis')
@@ -152,6 +280,7 @@ class ContactResource extends Resource
     {
         return [
             'index' => Pages\ManageContacts::route('/'),
+            'view' => Pages\ViewContact::route('/{record}'),
         ];
     }
 
