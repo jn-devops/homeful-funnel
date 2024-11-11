@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Spatie\ModelStates\HasStates;
 
 class Trips extends Model
 {
+    use HasStates;
     protected $fillable = [
         'campaign_id',
         'contact_id',
