@@ -4,7 +4,9 @@ namespace App\Livewire;
 
 use App\Models\Checkin;
 use App\Models\Trips;
+use App\States\TrippingState;
 use Carbon\Carbon;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Tables;
@@ -25,6 +27,7 @@ class TripsTable extends Component implements HasForms, HasTable
     {
         return $table
             ->query(Trips::query())
+            ->persistFiltersInSession()
             ->columns([
                 TextColumn::make('created_at')
                     ->date()
@@ -52,14 +55,36 @@ class TripsTable extends Component implements HasForms, HasTable
             ->filters([
                 Tables\Filters\SelectFilter::make('state')
                     ->label('Status')
-                    ->options([
-                        'draft' => 'Draft',
-                        'reviewing' => 'Reviewing',
-                        'published' => 'Published',
-                    ])
+                    ->native(false)
+                    ->options(function (){
+                        return collect(TrippingState::STATES)
+                            ->mapWithKeys(function ($stateClass) {
+                                return [$stateClass => $stateClass::label()];
+                            })
+                            ->all();
+                    })
             ])
             ->actions([
                 // Tables\Actions\EditAction::make(),
+                Tables\Actions\Action::make('update_state')
+                    ->label('Update Status')
+                    ->form([
+                       Select::make('state')
+                            ->label('Status')
+                            ->native(false)
+                            ->options(function (){
+                                return collect(TrippingState::STATES)
+                                    ->mapWithKeys(function ($stateClass) {
+                                        return [$stateClass => $stateClass::label()];
+                                    })
+                                    ->all();
+                            })
+                    ])
+                    ->action(function (array $data, Trips $record): void {
+                        $record->state =$data['state'] ;
+                        $record->save();
+                    })
+
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

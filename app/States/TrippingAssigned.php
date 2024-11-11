@@ -8,4 +8,8 @@ class TrippingAssigned extends TrippingState
     {
         return 'Tripping Assigned';
     }
+    public static function label(): string
+    {
+        return 'Tripping Assigned';
+    }
 }

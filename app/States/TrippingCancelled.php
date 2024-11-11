@@ -8,4 +8,10 @@ class TrippingCancelled extends TrippingState
     {
         return 'Tripping Cancelled';
     }
+
+    public static function label(): string
+    {
+        return 'Tripping Cancelled';
+    }
+
 }

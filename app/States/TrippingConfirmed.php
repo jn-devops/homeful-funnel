@@ -8,4 +8,9 @@ class TrippingConfirmed extends TrippingState
     {
         return 'Tripping Contacted';
     }
+
+    public static function label(): string
+    {
+        return 'Tripping Contacted';
+    }
 }

@@ -6,6 +6,7 @@ use App\Filament\Resources\TrippingsResource\Pages;
 use App\Filament\Resources\TrippingsResource\RelationManagers;
 use App\Models\Trippings;
 use App\Models\Trips;
+use App\States\TrippingState;
 use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -37,6 +38,7 @@ class TrippingsResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->persistFiltersInSession()
             ->columns([
                 TextColumn::make('created_at')
                     ->date()
@@ -62,7 +64,16 @@ class TrippingsResource extends Resource
             ])
             ->defaultSort('created_at', 'desc')
             ->filters([
-                //
+                Tables\Filters\SelectFilter::make('state')
+                    ->label('Status')
+                    ->native(false)
+                    ->options(function (){
+                        return collect(TrippingState::STATES)
+                            ->mapWithKeys(function ($stateClass) {
+                                return [$stateClass => $stateClass::label()];
+                            })
+                            ->all();
+                    })
             ])
             ->actions([
                 // Tables\Actions\EditAction::make(),
