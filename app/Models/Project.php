@@ -56,12 +56,24 @@ class Project extends Model
         'default_balance_payment_interest_rate',
         'default_seller_commission_code',
         'kwyc_check_campaign_code',
-        'sales_unit'
+        'sales_unit',
+        'trip_notification_email'
     ];
 
     protected $appends = [
         'rider_url',
     ];
+
+    public function setTripNotificationEmailAttribute(string $value): static
+    {
+        $this->meta->set('trip_notification_email', $value);
+        return $this;
+    }
+
+    public function getTripNotificationEmailAttribute(): ?string
+    {
+        return $this->meta->get('trip_notification_email');
+    }
 
     public function setProjectImageAttribute(string $value): static
     {
