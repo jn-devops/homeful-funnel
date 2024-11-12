@@ -51,20 +51,20 @@ class CreateTrip extends Component implements HasForms
                     ->options(Project::all()->pluck('name', 'id')->toArray())
                     ->preload()
                     ->placeholder('Choose your preferred project'),
-                Forms\Components\DatePicker::make('preferred_date')
-                    ->required()
-                    ->inlineLabel()
-                    ->displayFormat('M d, Y')
-                    ->minDate(Carbon::today())
-                    ->native(false),
-                Forms\Components\TimePicker::make('preferred_time')
-                    ->required()
-                    ->seconds(false)
-                    ->minutesStep(00)
-                    ->native(true)
-                    ->displayFormat('h i a')
-                    ->inlineLabel()
-                    ->format('H:i:s'),
+//                Forms\Components\DatePicker::make('preferred_date')
+//                    ->required()
+//                    ->inlineLabel()
+//                    ->displayFormat('M d, Y')
+//                    ->minDate(Carbon::today())
+//                    ->native(false),
+//                Forms\Components\TimePicker::make('preferred_time')
+//                    ->required()
+//                    ->seconds(false)
+//                    ->minutesStep(00)
+//                    ->native(true)
+//                    ->displayFormat('h i a')
+//                    ->inlineLabel()
+//                    ->format('H:i:s'),
                 Forms\Components\Textarea::make('remarks')
                     ->maxLength(255),
             ])
