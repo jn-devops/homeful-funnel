@@ -15,6 +15,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use PHPUnit\Metadata\Group;
 
 class ProjectResource extends Resource
 {
@@ -63,6 +64,11 @@ class ProjectResource extends Resource
                     ->columnSpanFull(),
                 Forms\Components\TextInput::make('kwyc_check_campaign_code')
                     ->label('KWYC Campaign Code')
+                    ->required()
+                    ->maxLength(255)
+                    ->columnSpanFull(),
+                Forms\Components\TextInput::make('trip_notificaiton_email')
+                    ->label('Trip Notification Email')
                     ->required()
                     ->maxLength(255)
                     ->columnSpanFull(),
@@ -177,6 +183,7 @@ class ProjectResource extends Resource
                         $data['default_seller_commission_code']=$record->meta->get('default_seller_commission_code');
                         $data['kwyc_check_campaign_code']=$record->meta->get('kwyc_check_campaign_code');
                         $data['sales_unit']=$record->meta->get('sales_unit');
+                        $data['trip_notification_email']=$record->meta->get('trip_notification_email');
                     return $data;
                 }),
                 Tables\Actions\DeleteAction::make(),
