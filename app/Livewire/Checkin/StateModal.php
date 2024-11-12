@@ -66,6 +66,14 @@ class StateModal extends Component implements HasForms, HasTable
                             return Carbon::parse($record->created_at)->format('F d, Y');
                         })
                         ->label('Date Registered'),
+                    TextColumn::make('aging')
+                        ->label('Aging')
+                        ->getStateUsing(function ($record) {
+                            $days = (int) $record->created_at->diffInDays(Carbon::now());
+                            $hrs = (int) $record->created_at->diffInHours(Carbon::now());
+                            return (($days < 1) ? $hrs . ' Hours' :  ($days . (($days < 2) ? ' Day' : ' Days')));
+                            ;
+                        }),
                 ])
                 ->filters([
                     // ...
@@ -160,9 +168,17 @@ class StateModal extends Component implements HasForms, HasTable
                         ->label('Project Interested'),
                     TextColumn::make('contact.availed_at')
                         ->formatStateUsing(function ($record) {
-                            return Carbon::parse($record->created_at)->format('F d, Y');
+                            return Carbon::parse($record->contact->availed_at)->format('F d, Y');
                         })
                         ->label('Date Availed'),
+                    TextColumn::make('aging')
+                        ->label('Aging')
+                        ->getStateUsing(function ($record) {
+                            $days = (int) Carbon::parse($record->contact->availed_at)->diffInDays(Carbon::now());
+                            $hrs = (int) Carbon::parse($record->contact->availed_at)->diffInHours(Carbon::now());
+                            return (($days < 1) ? $hrs . ' Hours' :  ($days . (($days < 2) ? ' Day' : ' Days')));
+                            ;
+                        }),
                 ])
                 ->filters([
                     // ...
@@ -207,6 +223,14 @@ class StateModal extends Component implements HasForms, HasTable
                             return Carbon::parse($record->created_at)->format('F d, Y');
                         })
                         ->label('Date Clicked "Not Now"'),
+                    TextColumn::make('aging')
+                        ->label('Aging')
+                        ->getStateUsing(function ($record) {
+                            $days = (int) Carbon::parse($record->created_at)->diffInDays(Carbon::now());
+                            $hrs = (int) Carbon::parse($record->created_at)->diffInHours(Carbon::now());
+                            return (($days < 1) ? $hrs . ' Hours' :  ($days . (($days < 2) ? ' Day' : ' Days')));
+                            ;
+                        }),
                 ])
                 ->filters([
                     // ...
