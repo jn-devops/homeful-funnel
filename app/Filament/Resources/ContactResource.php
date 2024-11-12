@@ -185,10 +185,10 @@ class ContactResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: false),
                 Tables\Columns\TextColumn::make('name')
                     ->formatStateUsing(function ($record) {
-                        return "{$record->name}\n{$record->mobile}\n{$record->email}";
+                        return "{$record->name}\n{$record->mobile}\n{$record->email}\n\n{$record->id}";
                     })
                     ->extraAttributes(['style' => 'white-space: pre-line'])
-                    ->searchable(['name','mobile','email']),
+                    ->searchable(['name','mobile','email','id']),
                 Tables\Columns\TextColumn::make('organization.name')
                     ->wrap()
                     ->searchable(),

@@ -40,6 +40,7 @@ class Checkin extends Model
         'contact_id',
         'rider_url',
         'project_id',
+        'reference_code'
 
     ];
 
