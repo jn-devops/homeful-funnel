@@ -34,8 +34,8 @@ class ProjectResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('seller_code')
-                    ->label('Seller Code')
+                Forms\Components\TextInput::make('project_location')
+                    ->label('Location')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('product_code')
@@ -67,7 +67,7 @@ class ProjectResource extends Resource
                     ->required()
                     ->maxLength(255)
                     ->columnSpanFull(),
-                Forms\Components\TextInput::make('trip_notificaiton_email')
+                Forms\Components\TextInput::make('trip_notification_email')
                     ->label('Trip Notification Email')
                     ->required()
                     ->maxLength(255)
@@ -132,6 +132,10 @@ class ProjectResource extends Resource
                     ->label('Default Seller Commission Code')
                     ->required()
                     ->maxLength(255),
+                Forms\Components\TextInput::make('seller_code')
+                    ->label('Seller Code')
+                    ->required()
+                    ->maxLength(255),
             ])->columns(3);
     }
 
@@ -184,6 +188,7 @@ class ProjectResource extends Resource
                         $data['kwyc_check_campaign_code']=$record->meta->get('kwyc_check_campaign_code');
                         $data['sales_unit']=$record->meta->get('sales_unit');
                         $data['trip_notification_email']=$record->meta->get('trip_notification_email');
+                        $data['project_location']=$record->meta->get('project_location');
                     return $data;
                 }),
                 Tables\Actions\DeleteAction::make(),

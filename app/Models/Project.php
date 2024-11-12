@@ -57,12 +57,24 @@ class Project extends Model
         'default_seller_commission_code',
         'kwyc_check_campaign_code',
         'sales_unit',
-        'trip_notification_email'
+        'trip_notification_email',
+        'project_location'
     ];
 
     protected $appends = [
         'rider_url',
     ];
+
+    public function setProjectLocationAttribute(string $value): static
+    {
+        $this->meta->set('project_location', $value);
+        return $this;
+    }
+
+    public function getProjectLocationAttribute(): ?string
+    {
+        return $this->meta->get('project_location');
+    }
 
     public function setTripNotificationEmailAttribute(string $value): static
     {
