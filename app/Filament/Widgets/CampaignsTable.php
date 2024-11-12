@@ -72,6 +72,7 @@ class CampaignsTable extends BaseWidget
                                     'id' => $record->id,
                                 ]),
                             ])
+                            ->modalHeading(fn($record) => 'Registered from '.$record->name.' ('.$record->checkins()->whereHas('contact', function ($q) { $q->whereIn('state', [Registered::class, FirstState::class]); })->count().')')
                             ->modalWidth(MaxWidth::SixExtraLarge)
                             ->modalSubmitAction(false)
                             ->modalCancelAction(false),
@@ -94,6 +95,7 @@ class CampaignsTable extends BaseWidget
                                     'id' => $record->id,
                                 ]),
                             ])
+                            ->modalHeading(fn($record) => 'For Tripping Requests from '.$record->name.' ('.$record->checkins()->whereHas('contact', function ($q) { $q->where('state', ForTripping::class); })->count().')')
                             ->modalWidth(MaxWidth::SixExtraLarge)
                             ->modalSubmitAction(false)
                             ->modalCancelAction(false),
@@ -116,6 +118,7 @@ class CampaignsTable extends BaseWidget
                                     'id' => $record->id,
                                 ]),
                             ])
+                            ->modalHeading(fn($record) => 'Availed from '.$record->name.' ('.$record->checkins()->whereHas('contact', function ($q) { $q->where('state', Availed::class); })->count().')')
                             ->modalWidth(MaxWidth::SixExtraLarge)
                             ->modalSubmitAction(false)
                             ->modalCancelAction(false),
@@ -138,6 +141,7 @@ class CampaignsTable extends BaseWidget
                                     'id' => $record->id,
                                 ]),
                             ])
+                            ->modalHeading(fn($record) => 'Clicked Not Now from '.$record->name.' ('.$record->checkins()->whereHas('contact', function ($q) { $q->where('state', Undecided::class); })->count().')')
                             ->modalWidth(MaxWidth::SixExtraLarge)
                             ->modalSubmitAction(false)
                             ->modalCancelAction(false),
