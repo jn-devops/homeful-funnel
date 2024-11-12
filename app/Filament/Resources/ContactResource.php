@@ -179,10 +179,6 @@ class ContactResource extends Resource
                     ->label('ID')
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('lastest_checkin.reference_code')
-                    ->label('Reference Code')
-                    ->searchable(['lastest_checkin.reference_code'])
-                    ->toggleable(isToggledHiddenByDefault: false),
                 Tables\Columns\TextColumn::make('name')
                     ->formatStateUsing(function ($record) {
                         return "{$record->name}\n{$record->mobile}\n{$record->email}\n\n{$record->id}";
