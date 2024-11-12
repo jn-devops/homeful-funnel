@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Str;
 use Propaganistas\LaravelPhone\Exceptions\NumberParseException;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Spatie\SchemalessAttributes\SchemalessAttributes;
@@ -53,6 +54,34 @@ class Contact extends Model
     protected $casts = [
         'state' => ContactState::class
     ];
+    public static function booted(): void
+    {
+
+        static::updating(function ($data) {
+            foreach (array_keys($data->getAttributes()) as $attr) {
+                if ($data->isDirty($attr)) {
+                    $from = $data->getOriginal($attr);
+                    $to = $data->getAttribute($attr);
+
+                    if (Str::endsWith($attr, '_id') && method_exists($data, Str::camel(str_replace('_id', '', $attr)))) {
+                        $relationshipName = Str::camel(str_replace('_id', '', $attr));
+                        $relatedModel = $data->$relationshipName()->getRelated();
+
+                        // Retrieve the name or another identifier instead of the ID
+                        $from = $data->getOriginal($attr) ? optional($relatedModel->find($data->getOriginal($attr)))->name : null;
+                        $to = $data->getAttribute($attr) ? optional($relatedModel->find($data->getAttribute($attr)))->name : null;
+                    }
+
+                    $data->updateLog()->create([
+                        'field' => Str::endsWith($attr, '_id') ? str_replace('_id', '', $attr) : $attr,
+                        'from' => $from??'',
+                        'to' => $to??'',
+                        'user_id'=> \auth()->user()->id
+                    ]);
+                }
+            }
+        });
+    }
 
     public static function fromMobile(string $value): ?static
     {
@@ -188,5 +217,10 @@ class Contact extends Model
     {
         return $this->getAttribute('availed_at')
             && $this->getAttribute('availed_at') <= now();
+    }
+
+    public function updateLog()
+    {
+        return $this->morphMany(UpdateLog::class, 'loggable');
     }
 }
