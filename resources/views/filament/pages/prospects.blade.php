@@ -26,7 +26,7 @@
             <x-filament::tabs.item
                 label="Tripping Requests"
                 icon="heroicon-o-document-text"
-                :badge="\App\Models\Checkin::count()"
+                :badge="\App\Models\Trips::count()"
                 wire:click="$set('activeTab', 'tripping')"
             >
                 Tripping Requests
