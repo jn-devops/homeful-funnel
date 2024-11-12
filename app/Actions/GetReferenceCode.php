@@ -46,6 +46,7 @@ class GetReferenceCode
             ]);
 
             $response = Http::withHeader('accept', 'application/json')->post(url: $booking_server_url, data: $validated);
+            $checkin->reference_code = $response->json('reference_code');
             return $response->json('reference_code');
 
         }catch (\Exception $exception){
