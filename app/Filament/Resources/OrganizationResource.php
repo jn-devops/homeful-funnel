@@ -33,7 +33,7 @@ class OrganizationResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('meta'),
+//                Forms\Components\TextInput::make('meta'),
             ]);
     }
 
