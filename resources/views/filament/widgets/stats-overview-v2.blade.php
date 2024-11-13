@@ -86,7 +86,7 @@
                 </svg>
             </div>
             <div class="text-stone-800 custom-height-md" style="color:#737373; font-size: 1rem;">
-                Availed <br> <span class="" style="font-size: 0.75rem;">(Reached the Homeful Consultation)</span>
+                Availed <br> <span class="" style="font-size: 0.75rem;">(Reach the Homeful Consultation)</span>
             </div>
             <div class="text-3xl text-black font-bold">
                 {{$data['availed']}} <sup class="text-sm" style="font-weight: 400; color: red;  position: relative; top: -1em;">{{$data['availed_percent']}}%</sup>
@@ -108,7 +108,7 @@
                 </svg>
             </div>
             <div class="text-stone-800 custom-height-md" style="color:#737373; font-size: 1rem;">
-                Consulted <br> <span class="" style="font-size: 0.75rem;">(Completed the Home Loan Consultation)</span>
+                Consulted <br> <span class="" style="font-size: 0.75rem;">(Complete the Home Loan Consultation)</span>
             </div>
             <div class="text-3xl text-black font-bold">
                 {{$data['consulted']}} <sup class="text-sm" style="font-weight: 400; color: red;  position: relative; top: -1em;">{{$data['consulted_percent']}}%</sup>

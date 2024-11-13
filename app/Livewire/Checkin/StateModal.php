@@ -57,8 +57,6 @@ class StateModal extends Component implements HasForms, HasTable
                         ->label('Contact Number'),
                     TextColumn::make('contact.organization.name')
                         ->label('Organization'),
-                    TextColumn::make('campaign.name')
-                        ->label('Campaign'),
                     TextColumn::make('project.name')
                         ->label('Project Interested'),
                     TextColumn::make('created_at')
