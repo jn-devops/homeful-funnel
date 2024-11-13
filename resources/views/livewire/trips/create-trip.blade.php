@@ -8,6 +8,12 @@
         <div class=" flex justify-center ">
             <img class="h-auto w-full lg:w-full" src="/CompanyLogo.png" alt="CompanyLogo.png">
         </div>
+        <div  class="flex justify-center ">
+            <h2 class="text-xl font-bold leading-tight text-gray-800  text-center">
+                Request Tripping
+            </h2>
+
+        </div>
         <form wire:submit="save" class="w-full mt-2">
 
             {{ $this->form }}

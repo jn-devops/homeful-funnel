@@ -6,6 +6,9 @@
             <div class="text-center mx-5 mb-10">
                 <div class="text-3xl font-bold mb-4">The tripping has been scheduled successfully.</div>
             </div>
+            <div class="text-center mx-5 mb-10">
+                <div class="text-3xl font-bold mb-4 text-sm">One of our team will contact you soon to assist with your trip request.</div>
+            </div>
         </div>
 
     </div>
