@@ -28,7 +28,7 @@
                 label="Tripping Requests"
                 icon="heroicon-o-document-text"
                 :badge="\App\Models\Trips::count()"
-                wire:click="$set('activeTab', 'tripping');activeTab = 'Tripping Requests'"
+                wire:click="$set('activeTab', 'tripping');activeTab = 'Tripping Requests';"
                 alpine-active="activeTab === 'Tripping Requests'"
             >
                 Tripping Requests

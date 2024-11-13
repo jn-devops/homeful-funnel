@@ -193,6 +193,7 @@ class CreateCheckin extends Component implements HasForms
                 ]
             ]);
 
+
             // CheckinContact::dispatch($this->campaign, $contact, $this->organization, $data);
 
 

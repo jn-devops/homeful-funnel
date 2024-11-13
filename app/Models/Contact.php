@@ -56,7 +56,6 @@ class Contact extends Model
     ];
     public static function booted(): void
     {
-
         static::updating(function ($data) {
             foreach (array_keys($data->getAttributes()) as $attr) {
                 if ($data->isDirty($attr)) {
@@ -72,16 +71,25 @@ class Contact extends Model
                         $to = $data->getAttribute($attr) ? optional($relatedModel->find($data->getAttribute($attr)))->name : null;
                     }
 
+                    // Convert SchemalessAttributes instances to JSON if needed
+                    if ($from instanceof \Spatie\SchemalessAttributes\SchemalessAttributes) {
+                        $from = json_encode($from->all());
+                    }
+                    if ($to instanceof \Spatie\SchemalessAttributes\SchemalessAttributes) {
+                        $to = json_encode($to->all());
+                    }
+
                     $data->updateLog()->create([
                         'field' => Str::endsWith($attr, '_id') ? str_replace('_id', '', $attr) : $attr,
-                        'from' => $from??'',
-                        'to' => $to??'',
-                        'user_id'=> \auth()->user()->id
+                        'from' => $from ?? '',
+                        'to' => $to ?? '',
+                        'user_id' => \auth()->user()->id ?? 0
                     ]);
                 }
             }
         });
     }
+
 
     public static function fromMobile(string $value): ?static
     {
