@@ -17,6 +17,9 @@ class Trips extends Model
         'preferred_date',
         'preferred_time',
         'remarks',
+        'assigned_to',
+        'assigned_to_mobile',
+        'completed_ts'
     ];
 
     protected $casts = [
