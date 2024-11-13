@@ -3,6 +3,7 @@
 namespace App\Filament\Pages;
 
 use App\Filament\Resources\ContactResource\Widgets\ContactStateSummary;
+use App\Filament\Resources\UpdateLogsResource\RelationManagers\UpdateLogRelationManager;
 use App\Models\Checkin;
 use App\Models\Contact;
 use Filament\Pages\Page;
@@ -25,6 +26,7 @@ class Prospects extends Page
         }
        return [];
     }
+
 
 //    public function mount()
 //    {

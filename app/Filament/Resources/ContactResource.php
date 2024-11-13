@@ -3,7 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\ContactResource\Pages;
-use App\Filament\Resources\ContactResource\RelationManagers;
+use App\Filament\Resources\UpdateLogsResource\RelationManagers\UpdateLogRelationManager;
 use App\Models\Checkin;
 use App\Models\Contact;
 use App\Notifications\Adhoc;
@@ -288,5 +288,10 @@ class ContactResource extends Resource
             'view' => Pages\ViewContact::route('/{record}'),
         ];
     }
-
+//    public static function getRelations(): array
+//    {
+//        return [
+//            UpdateLogRelationManager::class,
+//        ];
+//    }
 }

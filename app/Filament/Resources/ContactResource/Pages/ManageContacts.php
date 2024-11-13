@@ -5,6 +5,7 @@ namespace App\Filament\Resources\ContactResource\Pages;
 use App\Filament\Exports\ContactExporter;
 use App\Filament\Resources\ContactResource;
 use App\Filament\Resources\ContactResource\Widgets\ContactStateSummary;
+use App\Filament\Resources\UpdateLogsResource\RelationManagers\UpdateLogRelationManager;
 use Filament\Actions;
 use Filament\Actions\ExportAction;
 use Filament\Resources\Pages\ManageRecords;
@@ -29,4 +30,5 @@ class ManageContacts extends ManageRecords
             ContactStateSummary::class,
         ];
     }
+
 }

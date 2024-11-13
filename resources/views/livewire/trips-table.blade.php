@@ -1,13 +1,13 @@
-<div class="flex space-x-4">
+<div class="flex">
     <div class="w-auto">
         <div class="flex flex-col space-y-2 px-3" x-data="{ tableFilters: @entangle('tableFilters') }" x-effect="console.log(tableFilters)">
             <x-filament::tabs label="Content tabs" class="w-full flex flex-col space-y-2" x-data="{ activeTab: 'Requests' }" >
                 <x-filament::tabs.item
                     alpine-active="activeTab === 'Requests'"
                     icon="heroicon-o-document-text"
-                    x-on:click="$wire.call('removeTableFilters');activeTab = 'Requests'">
+                    x-on:click="$wire.set('tableFilters', {'state': {'value': 'App\\\\States\\\\TrippingRequested'}});activeTab = 'Requests'">
                     <x-slot name="badge">
-                        {{ \App\Models\Trips::count() }}
+                        {{ \App\Models\Trips::where('state','App\States\TrippingRequested')->count() }}
                     </x-slot>
                     Requests
                 </x-filament::tabs.item>
@@ -56,7 +56,7 @@
 
         </div>
     </div>
-    <div class="flex-1">
+    <div class="overflow-x-auto">
         {{ $this->table }}
     </div>
 </div>
