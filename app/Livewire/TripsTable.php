@@ -27,6 +27,8 @@ use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\HtmlString;
 use Livewire\Component;
 use Illuminate\Contracts\View\View;
 
@@ -61,6 +63,13 @@ class TripsTable extends Component implements HasForms, HasTable
                     ->wrap()
                     ->words(10)
                     ->lineClamp(2),
+                TextColumn::make('completed_ts')
+                    ->label('Date Completed')
+                    ->formatStateUsing(function ($record) {
+                        return Carbon::parse($record->preferred_date)->format('F d, Y h:i A') ;
+                    }),
+                TextColumn::make('last_updated_by')
+                    ->label('Last Updated By'),
             ])
             ->defaultSort('created_at', 'desc')
             ->filters([
@@ -130,6 +139,7 @@ class TripsTable extends Component implements HasForms, HasTable
                             $record->state=TrippingAssigned::class;
                             $record->assigned_to=$data['assigned_to'];
                             $record->assigned_to_mobile=$data['assigned_to_mobile'];
+                            $record->last_updated_by=auth()->user()->name;
                             $record->save();
 
                             Notification::make()
@@ -194,6 +204,7 @@ class TripsTable extends Component implements HasForms, HasTable
                         $record->state=TrippingConfirmed::class;
                         $record->preferred_date = $data['preferred_date'];
                         $record->preferred_time = $data['preferred_time'];
+                        $record->last_updated_by=auth()->user()->name;
                         $record->save();
                         Notification::make()
                             ->title('Tripping has been Confirmed & Scheduled')
@@ -210,6 +221,7 @@ class TripsTable extends Component implements HasForms, HasTable
                 Tables\Actions\Action::make('Cancel')
                     ->action(function (Model $record){
                             $record->state = TrippingCancelled::class;
+                            $record->last_updated_by=auth()->user()->name;
                             $record->save();
                         Notification::make()
                             ->title('Tripping has been cancelled successfully')
@@ -219,11 +231,13 @@ class TripsTable extends Component implements HasForms, HasTable
                             ->send();
                     })
                     ->icon('heroicon-o-x-mark')
-                    ->requiresConfirmation(),
+                    ->requiresConfirmation()
+                    ->hidden(fn($record):bool=>$record->state==TrippingCompleted::class),
                 Tables\Actions\Action::make('Complete')
                     ->action(function (Model $record){
                         $record->state = TrippingCompleted::class;
                         $record->completed_ts = now();
+                        $record->last_updated_by=auth()->user()->name;
                         $record->save();
                         Notification::make()
                             ->title('Tripping has been completed successfully')

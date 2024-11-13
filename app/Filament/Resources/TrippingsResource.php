@@ -55,10 +55,7 @@ class TrippingsResource extends Resource
                         return Carbon::parse($record->preferred_date)->format('F d, Y');
                     }),
                 TextColumn::make('preferred_time')
-                    ->label('Preferred Time')
-                    ->formatStateUsing(function ($record) {
-                        return Carbon::parse($record->preferred_time)->format('h:i A');
-                    }),
+                    ->label('Preferred Time'),
                 TextColumn::make('remarks')
                     ->label('Remarks'),
             ])

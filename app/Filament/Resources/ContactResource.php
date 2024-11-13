@@ -70,9 +70,7 @@ class ContactResource extends Resource
                                     ->date('M d, Y')
                                     ->inlineLabel(true),
                                 TextEntry::make('latest_trip.preferred_time')
-                                    ->label('Time')
-                                    ->time('h:i A')
-                                    ->inlineLabel(true),
+                                    ->label('Time'),
                                 TextEntry::make('latest_trip.project.name')
                                     ->label('Project')
                                     ->inlineLabel(true),
