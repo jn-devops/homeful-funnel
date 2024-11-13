@@ -25,13 +25,13 @@
 
             <!-- Tripping Requests Tab -->
             <x-filament::tabs.item
-                label="Tripping Requests"
+                label="Tripping"
                 icon="heroicon-o-document-text"
                 :badge="\App\Models\Trips::count()"
                 wire:click="$set('activeTab', 'tripping');activeTab = 'Tripping Requests';"
                 alpine-active="activeTab === 'Tripping Requests'"
             >
-                Tripping Requests
+                Tripping
             </x-filament::tabs.item>
         </x-filament::tabs>
     </div>
