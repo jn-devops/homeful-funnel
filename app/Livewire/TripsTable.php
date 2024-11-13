@@ -6,6 +6,7 @@ use App\Filament\Resources\ContactResource;
 use App\Models\Trips;
 use App\States\TrippingAssigned;
 use App\States\TrippingCancelled;
+use App\States\TrippingCompleted;
 use App\States\TrippingConfirmed;
 use App\States\TrippingRequested;
 use App\States\TrippingState;
@@ -17,6 +18,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
+use Filament\Notifications\Notification;
 use Filament\Support\Enums\MaxWidth;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
@@ -129,9 +131,19 @@ class TripsTable extends Component implements HasForms, HasTable
                             $record->assigned_to=$data['assigned_to'];
                             $record->assigned_to_mobile=$data['assigned_to_mobile'];
                             $record->save();
+
+                            Notification::make()
+                            ->title('Tripping has been successfully assigned')
+                            ->success()
+                            ->icon('heroicon-o-check')
+                            ->sendToDatabase(auth()->user())
+                            ->send();
                     })
+                    ->modalHeading('Assign Contact?')
+                    ->modalDescription('Are you sure you want to assign the Prospect to Declared Contact? This cannot be undone.')
+                    ->requiresConfirmation()
                     ->hidden(fn($record):bool=>$record->state!=TrippingRequested::class ||$record->state==null )
-                    ->modalWidth(MaxWidth::TwoExtraLarge),
+                    ->modalWidth(MaxWidth::Small),
                 Tables\Actions\Action::make('Confirm Tripping')
                     ->icon('heroicon-o-pencil-square')
                     ->color('success')
@@ -148,6 +160,7 @@ class TripsTable extends Component implements HasForms, HasTable
                                 ->native(false)
                                 ->required(),
                             Select::make('preferred_time')
+                                ->required()
                                 ->label('Time')
                                 ->native(false)
                                 ->options([
@@ -182,23 +195,47 @@ class TripsTable extends Component implements HasForms, HasTable
                         $record->preferred_date = $data['preferred_date'];
                         $record->preferred_time = $data['preferred_time'];
                         $record->save();
+                        Notification::make()
+                            ->title('Tripping has been Confirmed & Scheduled')
+                            ->success()
+                            ->icon('heroicon-o-check')
+                            ->sendToDatabase(auth()->user())
+                            ->send();
                     })
                     ->hidden(fn($record):bool=>$record->state!=TrippingAssigned::class)
+                    ->requiresConfirmation()
+                    ->modalHeading(' Confirm Tripping Schedule')
+                    ->modalDescription('Do you want to confirm the tripping schedule? This will update the prospect Tripping Schedule. This cannot be undone')
                     ->modalWidth(MaxWidth::Small),
                 Tables\Actions\Action::make('Cancel')
                     ->action(function (Model $record){
                             $record->state = TrippingCancelled::class;
+                            $record->save();
+                        Notification::make()
+                            ->title('Tripping has been cancelled successfully')
+                            ->success()
+                            ->icon('heroicon-o-check')
+                            ->sendToDatabase(auth()->user())
+                            ->send();
                     })
                     ->icon('heroicon-o-x-mark')
                     ->requiresConfirmation(),
                 Tables\Actions\Action::make('Complete')
                     ->action(function (Model $record){
-                        $record->state = TrippingCancelled::class;
+                        $record->state = TrippingCompleted::class;
                         $record->completed_ts = now();
                         $record->save();
+                        Notification::make()
+                            ->title('Tripping has been completed successfully')
+                            ->success()
+                            ->icon('heroicon-o-check')
+                            ->sendToDatabase(auth()->user())
+                            ->send();
                     })
                     ->color('success')
                     ->icon('heroicon-o-x-mark')
+                    ->modalHeading('Tripping has been Completed?')
+                    ->modalDescription('Do you want to mark the Tripping as “Completed”? This cannot be undone.')
                     ->requiresConfirmation()
                     ->hidden(fn($record):bool=>$record->state!=TrippingConfirmed::class),
 
