@@ -68,7 +68,7 @@ class ProjectResource extends Resource
                     ->maxLength(255)
                     ->columnSpanFull(),
                 Forms\Components\TextInput::make('trip_notification_email')
-                    ->label('Trip Notification Email')
+                    ->label('Recipient for Trippings')
                     ->required()
                     ->maxLength(255)
                     ->columnSpanFull(),
