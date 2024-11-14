@@ -4,10 +4,6 @@ use App\Http\Controllers\LinkController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
-Route::get('/test', function () {
-   return view('sample');
-});
-
 //Route::resource('contacts', \App\Http\Controllers\ContactController::class);
 
 Route::get('checkin/{campaign}',App\Livewire\Checkin\CreateCheckin::class, )->name('Checkin');
