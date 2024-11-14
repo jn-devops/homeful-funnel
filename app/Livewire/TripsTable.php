@@ -52,16 +52,12 @@ class TripsTable extends Component implements HasForms, HasTable
                 TextColumn::make('project.name')
                     ->label('Project')
                     ->searchable(),
-                TextColumn::make('preferred_date')
-                    ->label('Schedule')
-                    ->formatStateUsing(function ($record) {
-                        return Carbon::parse($record->preferred_date)->format('F d, Y') .' '. $record->preferred_time;
-                    }),
                 TextColumn::make('remarks')
                     ->label('Remarks')
                     ->wrap()
                     ->words(10)
-                    ->lineClamp(2),
+                    ->lineClamp(2)
+                    ->tooltip(fn($record)=>$record->remarks??''),
                 TextColumn::make('completed_ts')
                     ->label('Date Completed')
                     ->formatStateUsing(function ($record) {
@@ -270,8 +266,12 @@ class TripsTable extends Component implements HasForms, HasTable
         return view('livewire.trips-table');
     }
 
+    public function mount(){
+        $this->tableFilters['state']['value'] = 'App\\States\\TrippingRequested';
+    }
+
     public function getTableFiltersProperty()
-{
-    return $this->tableFilters;
-}
+    {
+        return $this->tableFilters;
+    }
 }
