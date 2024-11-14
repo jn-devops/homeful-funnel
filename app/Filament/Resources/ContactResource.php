@@ -33,73 +33,76 @@ class ContactResource extends Resource
         return static::getModel()::count();
     }
 
-    public static function infolist(Infolist $infolist): Infolist
-    {
-        return $infolist
-            ->inlineLabel(true)
-            ->schema([
-                Section::make()
-                    ->schema([
-                        Fieldset::make('Personal Information')
-                            ->schema([
-                                TextEntry::make('first_name')
-                                    ->label('First Name'),
-                                TextEntry::make('last_name')
-                                    ->label('Last Name'),
-                                TextEntry::make('email'),
-                                TextEntry::make('mobile'),
-                                TextEntry::make('organization.name'),
-                            ])
-                            ->columns(1)
-                            ->columnSpan(1),
-                        Fieldset::make('Campaign attended')
-                            ->schema([
-                                TextEntry::make('lastest_checkin.campaign.name')
-                                    ->label('Campaign'),
-                                TextEntry::make('lastest_checkin.campaign.type')
-                                    ->label('Type'),
-                                TextEntry::make('lastest_checkin.project.name')
-                                    ->label('Project Interested'),
-                            ])
-                            ->columns(1)
-                            ->columnSpan(1),
-                        Fieldset::make('Trips')
-                            ->schema([
-                                TextEntry::make('latest_trip.preferred_date')
-                                    ->label('Date')
-                                    ->date('M d, Y')
-                                    ->inlineLabel(true),
-                                TextEntry::make('latest_trip.preferred_time')
-                                    ->label('Time'),
-                                TextEntry::make('latest_trip.project.name')
-                                    ->label('Project')
-                                    ->inlineLabel(true),
-                                TextEntry::make('latest_trip.remarks')
-                                    ->label('Remarks')
-                                    ->inlineLabel(true),
-                            ])
-                            ->columns(1)
-                            ->columnSpan(1)
+    // public static function infolist(Infolist $infolist): Infolist
+    // {
+    //     return $infolist
+    //         ->inlineLabel(true)
+    //         ->schema([
+    //             Section::make()
+    //                 ->schema([
+    //                     Fieldset::make('Personal Information')
+    //                         ->schema([
+    //                             TextEntry::make('first_name')
+    //                                 ->label('First Name'),
+    //                             TextEntry::make('last_name')
+    //                                 ->label('Last Name'),
+    //                             TextEntry::make('email'),
+    //                             TextEntry::make('mobile'),
+    //                             TextEntry::make('organization.name'),
+    //                         ])
+    //                         ->columns(1)
+    //                         ->columnSpan(1),
+    //                     Fieldset::make('Campaign attended')
+    //                         ->schema([
+    //                             TextEntry::make('lastest_checkin.campaign.name')
+    //                                 ->label('Campaign'),
+    //                             TextEntry::make('lastest_checkin.campaign.type')
+    //                                 ->label('Type'),
+    //                             TextEntry::make('lastest_checkin.project.name')
+    //                                 ->label('Project Interested'),
+    //                         ])
+    //                         ->columns(1)
+    //                         ->columnSpan(1),
+    //                     Fieldset::make('Trips')
+    //                         ->schema([
+    //                             TextEntry::make('latest_trip.preferred_date')
+    //                                 ->label('Date')
+    //                                 ->date('M d, Y')
+    //                                 ->inlineLabel(true),
+    //                             TextEntry::make('latest_trip.preferred_time')
+    //                                 ->label('Time')
+    //                                 ->getStateUsing(function ($record) {
+    //                                     return $record->latest_trip->preferred_time;
+    //                                 }),
+    //                             TextEntry::make('latest_trip.project.name')
+    //                                 ->label('Project')
+    //                                 ->inlineLabel(true),
+    //                             TextEntry::make('latest_trip.remarks')
+    //                                 ->label('Remarks')
+    //                                 ->inlineLabel(true),
+    //                         ])
+    //                         ->columns(1)
+    //                         ->columnSpan(1)
 
-                    ])
-                    ->columns(2)
-                    ->columnSpan(2),
-                Section::make()
-                    ->schema([
-                        TextEntry::make('latest_trip.state')
-                            ->label('Status')
-                            ->inlineLabel(false)
-                            ->badge(),
-                        TextEntry::make('created_at')
-                            ->label('Date Registered')
-                            ->inlineLabel(false)
-                            ->dateTime('M d, Y h:i A')
-                            ->hint(fn($record)=>$record->created_at->diffForHumans()),
-                    ])
-                    ->columns(1)
-                    ->columnSpan(1),
-        ])->columns(3);
-    }
+    //                 ])
+    //                 ->columns(2)
+    //                 ->columnSpan(2),
+    //             Section::make()
+    //                 ->schema([
+    //                     TextEntry::make('latest_trip.state')
+    //                         ->label('Status')
+    //                         ->inlineLabel(false)
+    //                         ->badge(),
+    //                     TextEntry::make('created_at')
+    //                         ->label('Date Registered')
+    //                         ->inlineLabel(false)
+    //                         ->dateTime('M d, Y h:i A')
+    //                         ->hint(fn($record)=>$record->created_at->diffForHumans()),
+    //                 ])
+    //                 ->columns(1)
+    //                 ->columnSpan(1),
+    //     ])->columns(3);
+    // }
 
 //    public static function form(Form $form): Form
 //    {
