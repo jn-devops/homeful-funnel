@@ -25,10 +25,17 @@ class ContactStateSummary extends BaseWidget
             ])
             ->toArray();
 
+        return [
+            Stat::make('Availed', $stateCounts['App\\States\\Availed']['count']),
+            Stat::make('For Tripping', $stateCounts['App\\States\\ForTripping']['count']),
+            Stat::make('Consulted', 0), // TODO: Count for Consulted State
+            Stat::make('Not Now', $stateCounts['App\\States\\Undecided']['count']),
+        ];
+
         // Create stats with state names and counts
-        return collect($stateCounts)->map(function ($data) {
-            return Stat::make($data['name'], $data['count']);
-        })->values()->all();
+        // return collect($stateCounts)->map(function ($data) {
+        //     return Stat::make($data['name'], $data['count']);
+        // })->values()->all();
     }
 
 }

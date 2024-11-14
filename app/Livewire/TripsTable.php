@@ -37,7 +37,7 @@ class TripsTable extends Component implements HasForms, HasTable
     use InteractsWithForms;
     use InteractsWithTable;
 
-    public static function table(Table $table): Table
+    public function table(Table $table): Table
     {
         return $table
             ->query(Trips::query())
@@ -62,7 +62,8 @@ class TripsTable extends Component implements HasForms, HasTable
                     ->label('Remarks')
                     ->wrap()
                     ->words(10)
-                    ->lineClamp(2),
+                    ->lineClamp(2)
+                    ->hidden(!fn()=>$this->tableFilters['state']['value'] == 'App\\States\\TrippingAssigned'),
                 TextColumn::make('completed_ts')
                     ->label('Date Completed')
                     ->formatStateUsing(function ($record) {
@@ -108,6 +109,13 @@ class TripsTable extends Component implements HasForms, HasTable
                     ->url(fn($record)=>ContactResource::getUrl('view', ['record' => $record->contact]))
                     ->icon('heroicon-o-eye')
                     ->color('secondary'),
+                Tables\Actions\Action::make('Cancel')
+                    ->icon('heroicon-m-x-circle')
+                    ->color('danger')
+                    ->requiresConfirmation()
+                    ->action(function (Model $record, array $data){
+
+                    }),
                 Tables\Actions\Action::make('Assign Contact')
                     ->icon('heroicon-o-pencil-square')
                     ->color('success')
@@ -122,16 +130,20 @@ class TripsTable extends Component implements HasForms, HasTable
                                 ->regex("/^[0-9]+$/")
                                 ->minLength(10)
                                 ->maxLength(10),
-                            Placeholder::make('project.name')
+                            TextInput::make('project.name')
                                 ->label('Project')
-                                ->content(fn($record)=>$record->project->name??''),
-                            Placeholder::make('project.name')
-                                ->label('Location')
-                                ->content(function(Model $record){
-                                    return $record->project->project_location;
-                                }),
-                            Placeholder::make('remarks')
-                                ->content(fn($record)=>$record->remarks??'')
+                                ->default(fn($record) => $record->project->name)
+                                ->disabled()
+                                ->columnSpanFull(),
+                            TextInput::make('project.project_location')
+                                ->label('Project Location')
+                                ->default(fn($record) => $record->project->project_location)
+                                ->disabled()
+                                ->columnSpanFull(),
+                            TextInput::make('remarks')
+                                ->label('Project Location')
+                                ->default(fn($record) => $record->remarks)
+                                ->disabled()
                                 ->columnSpanFull(),
                         ])->columns(2);
                     })
@@ -266,4 +278,9 @@ class TripsTable extends Component implements HasForms, HasTable
     {
         return view('livewire.trips-table');
     }
+
+    public function getTableFiltersProperty()
+{
+    return $this->tableFilters;
+}
 }

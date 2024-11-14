@@ -4,9 +4,9 @@ use App\Http\Controllers\LinkController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
-//Route::get('/', function () {
-//    return view('welcome');
-//});
+Route::get('/test', function () {
+   return view('sample');
+});
 
 //Route::resource('contacts', \App\Http\Controllers\ContactController::class);
 

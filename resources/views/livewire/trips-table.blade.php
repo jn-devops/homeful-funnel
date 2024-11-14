@@ -56,7 +56,7 @@
 
         </div>
     </div>
-    <div class="overflow-x-auto">
-        {{ $this->table }}
+    <div class="overflow-x-auto w-full">
+        {{ $this->table}}
     </div>
 </div>

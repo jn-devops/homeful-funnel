@@ -9,6 +9,7 @@ use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Section;
 use App\Filament\Widgets\StatsOverview;
 use App\Filament\Widgets\CampaignAnalysisChart;
+use App\Filament\Widgets\CampaignAnalysisChartV2;
 use App\Filament\Widgets\CampaignsTable;
 use App\Filament\Widgets\StatsOverviewV2;
 use App\Models\Campaign;
@@ -26,6 +27,7 @@ class Dashboard extends \Filament\Pages\Dashboard
     {
         return [
             CampaignAnalysisChart::class,
+            // CampaignAnalysisChartV2::class,
             // StatsOverview::class,
             StatsOverviewV2::class,
             CampaignsTable::class,
