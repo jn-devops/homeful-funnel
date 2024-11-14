@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
 //            OrganizationSeeder::class,
 //            ProjectSeeder::class,
 //            CampaignTypeSeeder::class,
+            SetRequestedStateToNullStateTrips::class,
         ]);
     }
 }
