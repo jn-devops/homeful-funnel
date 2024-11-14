@@ -83,7 +83,7 @@ class ProjectResource extends Resource
                     ->minValue(10000)
                     ->required(),
                 Forms\Components\Select::make('sales_unit')
-                    ->label('Sales Unit')
+                    ->label('Brand')
                     ->native(false)
                     ->options(function () {
                         $data = array_map(fn($case) => [
@@ -92,7 +92,7 @@ class ProjectResource extends Resource
                         ], SalesUnit::cases());
                         $values = array_column($data, 'value');
                         $labels = array_column($data, 'label');
-                        return array_combine($values, $values);
+                        return array_combine($values, array_map('ucfirst', $values));
                     })
                     ->required(),
                 Forms\Components\TextInput::make('default_price')
