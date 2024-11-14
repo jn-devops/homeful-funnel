@@ -111,15 +111,12 @@ class CampaignResource extends Resource
                     ->preload(),
                 Forms\Components\TextInput::make('avail_label')
                     ->label('Avail Label')
-                    ->required()
                     ->columnSpan(1),
                 Forms\Components\TextInput::make('trip_label')
                     ->label('Trip Label')
-                    ->required()
                     ->columnSpan(1),
                 Forms\Components\TextInput::make('undecided_label')
                     ->label('Undecided Label')
-                    ->required()
                     ->columnSpan(1),
 //                FileUpload::make('splash_image')
 //                    ->required()
