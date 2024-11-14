@@ -7,7 +7,7 @@
                     icon="heroicon-o-document-text"
                     x-on:click="$wire.set('tableFilters', {'state': {'value': 'App\\\\States\\\\TrippingRequested'}});activeTab = 'Requests'">
                     <x-slot name="badge">
-                        {{ \App\Models\Trips::where('state','App\States\TrippingRequested')->count() }}
+                        {{ \App\Models\Trips::where('state','App\States\TrippingRequested')->count() + \App\Models\Trips::where('state', null)->count() }}
                     </x-slot>
                     Requests
                 </x-filament::tabs.item>
