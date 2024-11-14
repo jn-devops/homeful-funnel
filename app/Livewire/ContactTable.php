@@ -2,8 +2,16 @@
 
 namespace App\Livewire;
 
+use App\Filament\Resources\ContactResource;
 use App\Models\Contact;
 use App\Notifications\Adhoc;
+use App\States\Availed;
+use App\States\TrippingAssigned;
+use App\States\TrippingCancelled;
+use App\States\TrippingCompleted;
+use App\States\TrippingConfirmed;
+use App\States\TrippingRequested;
+use App\States\Undecided;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
@@ -54,9 +62,59 @@ class ContactTable extends Component implements HasForms, HasTable
 //                    ->searchable(),
 //                Tables\Columns\TextColumn::make('name')
 //                    ->searchable(),
-                Tables\Columns\TextColumn::make('state')
-                    ->formatStateUsing(fn(Contact $record)=>$record->state->name())
-                    ->searchable(),
+                // Tables\Columns\TextColumn::make('state')
+                //     ->formatStateUsing(fn(Contact $record)=>$record->state->name())
+                //     ->searchable(),
+                Tables\Columns\TextColumn::make('availed')
+                    ->label('Availed')
+                    ->badge()
+                    ->color(function (Contact $record){
+                        return ($record->state == Availed::class) ? 'success' : 'gray';
+                    })
+                    ->getStateUsing(function (Contact $record){ 
+                        return ($record->state == Availed::class) ? 'Yes' : 'Not Yet';
+                    }),
+                Tables\Columns\TextColumn::make('for_tripping')
+                    ->label('For Tripping')
+                    ->badge()
+                    ->color(function (Contact $record){
+                        if($record->latest_trip()->count() > 0){
+                            if($record->latest_trip->state == TrippingAssigned::class){
+                                return 'warning';
+                            }elseif($record->latest_trip->state == TrippingConfirmed::class){
+                                return 'info';
+                            }elseif($record->latest_trip->state == TrippingCompleted::class){
+                                return 'success';
+                            }elseif($record->latest_trip->state == TrippingCancelled::class){
+                                return 'danger';
+                            }else{
+                                return 'primary';
+                            }
+                        }else{
+                            return 'gray';
+                        }
+                    })
+                    ->getStateUsing(function (Contact $record){
+                        return ($record->latest_trip()->count() > 0) ? $record->latest_trip->state->name() : 'Not Yet';
+                    }),
+                Tables\Columns\TextColumn::make('not_now')
+                    ->label('Not Now')
+                    ->badge()
+                    ->color(function (Contact $record){
+                        return ($record->state == Undecided::class) ? 'success' : 'gray';
+                    })
+                    ->getStateUsing(function (Contact $record){ 
+                        return ($record->state == Undecided::class) ? 'Yes' : 'Not Yet';
+                    }),
+                Tables\Columns\TextColumn::make('consulted')
+                    ->label('Consulted')
+                    ->badge()
+                    ->color(function (Contact $record){
+                        return 'gray'; // TODO: No data source for consulted
+                    })
+                    ->getStateUsing(function (Contact $record){ 
+                        return 'Not Yet'; // TODO: No data source for consulted
+                    }),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -74,7 +132,10 @@ class ContactTable extends Component implements HasForms, HasTable
                 //
             ])
             ->actions([
-//                Tables\Actions\EditAction::make(),
+                Tables\Actions\Action::make('View')
+                    ->url(fn($record)=>ContactResource::getUrl('view', ['record' => $record]))
+                    ->icon('heroicon-o-eye')
+                    ->color('secondary'),
                 Tables\Actions\DeleteAction::make(),
                 Action::make('send')
                     ->icon('heroicon-m-chat-bubble-left-ellipsis')

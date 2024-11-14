@@ -6,7 +6,7 @@ class TrippingConfirmed extends TrippingState
 {
     public function name(): string
     {
-        return 'Tripping Contacted';
+        return 'Contacted';
     }
 
     public static function label(): string

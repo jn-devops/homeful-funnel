@@ -6,7 +6,7 @@ class TrippingRequested extends TrippingState
 {
     public function name(): string
     {
-        return 'Tripping Requested';
+        return 'Requested';
     }
 
     public static function label(): string
