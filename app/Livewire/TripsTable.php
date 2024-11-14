@@ -57,13 +57,11 @@ class TripsTable extends Component implements HasForms, HasTable
                     ->formatStateUsing(function ($record) {
                         return Carbon::parse($record->preferred_date)->format('F d, Y') .' '. $record->preferred_time;
                     }),
-//
                 TextColumn::make('remarks')
                     ->label('Remarks')
                     ->wrap()
                     ->words(10)
-                    ->lineClamp(2)
-                    ->hidden(!fn()=>$this->tableFilters['state']['value'] == 'App\\States\\TrippingAssigned'),
+                    ->lineClamp(2),
                 TextColumn::make('completed_ts')
                     ->label('Date Completed')
                     ->formatStateUsing(function ($record) {
@@ -109,13 +107,6 @@ class TripsTable extends Component implements HasForms, HasTable
                     ->url(fn($record)=>ContactResource::getUrl('view', ['record' => $record->contact]))
                     ->icon('heroicon-o-eye')
                     ->color('secondary'),
-                Tables\Actions\Action::make('Cancel')
-                    ->icon('heroicon-m-x-circle')
-                    ->color('danger')
-                    ->requiresConfirmation()
-                    ->action(function (Model $record, array $data){
-
-                    }),
                 Tables\Actions\Action::make('Assign Contact')
                     ->icon('heroicon-o-pencil-square')
                     ->color('success')

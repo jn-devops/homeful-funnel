@@ -150,9 +150,9 @@ class Contact extends Model
         return $this->hasMany(Trips::class,'contact_id','id');
     }
 
-    public function latest_trip(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function latest_trip(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
-        return $this->trips()->latest();
+        return $this->hasOne(Trips::class)->latestOfMany();
     }
 
     public function smsLogs(): \Illuminate\Database\Eloquent\Relations\HasMany
