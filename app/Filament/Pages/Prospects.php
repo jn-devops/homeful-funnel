@@ -2,10 +2,12 @@
 
 namespace App\Filament\Pages;
 
+use App\Filament\Exports\ContactExporter;
 use App\Filament\Resources\ContactResource\Widgets\ContactStateSummary;
 use App\Filament\Resources\UpdateLogsResource\RelationManagers\UpdateLogRelationManager;
 use App\Models\Checkin;
 use App\Models\Contact;
+use Filament\Actions\ExportAction;
 use Filament\Pages\Page;
 use Filament\Resources\Components\Tab;
 
@@ -17,6 +19,15 @@ class Prospects extends Page
     protected static string $view = 'filament.pages.prospects';
     protected static ?string $navigationLabel='Prospect New (work in progress)';
     public $activeTab ='prospects';
+
+    protected function getHeaderActions(): array
+    {
+        return [
+            ExportAction::make()
+                ->exporter(ContactExporter::class),
+        ];
+    }
+
     protected function getHeaderWidgets(): array
     {
         if($this->activeTab=='prospects'){
