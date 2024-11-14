@@ -18,6 +18,9 @@ use Homeful\Common\Traits\HasMeta;
  * @property CampaignType $campaignType
  * @property string $rider_url
  * @property string $feedback
+ * @property string $avail_label
+ * @property string $trip_label
+ * @property string $undecided_label
  *
  * @method int getKey()
  */
@@ -37,6 +40,9 @@ class Campaign extends Model
         'event_time_to',
         'rider_url',
         'feedback',
+        'avail_label',
+        'trip_label',
+        'undecided_label'
     ];
 
     protected $appends = [
@@ -139,5 +145,38 @@ class Campaign extends Model
     public function getFeedbackAttribute(): ?string
     {
         return $this->meta->get('feedback');
+    }
+
+    public function setAvailLabelAttribute(string $value): static
+    {
+        $this->meta->set('avail_label', $value);
+        return $this;
+    }
+
+    public function getAvailLabelAttribute(): ?string
+    {
+        return $this->meta->get('avail_label', 'Avail Now');
+    }
+
+    public function setTripLabelAttribute(string $value): static
+    {
+        $this->meta->set('trip_label', $value);
+        return $this;
+    }
+
+    public function getTripLabelAttribute(): ?string
+    {
+        return $this->meta->get('trip_label', 'Schedule Visit');
+    }
+
+    public function setUndecidedLabelAttribute(string $value): static
+    {
+        $this->meta->set('undecided_label', $value);
+        return $this;
+    }
+
+    public function getUndecidedLabelAttribute(): ?string
+    {
+        return $this->meta->get('undecided_label', 'Not Now');
     }
 }

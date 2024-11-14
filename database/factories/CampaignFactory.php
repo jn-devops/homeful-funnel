@@ -20,6 +20,9 @@ class CampaignFactory extends Factory
             'name' => $this->faker->company(),
             'rider_url' => $this->faker->url(),
             'feedback' => $this->faker->sentence(),
+            'avail_label' => $this->faker->word(),
+            'trip_label' => $this->faker->word(),
+            'undecided_label' => $this->faker->word(),
         ];
     }
 }
