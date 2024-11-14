@@ -109,6 +109,18 @@ class CampaignResource extends Resource
                     ->searchable()
                     ->columnSpanFull()
                     ->preload(),
+                Forms\Components\TextInput::make('avail_label')
+                    ->label('Avail Label')
+                    ->required()
+                    ->columnSpan(1),
+                Forms\Components\TextInput::make('trip_label')
+                    ->label('Trip Label')
+                    ->required()
+                    ->columnSpan(1),
+                Forms\Components\TextInput::make('undecided_label')
+                    ->label('Undecided Label')
+                    ->required()
+                    ->columnSpan(1),
 //                FileUpload::make('splash_image')
 //                    ->required()
 //                    ->label('Splash Image')
@@ -172,6 +184,10 @@ class CampaignResource extends Resource
                         $data['event_date']=$record->meta->get('event_date');
                         $data['event_time_from']=$record->meta->get('event_time_from');
                         $data['event_time_to']=$record->meta->get('event_time_to');
+
+                        $data['avail_label']=$record->avail_label;
+                        $data['trip_label']=$record->trip_label;
+                        $data['undecided_label']=$record->undecided_label;
                     return $data;
                 }),
                 Tables\Actions\DeleteAction::make(),

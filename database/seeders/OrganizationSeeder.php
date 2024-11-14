@@ -25,7 +25,8 @@ class OrganizationSeeder extends Seeder
             "Task Us",
             "Sutherland",
             "Asurion",
-            "The Backroom"
+            "The Backroom",
+            "Public"
         ];
 
         foreach ($data as $index => $d) {

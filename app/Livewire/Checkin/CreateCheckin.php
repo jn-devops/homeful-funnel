@@ -115,7 +115,8 @@ class CreateCheckin extends Component implements HasForms
                         ->disabled(!$this->isOrganizationEmpty)
                         ->optionsLimit(Organization::count()+1)
                         ->placeholder('Select your organization')
-                        ->dehydrated(fn($state)=>$state!=='other'),
+                        ->dehydrated(fn($state)=>$state!=='other')
+                        ->visible($this->organization_default!='Public'),
                     Forms\Components\TextInput::make('organization_other')
                         ->label('Other Organization: ')
                         ->visible(fn(Get $get):bool=>$get('organization')=='other')
@@ -162,6 +163,8 @@ class CreateCheckin extends Component implements HasForms
             if (array_key_exists('organization_other', $data)) {
 
                 $this->organization=Organization::firstOrCreate(['name'=>$data['organization_other']]);
+            }elseif ($this->organization_default=='Public'){
+                $this->organization= Organization::where('name','Public')->first();
             }else{
                 $this->organization= Organization::where('name',$data['organization'])->first();
             }

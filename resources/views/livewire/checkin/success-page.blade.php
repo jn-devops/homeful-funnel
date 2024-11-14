@@ -27,7 +27,7 @@
                    <button wire:click="availed()"
                            class="w-full max-w-xs rounded-lg text-white font-bold p-2"
                            style="background-color: #D97706;">
-                       Avail Now
+                       {{$this->checkin->campaign->avail_label}}
                    </button>
                    <span class="text-center">Use the registration code to avail</span>
                </div>
@@ -38,7 +38,7 @@
                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5 mr-2">
                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3M5 11h14M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
                        </svg>
-                       Schedule Visit
+                       {{$this->checkin->campaign->trip_label}}
                    </button>
                    {{-- <span class="text-center">Use Registration code to avail</span> --}}
 {{--                   <button wire:click="redirect_page_to('{{$checkin->project->rider_url}}')"--}}
@@ -49,7 +49,7 @@
                    <button wire:click="not_now()"
                            class="w-full max-w-xs rounded-lg text-black font-bold p-2 mt-1"
                            style="background-color: white; border: 1px solid rgb(212, 212, 212);">
-                       Not Now
+                       {{$this->checkin->campaign->undecided_label}}
                    </button>
                    {{-- <button wire:click="redirect_page_to('https://homeful.ph/')" --}}
                            {{-- class="w-full max-w-xs rounded-lg text-black font-bold p-2 mt-1" --}}
