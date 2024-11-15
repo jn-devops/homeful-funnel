@@ -20,6 +20,11 @@ class Prospects extends Page
     protected static ?string $navigationLabel='Prospects';
     public $activeTab ='prospects';
 
+    public static function getNavigationBadge(): ?string
+    {
+        return Contact::count();
+    }
+
     protected function getHeaderActions(): array
     {
         return [
