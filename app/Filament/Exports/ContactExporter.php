@@ -25,7 +25,7 @@ class ContactExporter extends Exporter
                 ->label('Latest Campaign')
                 ->formatStateUsing(function (Contact $record) {
                     $checkin= $record->checkins()->latest()->first();
-                    if ($checkin->campaign){
+                    if ($checkin->campaign_id){
                         return $checkin->campaign->name;
                     }else{
                         return '';
@@ -35,14 +35,14 @@ class ContactExporter extends Exporter
                 ->label('Latest Checkin Project')
                 ->formatStateUsing(function (Contact $record) {
                     $project= $record->checkins()->latest()->first();
-                    if ($project->project){
+                    if ($project->project_id){
                         return $project->project->name;
                     }else{
                         return '';
                     }
                 }),
             ExportColumn::make('state')
-                ->formatStateUsing(fn(Contact $record)=>$record->state->name()),
+                ->formatStateUsing(fn(Contact $record)=>$record->state->name()??''),
 //            ExportColumn::make('state'),
 //            ExportColumn::make('meta'),
 //            ExportColumn::make('updated_at'),
