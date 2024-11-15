@@ -17,7 +17,7 @@ class Prospects extends Page
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
 
     protected static string $view = 'filament.pages.prospects';
-    protected static ?string $navigationLabel='Prospect New (work in progress)';
+    protected static ?string $navigationLabel='Prospects';
     public $activeTab ='prospects';
 
     protected function getHeaderActions(): array
