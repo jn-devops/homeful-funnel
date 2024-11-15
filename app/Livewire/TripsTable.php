@@ -48,6 +48,7 @@ class TripsTable extends Component implements HasForms, HasTable
                     ->label('Created Date'),
                 TextColumn::make('contact.name')
                     ->label('Name')
+                    ->formatStateUsing(fn($record)=>ucfirst($record->contact->name))
                     ->searchable(),
                 TextColumn::make('project.name')
                     ->label('Project')

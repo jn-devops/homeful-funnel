@@ -28,6 +28,10 @@ class CheckinResource extends Resource
     {
         return static::getModel()::count();
     }
+    public static function canViewAny(): bool
+    {
+        return false;
+    }
     public static function form(Form $form): Form
     {
         return $form

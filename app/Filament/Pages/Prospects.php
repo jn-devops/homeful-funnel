@@ -23,7 +23,8 @@ class Prospects extends Page
     protected function getHeaderActions(): array
     {
         return [
-            ExportAction::make()
+            ExportAction::make('export_data')
+                ->label('Export Data')
                 ->exporter(ContactExporter::class),
         ];
     }
