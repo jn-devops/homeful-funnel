@@ -38,19 +38,40 @@ class CampaignsTable extends BaseWidget
                 Campaign::orderBy('created_at', 'desc')
             )
             ->columns([
-                TextColumn::make('organization')
+                // TextColumn::make('organization')
+                //     ->label('Organization')
+                //     ->getStateUsing(function ($record) {
+                //         return 'view';
+                //     })
+                //     ->url(function ($record) {
+                //         return '/organizations';
+                //     })
+                //     ->openUrlInNewTab()
+                //     ->color('warning')
+                //     ->extraAttributes([
+                //         'class' => 'mx-auto font-semibold',
+                //     ]),
+                TextColumn::make('view_org')
                     ->label('Organization')
+                    ->color('warning')
                     ->getStateUsing(function ($record) {
                         return 'view';
                     })
-                    ->url(function ($record) {
-                        return '/organizations';
-                    })
-                    ->openUrlInNewTab()
-                    ->color('warning')
                     ->extraAttributes([
                         'class' => 'mx-auto font-semibold',
-                    ]),
+                    ])
+                    ->action(
+                        Action::make('org_list')
+                            ->form(fn($record) => [
+                                Livewire::make(\App\Livewire\Campaign\CampaignOrgList::class, [
+                                    'id' => $record->id,
+                                ]),
+                            ])
+                            ->modalHeading(fn($record) => 'Organizations Invited in '.$record->name)
+                            ->modalWidth(MaxWidth::SixExtraLarge)
+                            ->modalSubmitAction(false)
+                            ->modalCancelAction(false),
+                    ),
                 TextColumn::make('name')
                     ->label('Campaign Name'),
                 TextColumn::make('project.name')
