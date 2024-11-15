@@ -18,6 +18,7 @@ use Filament\Tables;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\HtmlString;
 use phpDocumentor\Reflection\Types\True_;
 
@@ -26,17 +27,8 @@ class ContactResource extends Resource
     protected static ?string $model = Contact::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-    protected static ?string $modelLabel = 'Prospect';
     protected static ?string $recordTitleAttribute = 'name';
-    public static function getNavigationBadge(): ?string
-    {
-        return static::getModel()::count();
-    }
-
-    public static function canViewAny(): bool
-    {
-        return false;
-    }
+    protected static bool $shouldRegisterNavigation = false;
 
     // public static function infolist(Infolist $infolist): Infolist
     // {

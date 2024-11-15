@@ -24,13 +24,10 @@ class CheckinResource extends Resource
     protected static ?string $model = Checkin::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static bool $shouldRegisterNavigation = false;
     public static function getNavigationBadge(): ?string
     {
         return static::getModel()::count();
-    }
-    public static function canViewAny(): bool
-    {
-        return false;
     }
     public static function form(Form $form): Form
     {

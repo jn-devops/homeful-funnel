@@ -22,11 +22,12 @@ class TrippingsResource extends Resource
     protected static ?string $model = Trips::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static bool $shouldRegisterNavigation = false;
+
     public static function getNavigationBadge(): ?string
     {
         return static::getModel()::count();
     }
-
     public static function form(Form $form): Form
     {
         return $form
@@ -34,12 +35,6 @@ class TrippingsResource extends Resource
                 //
             ]);
     }
-
-    public static function canViewAny(): bool
-    {
-        return false;
-    }
-
     public static function table(Table $table): Table
     {
         return $table
