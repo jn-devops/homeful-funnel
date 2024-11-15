@@ -23,13 +23,15 @@ class ContactExporter extends Exporter
             ExportColumn::make('organization.name'),
             ExportColumn::make('campaign')
                 ->label('Latest Campaign')
-                ->formatStateUsing(function (Contact $record) {
-                    return $record->checkins()->latest()->first()->campaign->name;
+                ->getStateUsing(function (Contact $record) {
+                    $latestCheckin = $record->checkins()->latest()->first();
+                    return $latestCheckin?->campaign?->name ?? '';
                 }),
             ExportColumn::make('checkins')
                 ->label('Latest Checkin Project')
                 ->formatStateUsing(function (Contact $record) {
-                    return $record->checkins()->latest()->first()->project->name;
+                    $latestCheckin = $record->checkins()->latest()->first();
+                    return $latestCheckin?->project?->name ?? '';
                 }),
             ExportColumn::make('state')
                 ->formatStateUsing(fn(Contact $record)=>$record->state->name()),
