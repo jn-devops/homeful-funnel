@@ -20,7 +20,7 @@
                 wire:click="$set('activeTab', 'registered');activeTab = 'Registered'"
                 alpine-active="activeTab === 'Registered'"
             >
-                Prospect Check-in Logs
+                Prospect Check-In Logs
             </x-filament::tabs.item>
 
             <!-- Tripping Requests Tab -->
