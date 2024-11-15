@@ -24,12 +24,22 @@ class ContactExporter extends Exporter
             ExportColumn::make('campaign')
                 ->label('Latest Campaign')
                 ->formatStateUsing(function (Contact $record) {
-                    return $record->checkins()->latest()->first()->campaign->name;
+                    $checkin= $record->checkins()->latest()->first();
+                    if ($checkin->campaign){
+                        return $checkin->campaign->name;
+                    }else{
+                        return '';
+                    }
                 }),
             ExportColumn::make('checkins')
                 ->label('Latest Checkin Project')
                 ->formatStateUsing(function (Contact $record) {
-                    return $record->checkins()->latest()->first()->project->name;
+                    $project= $record->checkins()->latest()->first();
+                    if ($project->project){
+                        return $project->project->name;
+                    }else{
+                        return '';
+                    }
                 }),
             ExportColumn::make('state')
                 ->formatStateUsing(fn(Contact $record)=>$record->state->name()),
