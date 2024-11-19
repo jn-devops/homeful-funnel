@@ -21,13 +21,17 @@ class Trips extends Model
         'assigned_to',
         'assigned_to_mobile',
         'completed_ts',
-        'last_updated_by'
+        'last_updated_by',
+        'assigned_date',
+        'confirmed_date',
+        'cancelled_from_state',
+        'cancelled_date',
     ];
 
     protected $casts = [
         'preferred_date' => 'date',
-        // 'preferred_time' => 'time',
-        'state' => TrippingState::class
+        'state' => TrippingState::class,
+        'cancelled_from_state' => TrippingState::class,
     ];
     public static function booted(): void
     {

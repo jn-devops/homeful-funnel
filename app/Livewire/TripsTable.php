@@ -37,22 +37,153 @@ class TripsTable extends Component implements HasForms, HasTable
     use InteractsWithForms;
     use InteractsWithTable;
 
+    public function updatedTableFilters($value)
+    {
+        // $this->dispatchBrowserEvent('refresh');
+    }
+
+
     public function table(Table $table): Table
     {
-        return $table
-            ->query(Trips::query())
-            ->persistFiltersInSession()
-            ->columns([
-                TextColumn::make('created_at')
-                    ->date()
-                    ->label('Created Date'),
+        if($this->tableFilters['state']['value'] == 'App\\States\\TrippingRequested'){
+            $columns = [
                 TextColumn::make('contact.name')
-                    ->label('Name')
+                    ->label('Prospect')
                     ->formatStateUsing(fn($record)=>ucfirst($record->contact->name))
                     ->searchable(),
-                TextColumn::make('project.name')
+                TextColumn::make('campaign.name')
+                    ->label('Campaign'),
+                TextColumn::make('project')
                     ->label('Project')
+                    ->getStateUsing(function ($record) {
+                        return "{$record->project->name}\n{$record->project->project_location}";
+                    })
+                    ->extraAttributes(['style' => 'white-space: pre-line']),
+                TextColumn::make('preferred_date')
+                    ->label('Preferred Date')
+                    ->getStateUsing(function ($record) {
+                        return Carbon::parse($record->preferred_date)->format('F d, Y').' '.$record->preferred_time;
+                    }),
+                TextColumn::make('remarks')
+                    ->label('Remarks')
+                    ->wrap()
+                    ->words(10)
+                    ->lineClamp(2)
+                    ->tooltip(fn($record)=>$record->remarks??''),
+                TextColumn::make('created_at')
+                    ->label('Requested At')
+                    ->formatStateUsing(function ($record) {
+                        return Carbon::parse($record->created_at)->format('F d, Y h:i A') ;
+                    }),
+                TextColumn::make('aging')
+                    ->label('Aging')
+                    ->getStateUsing(function ($record) {
+                        $days = (int) $record->created_at->diffInDays(Carbon::now());
+                        $hrs = (int) $record->created_at->diffInHours(Carbon::now());
+                        return (($days < 1) ? $hrs . ' Hour/s' :  $days . ' Day/s');
+                    }),
+            ];
+        }elseif($this->tableFilters['state']['value'] == 'App\\States\\TrippingAssigned'){
+            $columns = [
+                TextColumn::make('assigned_to')
+                    ->label('Assigned to'),
+                TextColumn::make('contact.name')
+                    ->label('Prospect')
+                    ->formatStateUsing(fn($record)=>ucfirst($record->contact->name))
                     ->searchable(),
+                TextColumn::make('campaign.name')
+                    ->label('Campaign'),
+                TextColumn::make('project')
+                    ->label('Project')
+                    ->getStateUsing(function ($record) {
+                        return "{$record->project->name}\n{$record->project->project_location}";
+                    })
+                    ->extraAttributes(['style' => 'white-space: pre-line']),
+                TextColumn::make('preferred_date')
+                    ->label('Preferred Date')
+                    ->getStateUsing(function ($record) {
+                        return Carbon::parse($record->preferred_date)->format('F d, Y').' '.$record->preferred_time;
+                    }),
+                TextColumn::make('remarks')
+                    ->label('Remarks')
+                    ->wrap()
+                    ->words(10)
+                    ->lineClamp(2)
+                    ->tooltip(fn($record)=>$record->remarks??''),
+                TextColumn::make('assigned_date')
+                    ->label('Assigned At')
+                    ->formatStateUsing(function ($record) {
+                        return Carbon::parse($record->assigned_date)->format('M d, Y h:i A') ;
+                    }),
+                TextColumn::make('aging')
+                    ->label('Aging')
+                    ->getStateUsing(function ($record) {
+                        $days = (int) $record->created_at->diffInDays(Carbon::now());
+                        $hrs = (int) $record->created_at->diffInHours(Carbon::now());
+                        return (($days < 1) ? $hrs . ' Hour/s' :  $days . ' Day/s');
+                    }),
+            ];
+        }elseif($this->tableFilters['state']['value'] == 'App\\States\\TrippingConfirmed'){
+            $columns = [
+                TextColumn::make('assigned_to')
+                    ->label('Assigned to'),
+                TextColumn::make('contact.name')
+                    ->label('Prospect')
+                    ->formatStateUsing(fn($record)=>ucfirst($record->contact->name))
+                    ->searchable(),
+                TextColumn::make('campaign.name')
+                    ->label('Campaign'),
+                TextColumn::make('project')
+                    ->label('Project')
+                    ->getStateUsing(function ($record) {
+                        return "{$record->project->name}\n{$record->project->project_location}";
+                    })
+                    ->extraAttributes(['style' => 'white-space: pre-line']),
+                TextColumn::make('preferred_date')
+                    ->label('Date')
+                    ->getStateUsing(function ($record) {
+                        return Carbon::parse($record->preferred_date)->format('F d, Y').' '.$record->preferred_time;
+                    }),
+                TextColumn::make('remarks')
+                    ->label('Remarks')
+                    ->wrap()
+                    ->words(10)
+                    ->lineClamp(2)
+                    ->tooltip(fn($record)=>$record->remarks??''),
+                TextColumn::make('confirmed_date')
+                    ->label('Confirmed At')
+                    ->formatStateUsing(function ($record) {
+                        return Carbon::parse($record->confirmed_date)->format('M d, Y h:i A') ;
+                    }),
+                TextColumn::make('aging')
+                    ->label('Aging')
+                    ->getStateUsing(function ($record) {
+                        $days = (int) $record->created_at->diffInDays(Carbon::now());
+                        $hrs = (int) $record->created_at->diffInHours(Carbon::now());
+                        return (($days < 1) ? $hrs . ' Hour/s' :  $days . ' Day/s');
+                    }),
+            ];
+        }elseif($this->tableFilters['state']['value'] == 'App\\States\\TrippingCompleted'){
+            $columns = [
+                TextColumn::make('assigned_to')
+                    ->label('Assigned to'),
+                TextColumn::make('contact.name')
+                    ->label('Prospect')
+                    ->formatStateUsing(fn($record)=>ucfirst($record->contact->name))
+                    ->searchable(),
+                TextColumn::make('campaign.name')
+                    ->label('Campaign'),
+                TextColumn::make('project')
+                    ->label('Project')
+                    ->getStateUsing(function ($record) {
+                        return "{$record->project->name}\n{$record->project->project_location}";
+                    })
+                    ->extraAttributes(['style' => 'white-space: pre-line']),
+                TextColumn::make('preferred_date')
+                    ->label('Date')
+                    ->getStateUsing(function ($record) {
+                        return Carbon::parse($record->preferred_date)->format('F d, Y').' '.$record->preferred_time;
+                    }),
                 TextColumn::make('remarks')
                     ->label('Remarks')
                     ->wrap()
@@ -60,13 +191,104 @@ class TripsTable extends Component implements HasForms, HasTable
                     ->lineClamp(2)
                     ->tooltip(fn($record)=>$record->remarks??''),
                 TextColumn::make('completed_ts')
+                    ->label('Completed At')
+                    ->formatStateUsing(function ($record) {
+                        return Carbon::parse($record->completed_ts)->format('M d, Y h:i A') ;
+                    }),
+                TextColumn::make('aging')
+                    ->label('Aging')
+                    ->getStateUsing(function ($record) {
+                        $days = (int) $record->created_at->diffInDays(Carbon::now());
+                        $hrs = (int) $record->created_at->diffInHours(Carbon::now());
+                        return (($days < 1) ? $hrs . ' Hour/s' :  $days . ' Day/s');
+                    }),
+            ];
+        }elseif($this->tableFilters['state']['value'] == 'App\\States\\TrippingCancelled'){
+            $columns = [
+                TextColumn::make('assigned_to')
+                    ->label('Assigned to'),
+                TextColumn::make('contact.name')
+                    ->label('Prospect')
+                    ->formatStateUsing(fn($record)=>ucfirst($record->contact->name))
+                    ->searchable(),
+                TextColumn::make('campaign.name')
+                    ->label('Campaign'),
+                TextColumn::make('project')
+                    ->label('Project')
+                    ->getStateUsing(function ($record) {
+                        return "{$record->project->name}\n{$record->project->project_location}";
+                    })
+                    ->extraAttributes(['style' => 'white-space: pre-line']),
+                TextColumn::make('preferred_date')
+                    ->label('Date')
+                    ->getStateUsing(function ($record) {
+                        return Carbon::parse($record->preferred_date)->format('F d, Y').' '.$record->preferred_time;
+                    }),
+                TextColumn::make('remarks')
+                    ->label('Remarks')
+                    ->wrap()
+                    ->words(10)
+                    ->lineClamp(2)
+                    ->tooltip(fn($record)=>$record->remarks??''),
+                TextColumn::make('cancelled_from_status')
+                    ->label('Cancelled From')
+                    ->getStateUsing(fn($record)=>$record->cancelled_from_state?->name() ?? ''),
+                TextColumn::make('cancelled_date')
+                    ->label('Cancelled At')
+                    ->formatStateUsing(function ($record) {
+                        return Carbon::parse($record->cancelled_date)->format('M d, Y h:i A') ;
+                    }),
+                TextColumn::make('aging')
+                    ->label('Aging')
+                    ->getStateUsing(function ($record) {
+                        $days = (int) $record->created_at->diffInDays(Carbon::now());
+                        $hrs = (int) $record->created_at->diffInHours(Carbon::now());
+                        return (($days < 1) ? $hrs . ' Hour/s' :  $days . ' Day/s');
+                    }),
+            ];
+        }else{
+            $columns = [
+                TextColumn::make('aging')
+                    ->label('Aging')
+                    ->getStateUsing(function ($record) {
+                        $days = (int) $record->created_at->diffInDays(Carbon::now());
+                        $hrs = (int) $record->created_at->diffInHours(Carbon::now());
+                        return (($days < 1) ? $hrs . ' Hours' :  ($days . (($days < 2) ? ' Day' : ' Days')));
+                    }),
+                TextColumn::make('contact.name')
+                    ->label('Prospect')
+                    ->formatStateUsing(fn($record)=>ucfirst($record->contact->name))
+                    ->searchable(),
+                TextColumn::make('project')
+                    ->label('Project')
+                    ->getStateUsing(function ($record) {
+                        return "{$record->project->name}\n{$record->project->project_location}";
+                    })
+                    ->extraAttributes(['style' => 'white-space: pre-line']),
+                TextColumn::make('remarks')
+                    ->label('Remarks')
+                    ->wrap()
+                    ->words(10)
+                    ->lineClamp(2)
+                    ->tooltip(fn($record)=>$record->remarks??''),
+                TextColumn::make('preferred_date')
+                    ->label('Preferred Date')
+                    ->getStateUsing(function ($record) {
+                        return Carbon::parse($record->preferred_date)->format('F d, Y').' '.$record->preferred_time;
+                    }),
+                TextColumn::make('completed_ts')
                     ->label('Date Completed')
                     ->formatStateUsing(function ($record) {
-                        return Carbon::parse($record->preferred_date)->format('F d, Y h:i A') ;
+                        return Carbon::parse($record->completed_ts)->format('F d, Y h:i A') ;
                     }),
                 TextColumn::make('last_updated_by')
                     ->label('Last Updated By'),
-            ])
+            ];
+        }
+        return $table
+            ->query(Trips::query())
+            ->persistFiltersInSession()
+            ->columns($columns)
             ->defaultSort('created_at', 'desc')
             ->filters([
                 Tables\Filters\SelectFilter::make('state')
@@ -139,6 +361,7 @@ class TripsTable extends Component implements HasForms, HasTable
                             $record->state=TrippingAssigned::class;
                             $record->assigned_to=$data['assigned_to'];
                             $record->assigned_to_mobile=$data['assigned_to_mobile'];
+                            $record->assigned_date = Carbon::now();
                             $record->last_updated_by=auth()->user()->name;
                             $record->save();
 
@@ -204,6 +427,7 @@ class TripsTable extends Component implements HasForms, HasTable
                         $record->state=TrippingConfirmed::class;
                         $record->preferred_date = $data['preferred_date'];
                         $record->preferred_time = $data['preferred_time'];
+                        $record->confirmed_date = Carbon::now();
                         $record->last_updated_by=auth()->user()->name;
                         $record->save();
                         Notification::make()
@@ -220,7 +444,9 @@ class TripsTable extends Component implements HasForms, HasTable
                     ->modalWidth(MaxWidth::Small),
                 Tables\Actions\Action::make('Cancel')
                     ->action(function (Model $record){
+                            $record->cancelled_from_state = $record->state;
                             $record->state = TrippingCancelled::class;
+                            $record->cancelled_date = Carbon::now();
                             $record->last_updated_by=auth()->user()->name;
                             $record->save();
                         Notification::make()
@@ -254,12 +480,7 @@ class TripsTable extends Component implements HasForms, HasTable
                     ->hidden(fn($record):bool=>$record->state!=TrippingConfirmed::class),
 
 
-            ],Tables\Enums\ActionsPosition::BeforeCells)
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
-            ]);
+            ],Tables\Enums\ActionsPosition::BeforeCells);
     }
 
     public function render(): View
@@ -274,5 +495,9 @@ class TripsTable extends Component implements HasForms, HasTable
     public function getTableFiltersProperty()
     {
         return $this->tableFilters;
+    }
+
+    public function setStatus($status){
+        $this->status = $status;
     }
 }
