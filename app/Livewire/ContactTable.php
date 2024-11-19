@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Filament\Resources\ContactResource;
 use App\Models\Contact;
+use App\Models\User;
 use App\Notifications\Adhoc;
 use App\States\Availed;
 use App\States\TrippingAssigned;
@@ -12,9 +13,12 @@ use App\States\TrippingCompleted;
 use App\States\TrippingConfirmed;
 use App\States\TrippingRequested;
 use App\States\Undecided;
+use Filament\Tables\Actions\ActionGroup;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
+use Filament\Support\Enums\MaxWidth;
 use Filament\Tables;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\BulkAction;
@@ -25,7 +29,6 @@ use Illuminate\Support\Collection;
 use Livewire\Component;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
-
 class ContactTable extends Component implements HasForms, HasTable
 {
     use InteractsWithForms;
@@ -48,6 +51,8 @@ class ContactTable extends Component implements HasForms, HasTable
                     })
                     ->extraAttributes(['style' => 'white-space: pre-line'])
                     ->searchable(['name','mobile','email']),
+                Tables\Columns\TextColumn::make('assigned.name')
+                    ->extraAttributes(['style' => 'white-space: pre-line']),
                 Tables\Columns\TextColumn::make('organization.name')
                     ->wrap()
                     ->searchable(),
@@ -71,7 +76,7 @@ class ContactTable extends Component implements HasForms, HasTable
                     ->color(function (Contact $record){
                         return ($record->state == Availed::class) ? 'success' : 'gray';
                     })
-                    ->getStateUsing(function (Contact $record){ 
+                    ->getStateUsing(function (Contact $record){
                         return ($record->state == Availed::class) ? 'Yes' : 'Not Yet';
                     }),
                 Tables\Columns\TextColumn::make('for_tripping')
@@ -103,7 +108,7 @@ class ContactTable extends Component implements HasForms, HasTable
                     ->color(function (Contact $record){
                         return ($record->state == Undecided::class) ? 'success' : 'gray';
                     })
-                    ->getStateUsing(function (Contact $record){ 
+                    ->getStateUsing(function (Contact $record){
                         return ($record->state == Undecided::class) ? 'Yes' : 'Not Yet';
                     }),
                 Tables\Columns\TextColumn::make('consulted')
@@ -112,7 +117,7 @@ class ContactTable extends Component implements HasForms, HasTable
                     ->color(function (Contact $record){
                         return 'gray'; // TODO: No data source for consulted
                     })
-                    ->getStateUsing(function (Contact $record){ 
+                    ->getStateUsing(function (Contact $record){
                         return 'Not Yet'; // TODO: No data source for consulted
                     }),
                 Tables\Columns\TextColumn::make('created_at')
@@ -132,24 +137,43 @@ class ContactTable extends Component implements HasForms, HasTable
                 //
             ])
             ->actions([
-                Tables\Actions\Action::make('View')
-                    ->url(fn($record)=>ContactResource::getUrl('view', ['record' => $record]))
-                    ->icon('heroicon-o-eye')
-                    ->color('secondary'),
-                Tables\Actions\DeleteAction::make(),
-                Action::make('send')
-                    ->icon('heroicon-m-chat-bubble-left-ellipsis')
-                    ->form([
-                        Textarea::make('message')->required(),
-                    ])
-                    ->action(function (Contact $record, array $data) {
-                        $record->notify(new Adhoc($data['message']));
-                        $record->smsLogs()->create([
-                            'message' => $data['message'],
-                            'sent_to_mobile' => $record->mobile,
-                            'sent_to_email' => $record->email,
-                        ]);
-                    }),
+
+                ActionGroup::make([
+                    Tables\Actions\Action::make('View')
+                        ->url(fn($record)=>ContactResource::getUrl('view', ['record' => $record]))
+                        ->icon('heroicon-o-eye')
+                        ->color('secondary'),
+                    Tables\Actions\DeleteAction::make(),
+                    Action::make('send')
+                        ->icon('heroicon-m-chat-bubble-left-ellipsis')
+                        ->form([
+                            Textarea::make('message')->required(),
+                        ])
+                        ->action(function (Contact $record, array $data) {
+                            $record->notify(new Adhoc($data['message']));
+                            $record->smsLogs()->create([
+                                'message' => $data['message'],
+                                'sent_to_mobile' => $record->mobile,
+                                'sent_to_email' => $record->email,
+                            ]);
+                        }),
+                    Action::make('assign')
+                        ->label('Assign To Sales')
+                        ->icon('heroicon-m-pencil-square')
+                        ->form([
+                            Select::make('assign_to')
+                                ->label('Assign To Sales')
+                                ->options(User::all()->pluck('name','id'))
+                                ->searchable()
+                                ->native(false),
+                        ])
+                        ->action(function (Contact $record, array $data) {
+                            $record->assigned_to=$data['assign_to'];
+                            $record->save();
+                        })
+                        ->modalWidth(MaxWidth::ExtraSmall),
+                ])->button()->label('Actions'),
+
             ],Tables\Enums\ActionsPosition::BeforeCells)
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -170,7 +194,25 @@ class ContactTable extends Component implements HasForms, HasTable
                                 ]);
                             });
                         })
-                        ->deselectRecordsAfterCompletion()
+                        ->deselectRecordsAfterCompletion(),
+                     BulkAction::make('assign')
+                         ->label('Assign To Sales')
+                         ->icon('heroicon-m-pencil-square')
+                         ->form([
+                             Select::make('assign_to')
+                                 ->label('Assign To Sales')
+                                 ->options(User::all()->pluck('name','id'))
+                                 ->searchable()
+                                 ->native(false),
+                         ])
+                         ->action(function (Collection $records, array $data) {
+                             $records->each(function(Contact $record) use($data) {
+                                 $record->assigned_to=$data['assign_to'];
+                                 $record->save();
+                             });
+                         })
+                         ->modalWidth(MaxWidth::ExtraSmall)
+                         ->deselectRecordsAfterCompletion(),
                 ]),
             ]);
     }

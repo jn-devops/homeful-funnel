@@ -48,7 +48,7 @@ class Contact extends Model
 
     const PHONE_SEARCH_FORMAT = PhoneNumberFormat::E164;
     protected $fillable = [
-        'mobile', 'name', 'first_name', 'middle_name', 'last_name','email'
+        'mobile', 'name', 'first_name', 'middle_name', 'last_name','email','assigned_to'
     ];
 
     protected $casts = [
@@ -123,6 +123,11 @@ class Contact extends Model
     public function routeNotificationForEngageSpark(): string
     {
         return $this->mobile;
+    }
+
+    public function assigned(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(User::class, 'assigned_to','id');
     }
 
     public function organization(): \Illuminate\Database\Eloquent\Relations\BelongsTo

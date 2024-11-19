@@ -29,7 +29,7 @@ class ContactStateSummary extends BaseWidget
             Stat::make('Availed', $stateCounts['App\\States\\Availed']['count']),
             Stat::make('For Tripping', $stateCounts['App\\States\\ForTripping']['count']),
             Stat::make('Consulted', 0), // TODO: Count for Consulted State
-            Stat::make('Not Now', $stateCounts['App\\States\\Undecided']['count']),
+            Stat::make('Not Now', $stateCounts['App\\States\\Undecided']['count']??0),
         ];
 
         // Create stats with state names and counts
