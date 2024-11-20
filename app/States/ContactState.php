@@ -33,6 +33,10 @@ abstract class ContactState extends State
 //            ->allowTransition(TrippingAssigned::class, TrippingConfirmed::class)
 //            ->allowTransition(TrippingConfirmed::class, TrippingCompleted::class)
 //            ->allowTransition(TrippingCompleted::class, Availed::class)
+            ->allowTransition(ForTripping::class, Availed::class)
+            ->allowTransition(Registered::class, Uninterested::class)
+            ->allowTransition(Undecided::class, Uninterested::class)
+            ->allowTransition(ForTripping::class, Uninterested::class)
             ;
     }
 }

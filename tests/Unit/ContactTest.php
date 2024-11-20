@@ -1,6 +1,6 @@
 <?php
 
-use App\States\{Registered, Undecided, ForTripping, Availed};
+use App\States\{Registered, Undecided, ForTripping, Availed, Uninterested};
 use Propaganistas\LaravelPhone\Exceptions\NumberParseException;
 use Spatie\SchemalessAttributes\SchemalessAttributes;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -49,6 +49,9 @@ test('contact has states', function () {
     expect($contact->state)->toBeInstanceOf(ForTripping::class);
     $contact->state->transitionTo(Availed::class);
     expect($contact->state)->toBeInstanceOf(Availed::class);
+    $contact = Contact::factory()->create();
+    $contact->state->transitionTo(Uninterested::class);
+    expect($contact->state)->toBeInstanceOf(Uninterested::class);
 });
 
 test('contact has an organization', function () {
