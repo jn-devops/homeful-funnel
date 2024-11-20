@@ -6,6 +6,8 @@ use App\Filament\Resources\CampaignResource\Pages;
 use App\Filament\Resources\CampaignResource\RelationManagers;
 use App\Models\Campaign;
 use App\Models\Organization;
+use App\Models\Project;
+use App\Models\ProjectCampaign;
 use Filament\Forms;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Form;
@@ -44,7 +46,12 @@ class CampaignResource extends Resource
                     ->required()
                     ->maxLength(255),
                 Forms\Components\DatePicker::make('event_date')
-                    ->label('Date')
+                    ->label('Date From')
+                    ->date()
+                    ->native(false)
+                    ->required(),
+                Forms\Components\DatePicker::make('event_date_to')
+                    ->label('Date To')
                     ->date()
                     ->native(false)
                     ->required(),
@@ -65,9 +72,13 @@ class CampaignResource extends Resource
                     ->rule('after:start_time')
                     ->displayFormat('h:i A')
                     ->required(),
-                Forms\Components\Select::make('project_id')
+                Forms\Components\Select::make('projects')
                     ->label('Project')
-                    ->relationship('project', 'name')
+                    ->options(Project::pluck('name', 'id')->toArray())
+                    ->multiple()
+                    // ->hintAction(fn (Select $component) => Forms\Components\Actions\Action::make('select all')
+                    //     ->action(fn () => $component->state(Project::pluck('id')->toArray()))
+                    // )
                     ->preload()
                     ->native(false)
                     ->required(),
@@ -95,6 +106,7 @@ class CampaignResource extends Resource
                             <li><strong>@avail_url:</strong> Link to Avail.</li>
                         </ul>
                     '))
+                    ->default("Hi @‌name,\n\nThank you for your Registration. Here is your registration code:  @‌registration_code\n\nShould you wish to continue with the purchase, please click on the following link: @‌avail_url\n\nThank you for choosing our projects!")
                     ->columnSpan(2),
                 Forms\Components\TextInput::make('splash_image_url')
                     ->label('Splash Image Url')
@@ -107,16 +119,22 @@ class CampaignResource extends Resource
                     ->relationship('organizations', 'name')
                     ->multiple()
                     ->searchable()
+                    ->hintAction(fn (Select $component) => Forms\Components\Actions\Action::make('select all')
+                        ->action(fn () => $component->state(Organization::pluck('id')->toArray()))
+                    )
                     ->columnSpanFull()
                     ->preload(),
                 Forms\Components\TextInput::make('avail_label')
                     ->label('Avail Label')
+                    ->default('Avail Now')
                     ->columnSpan(1),
                 Forms\Components\TextInput::make('trip_label')
                     ->label('Trip Label')
+                    ->default('Request Tripping')
                     ->columnSpan(1),
                 Forms\Components\TextInput::make('undecided_label')
                     ->label('Undecided Label')
+                    ->default('Request Tripping')
                     ->columnSpan(1),
 //                FileUpload::make('splash_image')
 //                    ->required()
@@ -149,8 +167,6 @@ class CampaignResource extends Resource
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('campaignType.name')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('project.name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('rider_url')
                     ->label('Redirect URL')
@@ -247,6 +263,8 @@ class CampaignResource extends Resource
     {
         return [
             'index' => Pages\ManageCampaigns::route('/'),
+            'create' => Pages\CreateCampaign::route('/create'),
+            'edit' => Pages\EditCampaign::route('/{record}/edit'),
         ];
     }
 }

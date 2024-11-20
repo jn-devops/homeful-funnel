@@ -65,6 +65,11 @@ class Project extends Model
         'rider_url',
     ];
 
+    public function projectCampaigns(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(ProjectCampaign::class);
+    }
+
     public function setProjectLocationAttribute(string $value): static
     {
         $this->meta->set('project_location', $value);

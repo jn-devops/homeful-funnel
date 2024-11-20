@@ -21,6 +21,10 @@ use Homeful\Common\Traits\HasMeta;
  * @property string $avail_label
  * @property string $trip_label
  * @property string $undecided_label
+ * @property string $event_date
+ * @property string $event_date_to
+ * @property string $event_date_from
+ * @property string $event_date_to
  *
  * @method int getKey()
  */
@@ -36,6 +40,7 @@ class Campaign extends Model
         'splash_image',
         'splash_image_url',
         'event_date',
+        'event_date_to',
         'event_time_from',
         'event_time_to',
         'rider_url',
@@ -53,6 +58,16 @@ class Campaign extends Model
     public function checkins(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Checkin::class);
+    }
+
+    public function projectCampaigns(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(ProjectCampaign::class);
+    }
+
+    public function projects()
+    {
+        return $this->hasManyThrough(Project::class, ProjectCampaign::class, 'campaign_id', 'id', 'id', 'project_id');
     }
 
     public function project(): \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -101,6 +116,17 @@ class Campaign extends Model
     public function getEventDateAttribute(): ?string
     {
         return $this->meta->get('event_date');
+    }
+
+    public function setEventDateToAttribute(string $value): static
+    {
+        $this->meta->set('event_date_to', $value);
+        return $this;
+    }
+
+    public function getEventDateToAttribute(): ?string
+    {
+        return $this->meta->get('event_date_to');
     }
 
     public function setEventTimeFromAttribute(string $value): static
