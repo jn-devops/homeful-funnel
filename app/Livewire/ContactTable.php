@@ -4,15 +4,20 @@ namespace App\Livewire;
 
 use App\Filament\Resources\ContactResource;
 use App\Models\Contact;
+use App\Models\ContactStateHistory;
 use App\Models\User;
 use App\Notifications\Adhoc;
 use App\States\Availed;
+use App\States\ForTripping;
+use App\States\Registered;
 use App\States\TrippingAssigned;
 use App\States\TrippingCancelled;
 use App\States\TrippingCompleted;
 use App\States\TrippingConfirmed;
 use App\States\TrippingRequested;
 use App\States\Undecided;
+use App\States\Uninterested;
+use Faker\Provider\Text;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
@@ -172,6 +177,40 @@ class ContactTable extends Component implements HasForms, HasTable
                             $record->save();
                         })
                         ->modalWidth(MaxWidth::ExtraSmall),
+                    Action::make('update_state')
+                        ->label('Update State')
+                        ->icon('heroicon-m-pencil-square')
+                        ->form([
+                            Select::make('state')
+                                ->label('State')
+                                ->options([
+                                    Registered::class=>'Registered',
+                                    Availed::class=>'Availed',
+                                    Undecided::class=>'Undecided',
+                                    ForTripping::class=>'For Tripping',
+                                    TrippingAssigned::class=>'Tripping Assigned',
+                                    TrippingConfirmed::class=>'Tripping Confirmed',
+                                    TrippingCompleted::class=>'Tripping Completed',
+                                    Uninterested::class=>'Uninterested',
+                                ])
+                                ->searchable()
+                                ->native(false),
+                            Textarea::make('remarks')
+                                ->label('Remarks')
+                                ->rows(5)
+                                ->cols(5)
+                                ->maxLength(255),
+                        ])
+                        ->action(function (Contact $record, array $data) {
+                            $record->state=$data['state'];
+                            $record->save();
+                            ContactStateHistory::create([
+                               'contact_id'=>$record->id,
+                               'state'=>$data['state'],
+                               'remarks'=>$data['remarks']
+                            ]);
+                        })
+                        ->modalWidth(MaxWidth::ExtraSmall),
                 ])->button()->label('Actions'),
 
             ],Tables\Enums\ActionsPosition::BeforeCells)
@@ -213,6 +252,43 @@ class ContactTable extends Component implements HasForms, HasTable
                          })
                          ->modalWidth(MaxWidth::ExtraSmall)
                          ->deselectRecordsAfterCompletion(),
+                    BulkAction::make('update_state')
+                        ->label('Update State')
+                        ->icon('heroicon-m-pencil-square')
+                        ->form([
+                            Select::make('state')
+                                ->label('State')
+                                ->options([
+                                    Registered::class=>'Registered',
+                                    Availed::class=>'Availed',
+                                    Undecided::class=>'Undecided',
+                                    ForTripping::class=>'For Tripping',
+                                    TrippingAssigned::class=>'Tripping Assigned',
+                                    TrippingConfirmed::class=>'Tripping Confirmed',
+                                    TrippingCompleted::class=>'Tripping Completed',
+                                    Uninterested::class=>'Uninterested',
+                                ])
+                                ->searchable()
+                                ->native(false),
+                            Textarea::make('remarks')
+                                ->label('Remarks')
+                                ->rows(5)
+                                ->cols(5)
+                                ->maxLength(255),
+                        ])
+                        ->action(function (Collection $records, array $data) {
+                            $records->each(function(Contact $record) use($data) {
+                                $record->state=$data['state'];
+                                $record->save();
+                                ContactStateHistory::create([
+                                    'contact_id'=>$record->id,
+                                    'state'=>$data['state'],
+                                    'remarks'=>$data['remarks']
+                                ]);
+                            });
+
+                        })
+                        ->modalWidth(MaxWidth::ExtraSmall),
                 ]),
             ]);
     }
