@@ -17,6 +17,7 @@ abstract class ContactState extends State
         TrippingConfirmed::class,
         TrippingCompleted::class,
         Uninterested::class,
+        Unresponsive::class,
     ];
     /**
      * @throws InvalidConfig
