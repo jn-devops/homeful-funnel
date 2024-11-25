@@ -13,6 +13,8 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Enums\FiltersLayout;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -187,6 +189,21 @@ class CampaignResource extends Resource
             ])
             ->filters([
                 //
+                SelectFilter::make('project')
+                    ->options(Project::all()->pluck('name','id'))
+                    ->native(false)
+                    ->multiple()
+                    ->query(function (\Illuminate\Database\Eloquent\Builder $query, array $data): \Illuminate\Database\Eloquent\Builder {
+                        return $query->when(
+                            $data['values'],
+                            fn (\Illuminate\Database\Eloquent\Builder $query) => $query
+                                ->orWhereHas('projects', function (\Illuminate\Database\Eloquent\Builder $query) use ($data) {
+                                    $query->whereIn('projects.id', $data['values']);
+                                })
+                                ->orWhereIn('project_id', $data['values']) // Add direct condition on project_id
+                        );
+                    })
+
             ])
             ->actions([
                 Tables\Actions\EditAction::make()
