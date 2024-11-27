@@ -51,6 +51,11 @@ class SuccessPage extends Component
         return redirect()->to($this->checkin->project->rider_url);
     }
 
+    public function chat_url()
+    {
+        return redirect()->to($this->checkin->campaign->chat_url);
+    }
+
     public function redirect_page_to($url){
         return redirect()->to($url);
     }
