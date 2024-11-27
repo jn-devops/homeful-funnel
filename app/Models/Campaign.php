@@ -48,7 +48,7 @@ class Campaign extends Model
         'feedback',
         'avail_label',
         'trip_label',
-        'undecided_label'
+        'undecided_label',
     ];
 
     protected $appends = [

@@ -96,6 +96,12 @@ class CampaignResource extends Resource
                     ->required()
                     ->maxLength(255)
                     ->columnSpan(2),
+                Forms\Components\TextInput::make('chat_url')
+                    ->label('Chat URL')
+                    ->live()
+                    ->required()
+                    ->maxLength(255)
+                    ->columnSpan(2),
                 Forms\Components\MarkdownEditor::make('feedback')
                     ->helperText(new HtmlString('
                        <ul>
