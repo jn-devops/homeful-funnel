@@ -1,7 +1,7 @@
 <div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.9.6/lottie.min.js"></script>
     <div class="flex justify-center items-center">
-        <div class="" style="margin-top: 6rem">
+        <div class="" style="margin-top: 2rem">
             <div id="lottie-animation" class=" mx-auto" style="width: 12rem;"></div>
             <div class="text-center mx-5 mb-10">
                 <div class="text-3xl font-bold mb-4">Successfully Registered</div>
@@ -18,7 +18,7 @@
                     {{-- </button> --}}
                 {{-- <div style="color: rgb(30 64 175); padding: 0.5rem; background-color: rgb(219 234 254); font-size: 0.8rem" class="rounded-lg text-center w-full"> You may use your code to waive the P10,000 Consultation Fee</div> --}}
                <div class="flex flex-col items-center w-full">
-                   <span class="text-center mb-1">Should you wish to continue? Click</span>
+                   <span class="text-center mb-1">To reserve, click the button below</span>
 {{--                   <button wire:click="redirect_page_to('{{ config('kwyc-check.campaign_url') . '?email=' . $checkin->contact->email . '&mobile=' . $checkin->contact->mobile . '&identifier='.$checkin->registration_code.'&code='.$checkin->campaign->project->seller_code.'&choice='.$checkin->campaign->project->product_code }}')"--}}
 {{--                           class="w-full max-w-xs rounded-lg text-white font-bold p-2"--}}
 {{--                           style="background-color: #D97706;">--}}
@@ -29,9 +29,10 @@
                            style="background-color: #D97706;">
                        {{$this->checkin->campaign->avail_label}}
                    </button>
-                   <span class="text-center">Use the registration code to avail</span>
+                   <span class="text-center text-sm" style="color: #8B8B8B">Use the registration code to avail</span>
                </div>
                <div class="flex flex-col items-center w-full">
+                    <span>To schedule site visit, click the button below</span>
                    <button wire:click="trip()"
                    class="w-full max-w-xs rounded-lg text-white font-bold p-2 mb-2 items-center justify-center flex gap-2"
                            style="background-color: #16A34A;">
@@ -40,6 +41,7 @@
                        </svg>
                        {{$this->checkin->campaign->trip_label}}
                    </button>
+                   <span>Should you need assistance?</span>
                    <button wire:click="chat_url()"
                            class="w-full max-w-xs rounded-lg text-white font-bold p-2 mb-2 items-center justify-center flex gap-2"
                            style="background-color: #F9BC2D;">
