@@ -14,6 +14,7 @@ test('campaign has attributes', function () {
     expect($campaign->name)->toBeString();
     expect($campaign->meta)->toBeInstanceOf(SchemalessAttributes::class);
     expect($campaign->rider_url)->toBeString();
+    expect($campaign->chat_url)->toBeString();
     expect($campaign->feedback)->toBeString();
     expect($campaign->avail_label)->toBeString();
     expect($campaign->trip_label)->toBeString();
