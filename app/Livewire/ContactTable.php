@@ -17,6 +17,7 @@ use App\States\TrippingConfirmed;
 use App\States\TrippingRequested;
 use App\States\Undecided;
 use App\States\Uninterested;
+use App\States\Unresponsive;
 use Faker\Provider\Text;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Forms\Components\Select;
@@ -192,6 +193,7 @@ class ContactTable extends Component implements HasForms, HasTable
                                     TrippingConfirmed::class=>'Tripping Confirmed',
                                     TrippingCompleted::class=>'Tripping Completed',
                                     Uninterested::class=>'Uninterested',
+                                    Unresponsive::class=>'Uncontacted',
                                 ])
                                 ->searchable()
                                 ->native(false),
@@ -267,6 +269,7 @@ class ContactTable extends Component implements HasForms, HasTable
                                     TrippingConfirmed::class=>'Tripping Confirmed',
                                     TrippingCompleted::class=>'Tripping Completed',
                                     Uninterested::class=>'Uninterested',
+                                    Unresponsive::class=>'Uncontacted',
                                 ])
                                 ->searchable()
                                 ->native(false),
