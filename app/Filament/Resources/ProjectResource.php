@@ -62,6 +62,11 @@ class ProjectResource extends Resource
                     ->required()
                     ->maxLength(255)
                     ->columnSpanFull(),
+                Forms\Components\TextInput::make('avail_url')
+                    ->label('Avail URL')
+                    ->required()
+                    ->maxLength(255)
+                    ->columnSpanFull(),
                 Forms\Components\TextInput::make('kwyc_check_campaign_code')
                     ->label('KWYC Campaign Code')
                     ->required()
