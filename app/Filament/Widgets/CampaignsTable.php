@@ -15,6 +15,7 @@ use App\States\Registered;
 use App\States\Undecided;
 use Filament\Forms\Components\Livewire;
 use Filament\Forms\Components\TextInput;
+use Filament\Support\Enums\Alignment;
 use Filament\Support\Enums\MaxWidth;
 use Filament\Tables\Enums\ActionsPosition;
 use Filament\Widgets\Concerns\InteractsWithPageFilters;
@@ -74,8 +75,29 @@ class CampaignsTable extends BaseWidget
                     ),
                 TextColumn::make('name')
                     ->label('Campaign Name'),
-                TextColumn::make('project.name')
-                    ->label('Project Chosen'),
+                TextColumn::make('view_project')
+                    ->label('Projects')
+                    ->color('warning')
+                    ->icon('heroicon-s-home-modern')
+                    ->alignment(Alignment::Center)
+                    ->getStateUsing(function ($record) {
+                        return 'view';
+                    })
+                    ->extraAttributes([
+                        'class' => 'mx-auto font-semibold',
+                    ])
+                    ->action(
+                        Action::make('org_list')
+                            ->form(fn($record) => [
+                                Livewire::make(\App\Livewire\Campaign\ProjectChosenList::class, [
+                                    'id' => $record->id,
+                                ]),
+                            ])
+                            ->modalHeading(fn($record) => 'Projects on '.$record->name)
+                            ->modalWidth(MaxWidth::SixExtraLarge)
+                            ->modalSubmitAction(false)
+                            ->modalCancelAction(false),
+                    ),
                 TextColumn::make('registered')
                     ->label('Registered')
                     ->badge()

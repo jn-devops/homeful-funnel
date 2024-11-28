@@ -19,6 +19,7 @@ class CampaignFactory extends Factory
         return [
             'name' => $this->faker->company(),
             'rider_url' => $this->faker->url(),
+            'chat_url' => $this->faker->url(),
             'feedback' => $this->faker->sentence(),
             'avail_label' => $this->faker->word(),
             'trip_label' => $this->faker->word(),

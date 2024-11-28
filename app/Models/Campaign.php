@@ -17,6 +17,7 @@ use Homeful\Common\Traits\HasMeta;
  * @property Project $project
  * @property CampaignType $campaignType
  * @property string $rider_url
+ * @property string $chat_url
  * @property string $feedback
  * @property string $avail_label
  * @property string $trip_label
@@ -24,7 +25,6 @@ use Homeful\Common\Traits\HasMeta;
  * @property string $event_date
  * @property string $event_date_to
  * @property string $event_date_from
- * @property string $event_date_to
  *
  * @method int getKey()
  */
@@ -44,14 +44,16 @@ class Campaign extends Model
         'event_time_from',
         'event_time_to',
         'rider_url',
+        'chat_url',
         'feedback',
         'avail_label',
         'trip_label',
-        'undecided_label'
+        'undecided_label',
     ];
 
     protected $appends = [
         'rider_url',
+        'chat_url',
         'feedback',
     ];
 
@@ -160,6 +162,17 @@ class Campaign extends Model
     public function getRiderUrlAttribute(): ?string
     {
         return $this->meta->get('rider_url');
+    }
+
+    public function setChatUrlAttribute(string $value): static
+    {
+        $this->meta->set('chat_url', $value);
+        return $this;
+    }
+
+    public function getChatUrlAttribute(): ?string
+    {
+        return $this->meta->get('chat_url');
     }
 
     public function setFeedbackAttribute(string $value): static
