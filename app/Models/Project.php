@@ -18,6 +18,7 @@ use App\Enums\SalesUnit;
  * @property string $seller_code
  * @property string $product_code
  * @property string $rider_url
+ * @property string $avail_url
  * @property string $default_product
  * @property float $minimum_salary
  * @property float $default_price
@@ -46,6 +47,7 @@ class Project extends Model
         'seller_code',
         'product_code',
         'rider_url',
+        'avail_url',
         'default_product',
         'minimum_salary',
         'default_price',
@@ -63,6 +65,7 @@ class Project extends Model
 
     protected $appends = [
         'rider_url',
+        'avail_url'
     ];
 
     public function projectCampaigns(): \Illuminate\Database\Eloquent\Relations\HasMany
@@ -134,6 +137,17 @@ class Project extends Model
     public function getRiderUrlAttribute(): ?string
     {
         return $this->meta->get('rider_url');
+    }
+
+    public function setAvailUrlAttribute(string $value): static
+    {
+        $this->meta->set('avail_url', $value);
+        return $this;
+    }
+
+    public function getAvailUrlAttribute(): ?string
+    {
+        return $this->meta->get('avail_url');
     }
 
     public function setDefaultProductAttribute(string $value): static

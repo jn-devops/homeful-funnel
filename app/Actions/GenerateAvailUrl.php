@@ -15,11 +15,13 @@ class GenerateAvailUrl
     {
 	    try {
 		    $url = Url::parse(url: $this->getBookingUrl($checkin));
-		    $url->queryArray(query: [
-			    'mobile' => $checkin->contact->mobile,
-			    'email' => $checkin->contact->email,
-			    'identifier' => $this->getReferenceCode($checkin),
-		    ]);
+            $query = [
+                'mobile' => $checkin->contact->mobile,
+                'email' => $checkin->contact->email,
+                'identifier' => $this->getReferenceCode($checkin),
+                'splash_url' => $checkin->campaign->project->avail_url
+            ];
+		    $url->queryArray(query: array_filter($query));
 		    $link = Link::shortenUrl($url->toString());
 		    $link->checkin()->associate($checkin);
 		    $link->save();

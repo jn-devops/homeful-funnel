@@ -25,10 +25,16 @@ test('project has attributes', function () {
     expect($project->booking_server)->toBeString();
     expect($project->sales_unit)->toBeInstanceOf(SalesUnit::class);
     expect($project->meta)->toBeInstanceOf(SchemalessAttributes::class);
-    $url = $this->faker->url();
-    $project->rider_url = $url;
+    $rider_url = $this->faker->url();
+    $project->rider_url = $rider_url;
     $project->save();
-    expect($project->rider_url)->toBe($url);
+    expect($project->rider_url)->toBe($rider_url);
+    $avail_url = $this->faker->url();
+    $project->avail_url = $avail_url;
+    $project->save();
+    expect($project->avail_url)->toBe($avail_url);
+
+
 //    dd('create route for avail, generate reference from project defaults as inputs, then redirec to kwyc-check');
 });
 
