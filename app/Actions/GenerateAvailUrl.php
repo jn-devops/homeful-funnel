@@ -2,6 +2,7 @@
 
 namespace App\Actions;
 
+use Illuminate\Support\Facades\Log;
 use Lorisleiva\Actions\Concerns\AsAction;
 use App\Models\{Checkin, Link};
 use Crwlr\Url\Url;
@@ -19,7 +20,7 @@ class GenerateAvailUrl
                 'mobile' => $checkin->contact->mobile,
                 'email' => $checkin->contact->email,
                 'identifier' => $this->getReferenceCode($checkin),
-                'splash_url' => $checkin->campaign->project->avail_url
+                'splash_url' => $checkin->project->avail_url
             ];
 		    $url->queryArray(query: array_filter($query));
 		    $link = Link::shortenUrl($url->toString());
@@ -27,6 +28,11 @@ class GenerateAvailUrl
 		    $link->save();
 
 	    }catch (\Exception $exception){
+            Log::error('Error generating avail URL', [
+                'error' => $exception->getMessage(),
+                'trace' => $exception->getTraceAsString(),
+                'checkin_id' => $checkin->id ?? null,
+            ]);
             throw $exception;
 	    }
 	    return route('link.show', ['shortUrl' => $link->short_url]);
