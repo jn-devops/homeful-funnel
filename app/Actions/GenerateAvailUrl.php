@@ -27,7 +27,7 @@ class GenerateAvailUrl
 		    $link->save();
 
 	    }catch (\Exception $exception){
-		    throwException($exception);
+            throw $exception;
 	    }
 	    return route('link.show', ['shortUrl' => $link->short_url]);
     }
