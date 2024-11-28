@@ -112,6 +112,7 @@ class CampaignResource extends Resource
                             <li><strong>@registration_code:</strong> Generated unique code after registration.</li>
                             <li><strong>@campaign_type:</strong> Type of campaign associated with the check-in.</li>
                             <li><strong>@avail_url:</strong> Link to Avail.</li>
+                            <li><strong>@chat_url:</strong> Link for Chat URL.</li>
                         </ul>
                     '))
                     ->default("Hi @‌name,\n\nThank you for your Registration. Here is your registration code:  @‌registration_code\n\nShould you wish to continue with the purchase, please click on the following link: @‌avail_url\n\nThank you for choosing our projects!")
