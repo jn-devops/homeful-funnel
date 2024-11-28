@@ -14,7 +14,7 @@ class ProcessFeedback
     public function handle(Checkin|string $checkin, string $feedback): string
     {
         $checkin = $checkin instanceof Checkin ? $checkin : Checkin::where('id', $checkin)->first();
-        if ($checkin instanceof Checkin) {
+
             $contact = $checkin->contact;
             return __(str_replace('@', ':', $feedback), [
                 'mobile' => phone($contact->mobile, 'PH')->formatNational(),
@@ -26,6 +26,5 @@ class ProcessFeedback
                 'avail_url' => $checkin->getOrGenerateAvailUrl(),
                 'chat_url' => $checkin->campaign->chat_url,
             ]);
-        }
     }
 }
