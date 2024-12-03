@@ -2,6 +2,7 @@
 
 namespace App\Actions;
 
+use Illuminate\Support\Facades\Log;
 use Lorisleiva\Actions\Concerns\AsAction;
 use App\Actions\GenerateAvailUrl;
 use App\Models\Checkin;
@@ -13,7 +14,8 @@ class ProcessFeedback
 
     public function handle(Checkin|string $checkin, string $feedback): string
     {
-        $checkin = $checkin instanceof Checkin ? $checkin : Checkin::where('id', $checkin)->first();
+        try {
+            $checkin = $checkin instanceof Checkin ? $checkin : Checkin::where('id', $checkin)->first();
 
             $contact = $checkin->contact;
             return __(str_replace('@', ':', $feedback), [
@@ -26,5 +28,13 @@ class ProcessFeedback
                 'avail_url' => $checkin->getOrGenerateAvailUrl()??'',
                 'chat_url' => $checkin->campaign->chat_url??'',
             ]);
+        }catch (\Exception $exception){
+            Log::error('Error ProcessFeedback', [
+                'error' => $exception->getMessage(),
+                'trace' => $exception->getTraceAsString(),
+                'checkin_id' => $checkin->id ?? null,
+            ]);
+            throw $exception;
+        }
     }
 }
