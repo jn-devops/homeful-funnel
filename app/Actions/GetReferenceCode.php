@@ -3,6 +3,7 @@
 namespace App\Actions;
 
 use Homeful\Common\Classes\Input as InputFieldName;
+use Illuminate\Support\Facades\Log;
 use Lorisleiva\Actions\Concerns\AsAction;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Http;
@@ -21,7 +22,7 @@ class GetReferenceCode
 
             $data = [
                 InputFieldName::SKU => $checkin->project->product_code,
-                InputFieldName::WAGES => $checkin->project->minimum_salary,
+                InputFieldName::WAGES => $checkin->project->minimum_salary??15000,
                 InputFieldName::TCP => $checkin->project->default_price,
                 InputFieldName::PERCENT_DP => $checkin->project->default_percent_down_payment/100,
                 InputFieldName::PERCENT_MF => $checkin->project->default_percent_miscellaneous_fees/100,
@@ -51,6 +52,11 @@ class GetReferenceCode
             return $response->json('reference_code');
 
         }catch (\Exception $exception){
+            Log::error('Error generating Reference Code', [
+                'error' => $exception->getMessage(),
+                'trace' => $exception->getTraceAsString(),
+                'checkin_id' => $checkin->id ?? null,
+            ]);
             throwException($exception);
         }
     }
