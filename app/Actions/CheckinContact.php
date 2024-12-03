@@ -4,12 +4,12 @@ namespace App\Actions;
 
 use App\Notifications\AcknowledgeAvailmentNotification;
 use App\Models\{Campaign, Checkin, Contact};
+use Illuminate\Support\Facades\Log;
 use Lorisleiva\Actions\Concerns\AsAction;
 use Lorisleiva\Actions\ActionRequest;
 use App\Models\Organization;
 use Illuminate\Support\Arr;
 use App\Models\Project;
-use Mockery\Exception;
 use function PHPUnit\Framework\throwException;
 
 class CheckinContact
@@ -37,8 +37,13 @@ class CheckinContact
             $contact->notify(new AcknowledgeAvailmentNotification($checkin));
             return $checkin;
 
-        }catch (Exception $e){
-            throwException($e);
+        }catch (\Exception $e){
+            Log::error('Error CheckinContact', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+                'checkin_id' => $checkin->id ?? null,
+            ]);
+            throw $e;
         }
     }
 
