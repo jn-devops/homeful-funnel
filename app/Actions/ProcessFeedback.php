@@ -18,6 +18,7 @@ class ProcessFeedback
             $checkin = $checkin instanceof Checkin ? $checkin : Checkin::where('id', $checkin)->first();
 
             $contact = $checkin->contact;
+            $feedback = str_replace('\u{200C}', '', $feedback);
             return __(str_replace('@', ':', $feedback), [
                 'mobile' => phone($contact->mobile, 'PH')->formatNational(),
                 'name' => $contact->name??'',
