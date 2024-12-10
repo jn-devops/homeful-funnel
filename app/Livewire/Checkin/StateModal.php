@@ -91,7 +91,7 @@ class StateModal extends Component implements HasForms, HasTable
                     Action::make('view_profile')
                         ->label('View Profile')
                         ->url(function ($record){
-                            return 'checkins?tableSearch='.$record->contact->name ?? ''; // TODO: Must be in directed to Prospect's infolist
+                            return 'contacts/'.$record->contact->id ?? ''; 
                         }) 
                         ->openUrlInNewTab()
                         ->icon('heroicon-s-eye')
@@ -167,12 +167,13 @@ class StateModal extends Component implements HasForms, HasTable
                     Action::make('view_profile')
                         ->label('View Profile')
                         ->url(function ($record){
-                            return 'checkins?tableSearch='.$record->contact->name ?? ''; // TODO: Must be in directed to Prospect's infolist
+                            return 'contacts/'.$record->contact->id ?? ''; 
                         }) 
                         ->openUrlInNewTab()
                         ->icon('heroicon-s-eye'),
                         
                     Action::make('assigned_contact')
+                        ->label('Assign Contact')
                         ->icon('heroicon-o-pencil-square')
                         ->color('success')
                         ->form(function(Form $form){
@@ -271,7 +272,7 @@ class StateModal extends Component implements HasForms, HasTable
                     Action::make('view_profile')
                         ->label('View Profile')
                         ->url(function ($record){
-                            return 'checkins?tableSearch='.$record->contact->name ?? ''; // TODO: Must be in directed to Prospect's infolist
+                            return 'contacts/'.$record->contact->id ?? ''; 
                         }) 
                         ->openUrlInNewTab()
                         ->icon('heroicon-s-eye')
@@ -323,7 +324,7 @@ class StateModal extends Component implements HasForms, HasTable
                     Action::make('view_profile')
                         ->label('View Profile')
                         ->url(function ($record){
-                            return 'checkins?tableSearch='.$record->contact->name ?? ''; // TODO: Must be in directed to Prospect's infolist
+                            return 'contacts/'.$record->contact->id ?? '';
                         }) 
                         ->openUrlInNewTab()
                         ->icon('heroicon-s-eye')
