@@ -6,7 +6,14 @@ use App\Filament\Resources\CampaignResource;
 use App\Models\Campaign;
 use App\Models\ProjectCampaign;
 use Filament\Actions;
+use Filament\Actions\Action;
+use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Get;
 use Filament\Resources\Pages\EditRecord;
+use Filament\Support\Enums\MaxWidth;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\HtmlString;
 
 class EditCampaign extends EditRecord
 {
@@ -63,6 +70,51 @@ class EditCampaign extends EditRecord
     
         $campaign->save();
         return $data;
+    }
+
+    protected function getHeaderActions(): array
+    {
+        return [
+            Action::make('View QR')
+                    ->icon('heroicon-m-qr-code')
+                    ->modalIcon('heroicon-m-qr-code')
+                    ->form([
+                        Select::make('organization')
+                            ->options(function (Get $get, Campaign $record) {
+                                return $record->organizations()->get()->pluck('name', 'id');
+                            })
+                            ->searchable()
+                            ->live()
+                            ->debounce(100),
+                        Placeholder::make('qr_code')
+                            ->label('QR Code')
+                            ->content(function (Get $get, Model $record) {
+                                return \LaraZeus\Qr\Facades\Qr::render(
+                                    data:  sprintf(
+                                        '%s/checkin/%s%s',
+                                        config('app.url'),
+                                        $record->id,
+                                        $get('organization') ? '?organization=' . $get('organization') : ''
+                                    ), // This is your model. We are passing the personalizations. If you want the default just comment it out.
+                                );
+                        }),
+                        Placeholder::make('link')
+                            ->content(function (Get $get, Model $record) {
+                                $url = sprintf(
+                                    '%s/checkin/%s%s',
+                                    config('app.url'),
+                                    $record->id,
+                                    $get('organization') ? '?organization=' . $get('organization') : ''
+                                );
+                                return new HtmlString('<a href="' . $url . '" target="_blank" rel="noopener noreferrer" class="text-blue-500 underline">' . $url . '</a>');
+                            }),
+                    ])
+                ->label('Generate QR')
+                ->modalFooterActions([])
+                ->modalSubmitAction(false)
+                ->modalCancelAction(false)
+                ->modalWidth(MaxWidth::Small),
+        ];
     }
 
 }
