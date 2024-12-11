@@ -39,19 +39,6 @@ class CampaignsTable extends BaseWidget
                 Campaign::orderBy('created_at', 'desc')
             )
             ->columns([
-                // TextColumn::make('organization')
-                //     ->label('Organization')
-                //     ->getStateUsing(function ($record) {
-                //         return 'view';
-                //     })
-                //     ->url(function ($record) {
-                //         return '/organizations';
-                //     })
-                //     ->openUrlInNewTab()
-                //     ->color('warning')
-                //     ->extraAttributes([
-                //         'class' => 'mx-auto font-semibold',
-                //     ]),
                 TextColumn::make('view_org')
                     ->label('Organization')
                     ->color('warning')
@@ -74,6 +61,7 @@ class CampaignsTable extends BaseWidget
                             ->modalCancelAction(false),
                     ),
                 TextColumn::make('name')
+                    ->action(fn ($record) => redirect('campaigns/'.$record->id.'/edit'))
                     ->label('Campaign Name'),
                 TextColumn::make('view_project')
                     ->label('Projects')

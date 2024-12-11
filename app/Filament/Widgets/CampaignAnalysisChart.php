@@ -43,9 +43,9 @@ class CampaignAnalysisChart extends ChartWidget
          $consulted_percent = 0;
  
          // Campaign Type Ids
-         $presentation_id = CampaignType::where('name', 'Presentation')->first()->id;
-         $booth_id = CampaignType::where('name', 'Booth')->first()->id;
-         $site_id = CampaignType::where('name', 'Site Visit')->first()->id;
+         $presentation_id = CampaignType::where('name', 'Presentation')->first()->id ?? null;
+         $booth_id = CampaignType::where('name', 'Booth')->first()->id ?? null;
+         $site_id = CampaignType::where('name', 'Site Visit')->first()->id ?? null;
 
          $model = new Contact();
 
@@ -72,39 +72,39 @@ class CampaignAnalysisChart extends ChartWidget
                    if($data_start != null && $data_end != null){ // Selected Campaign with date filter
                        $date_filtered_model = $model->whereBetween('created_at', [$data_start.' 00:00:00', $data_end.' 23:59:59']);
                        $registered = $date_filtered_model->whereIn('state', [Registered::class, FirstState::class])
-                                       ->whereHas('campaign', function ($query) use($data_campaigns) {
-                                           $query->whereIn('id', $data_campaigns);
-                                       })->count();
+                                       ->whereHas('checkins', function ($query) use($data_campaigns){
+                                            $query->whereIn('campaign_id', $data_campaigns);
+                                        })->count();
                        $not_now = $date_filtered_model->where('state', Undecided::class)
-                                       ->whereHas('campaign', function ($query) use($data_campaigns) {
-                                           $query->whereIn('id', $data_campaigns);
-                                       })->count();
+                                       ->whereHas('checkins', function ($query) use($data_campaigns){
+                                            $query->whereIn('campaign_id', $data_campaigns);
+                                        })->count();
                        $for_tripping = $date_filtered_model->where('state', ForTripping::class)
-                                       ->whereHas('campaign', function ($query) use($data_campaigns) {
-                                           $query->whereIn('id', $data_campaigns);
-                                       })->count();
+                                       ->whereHas('checkins', function ($query) use($data_campaigns){
+                                            $query->whereIn('campaign_id', $data_campaigns);
+                                        })->count();
                        $availed = $date_filtered_model->where('state', Availed::class)
-                                       ->whereHas('campaign', function ($query) use($data_campaigns) {
-                                           $query->whereIn('id', $data_campaigns);
-                                       })->count();
+                                       ->whereHas('checkins', function ($query) use($data_campaigns){
+                                            $query->whereIn('campaign_id', $data_campaigns);
+                                        })->count();
                        $consulted = 0; // TODO: Data source for consulted. No State for consulted
                    }else{ // Selected Campaign without date filter
                        $registered = $model->whereIn('state', [Registered::class, FirstState::class])
-                                       ->whereHas('campaign', function ($query) use($data_campaigns) {
-                                           $query->whereIn('id', $data_campaigns);
-                                       })->count();
+                                       ->whereHas('checkins', function ($query) use($data_campaigns){
+                                            $query->whereIn('campaign_id', $data_campaigns);
+                                        })->count();
                        $not_now = $model->where('state', Undecided::class)
-                                       ->whereHas('campaign', function ($query) use($data_campaigns) {
-                                           $query->whereIn('id', $data_campaigns);
-                                       })->count();
+                                       ->whereHas('checkins', function ($query) use($data_campaigns){
+                                            $query->whereIn('campaign_id', $data_campaigns);
+                                        })->count();
                        $for_tripping = $model->where('state', ForTripping::class)
-                                       ->whereHas('campaign', function ($query) use($data_campaigns) {
-                                           $query->whereIn('id', $data_campaigns);
-                                       })->count();
+                                       ->whereHas('checkins', function ($query) use($data_campaigns){
+                                            $query->whereIn('campaign_id', $data_campaigns);
+                                        })->count();
                        $availed = $model->where('state', Availed::class)
-                                       ->whereHas('campaign', function ($query) use($data_campaigns) {
-                                           $query->whereIn('id', $data_campaigns);
-                                       })->count();
+                                       ->whereHas('checkins', function ($query) use($data_campaigns){
+                                            $query->whereIn('campaign_id', $data_campaigns);
+                                        })->count();
                        $consulted = 0; // TODO: Data source for consulted. No State for consulted
                    }
                }
