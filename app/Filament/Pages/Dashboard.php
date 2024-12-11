@@ -19,7 +19,7 @@ class Dashboard extends \Filament\Pages\Dashboard
 {
     use HasFiltersForm;
 
-    public $projects;
+    public $campaigns;
     public $start;
     public $end;
 
@@ -47,7 +47,7 @@ class Dashboard extends \Filament\Pages\Dashboard
                     ->multiple()
                     ->options(array_merge(['All' => 'All'], Campaign::all()->pluck('name', 'id')->toArray()))
                     ->afterStateUpdated(function ($state) {
-                        $this->projects = $state;
+                        $this->campaigns = $state;
                         $this->updateWidgets();
                     }),
                 DatePicker::make('start_date')
@@ -67,7 +67,7 @@ class Dashboard extends \Filament\Pages\Dashboard
     protected function updateWidgets()
     {
         $this->dispatch("filtersUpdated", [
-            'projects' => $this->projects,
+            'campaigns' => $this->campaigns,
             'start' => $this->start,
             'end' => $this->end,
         ]);
