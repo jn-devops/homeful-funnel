@@ -3,12 +3,14 @@
 namespace App\Livewire;
 
 use App\Filament\Resources\ContactResource;
+use App\Models\Project;
 use App\Models\Trips;
 use App\States\TrippingAssigned;
 use App\States\TrippingCancelled;
 use App\States\TrippingCompleted;
 use App\States\TrippingConfirmed;
 use App\States\TrippingRequested;
+use App\States\TrippingRescheduled;
 use App\States\TrippingState;
 use Filament\Actions\Action;
 use Filament\Forms\Components\DatePicker;
@@ -155,6 +157,46 @@ class TripsTable extends Component implements HasForms, HasTable
                     ->formatStateUsing(function ($record) {
                         return Carbon::parse($record->confirmed_date)->format('M d, Y h:i A') ;
                     }),
+                TextColumn::make('aging')
+                    ->label('Aging')
+                    ->getStateUsing(function ($record) {
+                        $days = (int) $record->created_at->diffInDays(Carbon::now());
+                        $hrs = (int) $record->created_at->diffInHours(Carbon::now());
+                        return (($days < 1) ? $hrs . ' Hour/s' :  $days . ' Day/s');
+                    }),
+            ];
+        }elseif($this->tableFilters['state']['value'] == 'App\\States\\TrippingRescheduled'){
+            $columns = [
+                TextColumn::make('contact.name')
+                    ->label('Prospect')
+                    ->formatStateUsing(fn($record)=>ucfirst($record->contact->name))
+                    ->searchable(),
+                TextColumn::make('assigned_to')
+                    ->label('Assigned to'),
+                TextColumn::make('date_time')
+                    ->label('Date & Time')
+                    ->getStateUsing(function ($record) {
+                        return Carbon::parse($record->preferred_date)->format('M d, Y') . ' ' . $record->preferred_time;
+                    }),
+                TextColumn::make('project')
+                    ->label('Project')
+                    ->getStateUsing(function ($record) {
+                        return "{$record->project->name}\n{$record->project->project_location}";
+                    })
+                    ->extraAttributes(['style' => 'white-space: pre-line']),
+                TextColumn::make('campaign.name')
+                    ->label('Campaign'),
+                TextColumn::make('preferred_date')
+                    ->label('Date')
+                    ->getStateUsing(function ($record) {
+                        return Carbon::parse($record->preferred_date)->format('F d, Y').' '.$record->preferred_time;
+                    }),
+                TextColumn::make('remarks')
+                    ->label('Remarks')
+                    ->wrap()
+                    ->words(10)
+                    ->lineClamp(2)
+                    ->tooltip(fn($record)=>$record->remarks??''),
                 TextColumn::make('aging')
                     ->label('Aging')
                     ->getStateUsing(function ($record) {
@@ -459,6 +501,66 @@ class TripsTable extends Component implements HasForms, HasTable
                     ->icon('heroicon-o-x-mark')
                     ->requiresConfirmation()
                     ->hidden(fn($record):bool=>$record->state==TrippingCompleted::class),
+                Tables\Actions\Action::make('Reschedule')
+                    ->form(function(Form $form){
+                        return $form->columns(2)->schema([
+                            TextInput::make('assign_contact_person')
+                                ->label('Assigned Contact Person')
+                                ->disabled()
+                                ->default(fn($record) => $record->assigned_to)
+                                ->columnSpan(1),
+                            TextInput::make('assign_contact_person_num')
+                                ->disabled()
+                                ->label('Contact Number')
+                                ->default(fn($record) => $record->assigned_to_mobile)
+                                ->columnSpan(1),
+                            DatePicker::make('preferred_date')
+                                ->label('Date')
+                                ->native(false)
+                                ->required(),
+                            Select::make('preferred_time')
+                                ->required()
+                                ->label('Time')
+                                ->native(false)
+                                ->options([
+                                    'AM'=>'AM',
+                                    'PM'=>'PM'
+                                ]),
+                            Select::make('project')
+                                ->label('Project')
+                                ->default(fn($record) => $record->project->id)
+                                ->options(Project::all()->pluck('name', 'id')->toArray())
+                                ->columnSpan(2),
+                            TextInput::make('project_loc')
+                                ->label('Project')
+                                ->disabled()
+                                ->default(fn($record) => $record->project->project_location)
+                                ->columnSpan(2),
+                            TextInput::make('remarks')
+                                ->label('Remarks')
+                                ->disabled()
+                                ->default(fn($record) => $record->remarks)
+                                ->columnSpan(2),
+                        ]);
+                    })
+                    ->action(function (Model $record, array $data){
+                            $record->state = TrippingRescheduled::class;
+                            $record->last_updated_by=auth()->user()->name;
+                            $record->preferred_date = $data['preferred_date'];
+                            $record->preferred_time = $data['preferred_time'];
+                            $record->project_id = $data['project'];
+                            $record->save();
+                            Notification::make()
+                                ->title('Tripping has been completed successfully')
+                                ->success()
+                                ->icon('heroicon-o-check')
+                                ->sendToDatabase(auth()->user())
+                                ->send();
+                        })
+                        ->color('info')
+                        ->icon('heroicon-s-arrow-top-right-on-square')
+                        ->modalWidth(MaxWidth::Medium)
+                        ->hidden(fn($record):bool=>($record->state==TrippingConfirmed::class) ? false : (($record->state==TrippingRescheduled::class) ? false : true )),
                 Tables\Actions\Action::make('Complete')
                     ->action(function (Model $record){
                         $record->state = TrippingCompleted::class;
@@ -473,11 +575,11 @@ class TripsTable extends Component implements HasForms, HasTable
                             ->send();
                     })
                     ->color('success')
-                    ->icon('heroicon-o-x-mark')
+                    ->icon('heroicon-s-arrow-top-right-on-square')
                     ->modalHeading('Tripping has been Completed?')
                     ->modalDescription('Do you want to mark the Tripping as “Completed”? This cannot be undone.')
                     ->requiresConfirmation()
-                    ->hidden(fn($record):bool=>$record->state!=TrippingConfirmed::class),
+                    ->hidden(fn($record):bool=>($record->state==TrippingConfirmed::class) ? false : (($record->state==TrippingRescheduled::class) ? false : true )),
 
 
             ],Tables\Enums\ActionsPosition::BeforeCells);

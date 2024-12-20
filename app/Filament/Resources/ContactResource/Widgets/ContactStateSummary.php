@@ -26,8 +26,8 @@ class ContactStateSummary extends BaseWidget
             ->toArray();
 
         return [
-            Stat::make('Availed', $stateCounts['App\\States\\Availed']['count']),
-            Stat::make('For Tripping', $stateCounts['App\\States\\ForTripping']['count']),
+            Stat::make('Availed', $stateCounts['App\\States\\Availed']['count'] ?? 0),
+            Stat::make('For Tripping', $stateCounts['App\\States\\ForTripping']['count'] ?? 0),
             Stat::make('Consulted', 0), // TODO: Count for Consulted State
             Stat::make('Not Now', $stateCounts['App\\States\\Undecided']['count']??0),
         ];

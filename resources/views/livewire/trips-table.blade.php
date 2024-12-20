@@ -34,6 +34,17 @@
                     </x-slot>
                     Confirmed
                 </x-filament::tabs.item>
+                
+                <x-filament::tabs.item
+                    wire:click="$refresh"
+                    alpine-active="activeTab === 'Rescheduled'"
+                    x-on:click="$wire.set('tableFilters', {'state': {'value': 'App\\\\States\\\\TrippingRescheduled'}});activeTab = 'Rescheduled'"
+                    icon="heroicon-o-calendar-days">
+                    <x-slot name="badge">
+                        {{ \App\Models\Trips::where('state','App\States\TrippingRescheduled')->count() }}
+                    </x-slot>
+                    Re-Scheduled
+                </x-filament::tabs.item>
 
                 <x-filament::tabs.item
                     wire:click="$refresh"
