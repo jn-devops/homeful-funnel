@@ -174,12 +174,14 @@ class CampaignResource extends Resource
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('name')
+                    ->sortable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('campaignType.name')
+                    ->label('Type')
+                    ->sortable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('rider_url')
-                    ->label('Redirect URL')
-                    ->searchable(),
+                    ->label('Redirect URL'),
                 // Tables\Columns\TextColumn::make('feedback')
                 //     ->label('Feedback')
                 //     ->searchable(),
