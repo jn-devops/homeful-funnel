@@ -12,9 +12,9 @@ class GenerateAvailUrl
 
     public function handle(Checkin $checkin): string
     {
-        $url = Url::parse(url: config('funnel.defaults.contact_callback'));
+        $url = Url::parse(url: config('funnel.defaults.contact_register'));
         $query = [
-            'callback' => config(''),
+            'callback' => config('funnel.defaults.contract_callback'),
             'showExtra' => true,
             'hidePassword' => true,
             'name' => $checkin->contact->name,
