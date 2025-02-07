@@ -19,7 +19,7 @@ class GenerateAvailUrl
             'hidePassword' => true,
             'name' => $checkin->contact->name,
             'email' => $checkin->contact->email,
-            'mobile' => $checkin->contact->mobile
+            'mobile' => phone($checkin->contact->mobile, 'PH')->formatForMobileDialingInCountry('PH')
         ];
 
         $url->queryArray(query: array_filter($query));
