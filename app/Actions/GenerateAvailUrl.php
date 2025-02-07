@@ -12,9 +12,9 @@ class GenerateAvailUrl
 
     public function handle(Checkin $checkin): string
     {
-        $url = Url::parse(url: 'https://contacts.homeful.ph/register');
+        $url = Url::parse(url: config('funnel.defaults.contact_callback'));
         $query = [
-            'callback' => 'https://contracts.homeful.ph',
+            'callback' => config(''),
             'showExtra' => true,
             'hidePassword' => true,
             'name' => $checkin->contact->name,
