@@ -9,7 +9,8 @@ return [
     'defaults' => [
         'booking_server' => env('DEFAULT_BOOKING_SERVER'),
         'authentication_server' => env('DEFAULT_AUTHENTICATION_SERVER', 'kwyc-check.net'),
-        'sales_unit' => SalesUnit::tryFrom(env('DEFAULT_SALES_UNIT', SalesUnit::default()->value))
+        'sales_unit' => SalesUnit::tryFrom(env('DEFAULT_SALES_UNIT', SalesUnit::default()->value)),
+        'contact_callback' => env('CONTRACT_CALLBACK', 'https://contracts.homeful.ph/consult/create')
     ],
     'campaign_code' => [
         SalesUnit::EXE->name => env('CAMPAIGN_CODE_EXE', '9d6c449e-1fd2-404f-a436-efd0b2d1ac2d'),
