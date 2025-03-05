@@ -365,7 +365,7 @@ class TripsTable extends Component implements HasForms, HasTable
 //                        $record->save();
 //                    }),
                 Tables\Actions\Action::make('View Profile')
-                    ->url(fn($record)=>ContactResource::getUrl('view', ['record' => $record->contact]))
+                    ->url(fn($record)=> ($record->contact) ? ContactResource::getUrl('view', ['record' => $record->contact]) : '#')
                     ->icon('heroicon-o-eye')
                     ->color('secondary'),
                 Tables\Actions\Action::make('Assign Contact')
