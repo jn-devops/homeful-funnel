@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\ContactResource\Pages;
 
 use App\Filament\Resources\ContactResource;
+use App\Mail\EmailNotification;
 use App\Models\Contact;
 use App\Models\ContactStateHistory;
 use App\Notifications\Adhoc;
@@ -18,8 +19,10 @@ use Filament\Actions;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
+use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ViewRecord;
 use Filament\Support\Enums\MaxWidth;
+use Illuminate\Support\Facades\Mail;
 
 class ViewContact extends ViewRecord
 {
@@ -37,13 +40,11 @@ class ViewContact extends ViewRecord
                         Textarea::make('message')->required(),
                     ])
                     ->action(function (Contact $record, array $data) {
-                        // TODO: Email Notif
-                        // $record->notify(new Adhoc($data['message']));
-                        // $record->smsLogs()->create([
-                        //     'message' => $data['message'],
-                        //     'sent_to_mobile' => $record->mobile,
-                        //     'sent_to_email' => $record->email,
-                        // ]);
+                        Mail::to($record->email)->send(new EmailNotification($data['message']));
+                        Notification::make()
+                            ->title('Successfully sent email')
+                            ->success()
+                            ->send();
                     }),
             Action::make('Send SMS')
                 ->label('Send SMS')
