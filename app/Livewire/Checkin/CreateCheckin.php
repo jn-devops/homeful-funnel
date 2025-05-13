@@ -8,6 +8,7 @@ use App\Models\Checkin;
 use App\Models\Contact;
 use App\Models\Organization;
 use App\Models\Project;
+use App\Notifications\AcknowledgeAvailmentNotification;
 use Exception;
 use Filament\Forms;
 use Filament\Forms\Concerns\InteractsWithForms;
@@ -18,6 +19,7 @@ use Filament\Forms\Set;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Arr;
@@ -172,47 +174,34 @@ class CreateCheckin extends Component implements HasForms
 //                Organization::firstOrCreate(['name'=>$data['organization_other']]):
 //                Organization::where('name',$data['organization'])->first();
 
-            $url = route('checkin-contact', ['campaign' => $this->campaign->id, 'contact' => $data['mobile']]);
-
-          $response =  Http::post($url, [
-                'name' => $data['first_name'].' '.$data['last_name'],
-                'code' => $this->organization->code,
-                'last_name' => $data['last_name'],
-                'first_name' => $data['first_name'],
-                // 'middle_name' => Arr::get($data, 'middle_name', 'N/A'),
-                'mobile' => $data['mobile'],
-                // 'ready_to_avail'=>$data['ready_to_avail'],
-                'project' => $data['project'],
-                'email' => $data['email'],
-                'meta'=>[
-                    'name'=> $data['first_name'].' '.$data['last_name'],
-                    'last_name' => $data['last_name'],
-                    'first_name' => $data['first_name'],
-                    // 'middle_name' => Arr::get($data, 'middle_name', 'N/A'),
-                    'mobile' => $data['mobile'],
-                    // 'ready_to_avail' =>$data['ready_to_avail'],
-                    'project' => $data['project'],
-                    'email' => $data['email'],
-                ]
-            ]);
-
-
-            // CheckinContact::dispatch($this->campaign, $contact, $this->organization, $data);
+//            $url = route('checkin-contact', ['campaign' => $this->campaign->id, 'contact' => $data['mobile']]);
+            $checkin=$this->checkinContact();
+//          $response =  Http::post($url, [
+//                'name' => $data['first_name'].' '.$data['last_name'],
+//                'code' => $this->organization->code,
+//                'last_name' => $data['last_name'],
+//                'first_name' => $data['first_name'],
+//                // 'middle_name' => Arr::get($data, 'middle_name', 'N/A'),
+//                'mobile' => $data['mobile'],
+//                // 'ready_to_avail'=>$data['ready_to_avail'],
+//                'project' => $data['project'],
+//                'email' => $data['email'],
+//                'meta'=>[
+//                    'name'=> $data['first_name'].' '.$data['last_name'],
+//                    'last_name' => $data['last_name'],
+//                    'first_name' => $data['first_name'],
+//                    // 'middle_name' => Arr::get($data, 'middle_name', 'N/A'),
+//                    'mobile' => $data['mobile'],
+//                    // 'ready_to_avail' =>$data['ready_to_avail'],
+//                    'project' => $data['project'],
+//                    'email' => $data['email'],
+//                ]
+//            ]);
 
 
-            // $this->dispatch('open-modal', id: 'success-modal');
-            // if ($data['ready_to_avail']) {
-            //     $params = [
-            //         'last_name' => $data['last_name'],
-            //         'first_name' => $data['first_name'],
-            //         'middle_name' => Arr::get($data, 'middle_name', 'N/A'),
-            //         'mobile' => $data['mobile'],
-            //     ];
-            //     return redirect()->to('https://gnc-lazarus.homeful.ph/client-information?' . http_build_query($params));
-            // }
 
             // return redirect()->to($this->campaign->rider_url ?? 'https://homeful.ph/');
-            return redirect()->route('checkin.success_page',['checkin' => $response->json()['id']??'']);
+            return redirect()->route('checkin.success_page',['checkin' => $checkin->id??'']);
 
             // return null;
         }catch (Exception $e) {
@@ -221,6 +210,87 @@ class CreateCheckin extends Component implements HasForms
             return null;
         }
     }
+
+    public function checkinContact()
+    {
+        try {
+            $campaign = Campaign::findOrFail($this->campaign->id);
+            $mobile = '+63' . $this->data['mobile'];
+            $firstName = $this->data['first_name'];
+            $lastName = $this->data['last_name'];
+            $email = $this->data['email'];
+            $fullName = "$firstName $lastName";
+
+            $contactByMobile = Contact::where('mobile', $mobile)->first();
+            $contactByName = Contact::where('name', $fullName)->first();
+
+            if ($contactByMobile && $contactByName && $contactByMobile->id !== $contactByName->id) {
+                // Conflict: mobile and name belong to different people
+                throw new \Exception('The provided name and mobile number belong to different contacts.');
+            }
+
+            if ($contactByMobile) {
+                $contact = $contactByMobile;
+            } elseif ($contactByName) {
+                // Ensure mobile isn't used by another contact
+                $conflict = Contact::where('mobile', $mobile)
+                    ->where('id', '!=', $contactByName->id)
+                    ->exists();
+
+                if ($conflict) {
+                    throw new \Exception('Mobile number already belongs to another contact.');
+                }
+
+                $contact = $contactByName;
+                $contact->mobile = $mobile;
+            } else {
+                // Ensure no contact already uses this mobile
+                $conflict = Contact::where('mobile', $mobile)->exists();
+                if ($conflict) {
+                    throw new \Exception('Mobile number already belongs to another contact.');
+                }
+
+                $contact = Contact::create([
+                    'mobile' => $mobile,
+                    'first_name' => $firstName,
+                    'last_name' => $lastName,
+                    'name' => $fullName,
+                    'email' => $email,
+                ]);
+            }
+
+            // Safe to update
+            $contact->first_name = $firstName;
+            $contact->last_name = $lastName;
+            $contact->name = $fullName;
+            $contact->email = $email;
+
+            if ($this->organization) {
+                $contact->organization()->associate($this->organization);
+            }
+
+            $contact->save();
+
+            $checkin = new Checkin();
+            $checkin->campaign()->associate($campaign);
+            $checkin->contact()->associate($contact);
+
+            if (!empty($this->data['project'])) {
+                $project = Project::where('name', $this->data['project'])->firstOrFail();
+                $checkin->project()->associate($project);
+            }
+
+            $checkin->save();
+            $contact->notify(new AcknowledgeAvailmentNotification($checkin));
+
+            return $checkin;
+        } catch (\Exception $e) {
+            report($e);
+            throw $e;
+        }
+    }
+
+
 
     public function closeModal()
     {
