@@ -17,7 +17,7 @@
                         {{-- Close --}}
                     {{-- </button> --}}
                 {{-- <div style="color: rgb(30 64 175); padding: 0.5rem; background-color: rgb(219 234 254); font-size: 0.8rem" class="rounded-lg text-center w-full"> You may use your code to waive the P10,000 Consultation Fee</div> --}}
-               {{-- <div class="flex flex-col items-center w-full">
+               <div class="flex flex-col items-center w-full">
                    <span class="text-center mb-1">To reserve, click the button below</span>
                    <button wire:click="availed()"
                            class="w-full max-w-xs rounded-lg text-white font-bold p-2"
@@ -25,7 +25,7 @@
                        {{$this->checkin->campaign->avail_label}}
                    </button>
                    <span class="text-center text-sm" style="color: #8B8B8B">Use the registration code to avail</span>
-               </div> --}}
+               </div>
                <div class="flex flex-col items-center w-full">
                     <span>To schedule site visit, click the button below</span>
                    <button wire:click="trip()"
