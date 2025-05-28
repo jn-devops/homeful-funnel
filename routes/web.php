@@ -18,3 +18,5 @@ Route::get('schedule-trip-success', App\Livewire\Trips\SuccessPage::class )->nam
 
 Route::get('avail/{checkin}', \App\Http\Controllers\AvailController::class)->name('avail');
 Route::get('/537/{shortUrl}', [LinkController::class, 'show'])->name('link.show');
+
+Route::get('socials/{campaign}',App\Livewire\SocialMediaLinkRegistration::class, )->name('socials.register');
