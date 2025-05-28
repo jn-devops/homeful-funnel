@@ -6,7 +6,7 @@
 
     <div  x-show="!showSplash" x-transition class="w-full max-w-lg bg-white p-4 rounded-lg">
         <div class=" flex justify-center ">
-            <img class="h-auto w-full lg:w-full" src="/CompanyLogo.png" alt="CompanyLogo.png">
+            <img class="h-auto w-full lg:w-full" src="{{config('app.url').'/'.$this->campaign->registration_logo}}" alt="CompanyLogo.png">
         </div>
         <form wire:submit="save" class="w-full">
             <div  class="flex justify-center ">
