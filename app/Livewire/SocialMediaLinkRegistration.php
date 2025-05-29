@@ -1,16 +1,15 @@
 <?php
 
-namespace App\Livewire\Checkin;
+namespace App\Livewire;
 
-use App\Actions\CheckinContact;
 use App\Models\Campaign;
 use App\Models\Checkin;
 use App\Models\Contact;
 use App\Models\Organization;
 use App\Models\Project;
+use App\Models\SocialMedia;
+use App\Models\SocialMediaCampaign;
 use App\Notifications\AcknowledgeAvailmentNotification;
-use Exception;
-use Filament\Forms;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
@@ -18,36 +17,21 @@ use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
 use Livewire\Component;
-use Illuminate\Contracts\View\View;
-use Illuminate\Support\Arr;
+use Filament\Forms;
 
-class CreateCheckin extends Component implements HasForms
+class SocialMediaLinkRegistration extends Component implements HasForms
 {
-
+    public SocialMediaCampaign $campaign;
     use InteractsWithForms;
 
     public ?array $data = [];
-    public Campaign $campaign;
-    public ?Organization $organization;
-    public String $error = '';
-    public bool $isDifferentCompanyBefore=false;
-    public bool $isOrganizationEmpty=true;
-    public string $organization_default='';
-
-    public function mount(Campaign $campaign ,Request $request): void
+    public string $error = '';
+    public function mount(SocialMediaCampaign $campaign ,Request $request): void
     {
-        if (!empty($request->organization)){
-            $this->isOrganizationEmpty=false;
-            $this->organization=Organization::find($request->organization)??null;
-            $this->organization_default=$this->organization->name;
-        }
         $this->campaign=$campaign;
         $this->form->fill();
     }
-
     public function form(Form $form): Form
     {
         return $form
@@ -71,7 +55,7 @@ class CreateCheckin extends Component implements HasForms
                                     $set('email',$contact->email??'');
                                     $set('organization',$contact->organization->name??'');
 
-                                    if (!empty($contact->organization->id) && $contact->organization->id && !$this->isOrganizationEmpty) {
+                                    if (!empty($contact->organization->id) && $contact->organization->id) {
                                         $this->isDifferentCompanyBefore = true;
                                     }else{
                                         $this->isDifferentCompanyBefore = false;
@@ -104,43 +88,12 @@ class CreateCheckin extends Component implements HasForms
                         ->required()
                         ->maxLength(255)
                         ->inlineLabel(),
-                    Forms\Components\Select::make('organization')
-                        ->label('Organization')
-                        ->required()
-                        ->inlineLabel()
-                        ->native(false)
-                        ->searchable()
-                        ->options($this->campaign->organizations()->pluck('name', 'name')->toArray() + ['other' => 'Others'])
-                        ->preload()
-                        ->live()
-                        ->default($this->organization_default)
-                        ->disabled(!$this->isOrganizationEmpty)
-                        ->optionsLimit(Organization::count()+1)
-                        ->placeholder('Select your organization')
-                        ->dehydrated(fn($state)=>$state!=='other')
-                        ->visible($this->organization_default!='Public'),
                     Forms\Components\TextInput::make('organization_other')
                         ->label('Other Organization: ')
                         ->visible(fn(Get $get):bool=>$get('organization')=='other')
                         ->requiredIf('organization','other')
                         ->maxLength(255)
                         ->inlineLabel(),
-
-                    Forms\Components\Select::make('project')
-                        ->label('Choice of Project')
-                        ->required()
-                        ->inlineLabel()
-                        ->native(false)
-                        ->options(Project::whereIn('id',$this->campaign->projects()->pluck('project_id'))->pluck('name', 'name')->toArray())
-                        ->preload()
-                        ->placeholder('Choose your preferred project')
-                    // Forms\Components\ToggleButtons::make('ready_to_avail')
-                    //     ->label('Ready to avail: ')
-                    //     ->inline()
-                    //     ->inlineLabel()
-                    //     ->required()
-                    //     ->boolean()
-                    //     ->columnSpanFull(),
 
                 ]),
             ])
@@ -152,58 +105,9 @@ class CreateCheckin extends Component implements HasForms
     {
         $data = $this->form->getState();
         try {
-//            $contact =Contact::create([
-//                'mobile' => $data['mobile'],
-//                'name' => $data['first_name'].' '.$data['middle_name'].' '.$data['last_name'],
-//            ]);
-//           $checkin= Checkin::create([
-//                'campaign_id' => $this->campaign->id,
-//                'organization_id' => $this->organization->id,
-//                'meta' => $data,
-//                'contact_id' => $contact->id,
-//            ]);
-            if (array_key_exists('organization_other', $data)) {
-
-                $this->organization=Organization::firstOrCreate(['name'=>$data['organization_other']]);
-            }elseif ($this->organization_default=='Public'){
-                $this->organization= Organization::where('name','Public')->first();
-            }else{
-                $this->organization= Organization::where('name',$data['organization'])->first();
-            }
-//            $this->organization = $data['organization']=='other'?
-//                Organization::firstOrCreate(['name'=>$data['organization_other']]):
-//                Organization::where('name',$data['organization'])->first();
-
-//            $url = route('checkin-contact', ['campaign' => $this->campaign->id, 'contact' => $data['mobile']]);
             $checkin=$this->checkinContact();
-//          $response =  Http::post($url, [
-//                'name' => $data['first_name'].' '.$data['last_name'],
-//                'code' => $this->organization->code,
-//                'last_name' => $data['last_name'],
-//                'first_name' => $data['first_name'],
-//                // 'middle_name' => Arr::get($data, 'middle_name', 'N/A'),
-//                'mobile' => $data['mobile'],
-//                // 'ready_to_avail'=>$data['ready_to_avail'],
-//                'project' => $data['project'],
-//                'email' => $data['email'],
-//                'meta'=>[
-//                    'name'=> $data['first_name'].' '.$data['last_name'],
-//                    'last_name' => $data['last_name'],
-//                    'first_name' => $data['first_name'],
-//                    // 'middle_name' => Arr::get($data, 'middle_name', 'N/A'),
-//                    'mobile' => $data['mobile'],
-//                    // 'ready_to_avail' =>$data['ready_to_avail'],
-//                    'project' => $data['project'],
-//                    'email' => $data['email'],
-//                ]
-//            ]);
+            return redirect()->route('checkin.social_media_success_page', ['checkin' => $checkin->id]);
 
-
-
-            // return redirect()->to($this->campaign->rider_url ?? 'https://homeful.ph/');
-            return redirect()->route('checkin.success_page',['checkin' => $checkin->id??'']);
-
-            // return null;
         }catch (Exception $e) {
             $this->error=$e->getMessage();
             $this->dispatch('open-modal', id: 'error-modal');
@@ -214,16 +118,16 @@ class CreateCheckin extends Component implements HasForms
     public function checkinContact()
     {
         try {
-            $campaign = Campaign::findOrFail($this->campaign->id);
+            $campaign = SocialMediaCampaign::findOrFail($this->campaign->id);
             $mobile = '+63' . $this->data['mobile'];
             $firstName = $this->data['first_name'];
             $lastName = $this->data['last_name'];
             $email = $this->data['email'];
             $fullName = "$firstName $lastName";
-
+            
             $contactByMobile = Contact::where('mobile', $mobile)->first();
             $contactByName = Contact::where('name', $fullName)->first();
-
+            
             if ($contactByMobile && $contactByName && $contactByMobile->id !== $contactByName->id) {
                 // Conflict: mobile and name belong to different people
                 throw new \Exception('The provided name and mobile number belong to different contacts.');
@@ -265,24 +169,19 @@ class CreateCheckin extends Component implements HasForms
             $contact->name = $fullName;
             $contact->email = $email;
 
-            if ($this->organization) {
-                $contact->organization()->associate($this->organization);
-            }
-
             $contact->save();
 
             $checkin = new Checkin();
-            $checkin->campaign()->associate($campaign);
+           $checkin->campaign()->associate($campaign);
             $checkin->contact()->associate($contact);
 
-            if (!empty($this->data['project'])) {
-                $project = Project::where('name', $this->data['project'])->firstOrFail();
-                $checkin->project()->associate($project);
-            }
+            // if (!empty($this->data['project'])) {
+            //     $project = Project::where('name', $this->data['project'])->firstOrFail();
+            //     $checkin->project()->associate($project);
+            // }
 
             $checkin->save();
             $contact->notify(new AcknowledgeAvailmentNotification($checkin));
-
             return $checkin;
         } catch (\Exception $e) {
             report($e);
@@ -290,15 +189,13 @@ class CreateCheckin extends Component implements HasForms
         }
     }
 
-
-
     public function closeModal()
     {
         $this->data =[];
     }
 
-    public function render(): View
+    public function render()
     {
-        return view('livewire.checkin.create-checkin');
+        return view('livewire.social-media-link-registration');
     }
 }

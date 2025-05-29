@@ -54,6 +54,10 @@ class Checkin extends Model
         return $this->belongsTo(Campaign::class);
     }
 
+    public function social_media_campaign(){
+        return $this->belongsTo(SocialMediaCampaign::class, 'campaign_id', 'id');
+    }
+
     public function getRegistrationCodeAttribute(): string
     {
         $campaign_codes = [];

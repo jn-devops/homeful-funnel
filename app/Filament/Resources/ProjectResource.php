@@ -69,8 +69,8 @@ class ProjectResource extends Resource
                     ->columnSpanFull(),
                 Forms\Components\TextInput::make('kwyc_check_campaign_code')
                     ->label('KWYC Campaign Code')
-                    ->required()
                     ->maxLength(255)
+                    ->hidden()
                     ->columnSpanFull(),
                 Forms\Components\TextInput::make('trip_notification_email')
                     ->label('Recipient for Trippings')

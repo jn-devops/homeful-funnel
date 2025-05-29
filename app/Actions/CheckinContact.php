@@ -19,33 +19,90 @@ class CheckinContact
     public function handle(Campaign $campaign, Contact $contact, Organization $organization = null, array $attribs = [])
     {
         try {
-            $checkin = new Checkin;
+            $checkin = new Checkin();
             $checkin->campaign()->associate($campaign);
-            if ($organization)
+
+            // If there are new attribs to apply
+            if (!empty($attribs)) {
+                // Check if another contact exists with the same name or mobile
+                $existing = Contact::where(function ($q) use ($attribs) {
+                    $q->where('name', $attribs['name'] ?? null)
+                        ->orWhere('mobile', $attribs['mobile'] ?? null);
+                })
+                    ->where('id', '!=', $contact->id)
+                    ->first();
+
+                // If found, use the existing one
+                if ($existing) {
+                    $contact = $existing;
+                } else {
+                    $contact->fill($attribs);
+                }
+            }
+
+            // Associate organization if applicable
+            if ($organization) {
                 $contact->organization()->associate($organization);
-            if ($attribs)
-                $contact->update($attribs);
+            }
 
             $contact->save();
 
             $checkin->contact()->associate($contact);
-            if ($project_name = Arr::get($attribs, 'project')) {
-                $project = Project::where('name', $project_name)->firstOrFail();
+
+            if ($projectName = Arr::get($attribs, 'project')) {
+                $project = Project::where('name', $projectName)->firstOrFail();
                 $checkin->project()->associate($project);
             }
+
             $checkin->save();
+
             $contact->notify(new AcknowledgeAvailmentNotification($checkin));
+
             return $checkin;
 
-        }catch (\Exception $e){
+        } catch (\Exception $e) {
             Log::error('Error CheckinContact', [
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
                 'checkin_id' => $checkin->id ?? null,
             ]);
+
             throw $e;
         }
     }
+
+
+//    public function handle(Campaign $campaign, Contact $contact, Organization $organization = null, array $attribs = [])
+//    {
+//        try {
+//            $checkin = new Checkin;
+//            $checkin->campaign()->associate($campaign);
+//            if ($organization)
+//                $contact->organization()->associate($organization);
+//            if ($attribs){
+//                $contact->update($attribs);
+//            }
+//
+//            $contact->save();
+//
+//            $checkin->contact()->associate($contact);
+//            if ($project_name = Arr::get($attribs, 'project')) {
+//                $project = Project::where('name', $project_name)->firstOrFail();
+//                $checkin->project()->associate($project);
+//            }
+//            $checkin->save();
+//            $contact->notify(new AcknowledgeAvailmentNotification($checkin));
+//            return $checkin;
+//
+//        }catch (\Exception $e){
+//            Log::error('Error CheckinContact', [
+//                'error' => $e->getMessage(),
+//                'trace' => $e->getTraceAsString(),
+//                'checkin_id' => $checkin->id ?? null,
+//            ]);
+//            throw $e;
+//        }
+//    }
 
     public function asController(ActionRequest $request, Campaign $campaign, Contact $contact)
     {
