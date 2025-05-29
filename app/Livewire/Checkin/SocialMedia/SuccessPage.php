@@ -11,7 +11,7 @@ class SuccessPage extends Component
     public $checkin;
     public function mount(Request $request)
     {
-        $this->checkin = Checkin::findOrFail($request->query('checkin'));
+        $this->checkin = Checkin::find($request->query('checkin'));
     }
     
     public function render()

@@ -106,7 +106,7 @@ class SocialMediaLinkRegistration extends Component implements HasForms
         $data = $this->form->getState();
         try {
             $checkin=$this->checkinContact();
-            return redirect()->route('checkin.social_media_success_page', ['checkin' => $checkin->id]);
+            return redirect()->route('checkin.social_media_success_page', ['checkin' => $checkin->id ?? null]);
 
         }catch (Exception $e) {
             $this->error=$e->getMessage();
@@ -164,25 +164,22 @@ class SocialMediaLinkRegistration extends Component implements HasForms
             }
 
             // Safe to update
-            $contact->first_name = $firstName;
-            $contact->last_name = $lastName;
-            $contact->name = $fullName;
-            $contact->email = $email;
+            // $contact->first_name = $firstName;
+            // $contact->last_name = $lastName;
+            // $contact->name = $fullName;
+            // $contact->email = $email;
 
-            $contact->save();
+            // $contact->save();
 
-            $checkin = new Checkin();
-           $checkin->campaign()->associate($campaign);
-            $checkin->contact()->associate($contact);
+            // $checkin = new Checkin();
+            // $checkin->campaign()->associate($campaign);
+            // $checkin->contact()->associate($contact);
 
-            // if (!empty($this->data['project'])) {
-            //     $project = Project::where('name', $this->data['project'])->firstOrFail();
-            //     $checkin->project()->associate($project);
-            // }
 
-            $checkin->save();
-            $contact->notify(new AcknowledgeAvailmentNotification($checkin));
-            return $checkin;
+            // $checkin->save();
+            // $contact->notify(new AcknowledgeAvailmentNotification($checkin));
+            // return $checkin;
+            return null;
         } catch (\Exception $e) {
             report($e);
             throw $e;
