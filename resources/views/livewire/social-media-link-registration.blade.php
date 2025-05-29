@@ -1,12 +1,12 @@
 <div class="flex justify-center items-center min-h-screen" style="background-image: url('{{ asset('storage').'/'.$campaign->registration_background }}'); background-size: cover; background-position: center;" x-data="{ showSplash: true }" x-init="setTimeout(() => showSplash = false, 2500)">
     <!-- Splash Screen -->
     <div x-show="showSplash" class="fixed inset-0 flex justify-center items-center bg-transparent z-50">
-        <img class="h-full w-full object-cover" src="{{config('app.url').'/'.$this->campaign->splash_image_url}}" alt="Splash Image">
+        <img class="h-full w-full object-cover" src="{{config('app.url').'/storage/'.$this->campaign->splash_image_url}}" alt="Splash Image">
     </div>
 
     <div  x-show="!showSplash" x-transition class="w-full max-w-lg bg-transparent p-4 rounded-lg">
         <div class=" flex justify-center ">
-            <img class="h-auto w-full lg:w-full" src="{{config('app.url').'/'.$this->campaign->registration_logo}}" alt="CompanyLogo.png">
+            <img class="h-auto w-full lg:w-full" src="{{config('app.url').'/storage/'.$this->campaign->registration_logo}}" alt="CompanyLogo.png">
         </div>
         <form wire:submit="save" class="w-full">
             <div  class="flex justify-center mt-4 mb-4">
