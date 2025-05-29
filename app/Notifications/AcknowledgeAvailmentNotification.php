@@ -15,7 +15,7 @@ class AcknowledgeAvailmentNotification extends BaseAdhoc
 If you are ready to secure the unit, kindly click on the link provided below:
 https://www.homeful.ph/pagsikat/availnow/promocode=?pasinaya'.substr($checkin->contact->id, -12);
 
-        $message = ProcessFeedback::run($checkin, $checkin->campaign->feedback ?: $default);
+        $message = ProcessFeedback::run($checkin, $checkin->campaign?->feedback ?: $default);
 
         parent::__construct($message);
     }

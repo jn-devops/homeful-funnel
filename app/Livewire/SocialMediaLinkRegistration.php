@@ -7,6 +7,7 @@ use App\Models\Checkin;
 use App\Models\Contact;
 use App\Models\Organization;
 use App\Models\Project;
+use App\Models\SocialMedia;
 use App\Models\SocialMediaCampaign;
 use App\Notifications\AcknowledgeAvailmentNotification;
 use Filament\Forms\Concerns\InteractsWithForms;
@@ -54,7 +55,7 @@ class SocialMediaLinkRegistration extends Component implements HasForms
                                     $set('email',$contact->email??'');
                                     $set('organization',$contact->organization->name??'');
 
-                                    if (!empty($contact->organization->id) && $contact->organization->id && !$this->isOrganizationEmpty) {
+                                    if (!empty($contact->organization->id) && $contact->organization->id) {
                                         $this->isDifferentCompanyBefore = true;
                                     }else{
                                         $this->isDifferentCompanyBefore = false;
@@ -105,8 +106,7 @@ class SocialMediaLinkRegistration extends Component implements HasForms
         $data = $this->form->getState();
         try {
             $checkin=$this->checkinContact();
-
-            return redirect()->route('checkin.success_page',['checkin' => $checkin->id??'']);
+            return redirect()->route('checkin.social_media_success_page', ['checkin' => $checkin->id]);
 
         }catch (Exception $e) {
             $this->error=$e->getMessage();
@@ -118,16 +118,16 @@ class SocialMediaLinkRegistration extends Component implements HasForms
     public function checkinContact()
     {
         try {
-            $campaign = Campaign::findOrFail($this->campaign->id);
+            $campaign = SocialMediaCampaign::findOrFail($this->campaign->id);
             $mobile = '+63' . $this->data['mobile'];
             $firstName = $this->data['first_name'];
             $lastName = $this->data['last_name'];
             $email = $this->data['email'];
             $fullName = "$firstName $lastName";
-
+            
             $contactByMobile = Contact::where('mobile', $mobile)->first();
             $contactByName = Contact::where('name', $fullName)->first();
-
+            
             if ($contactByMobile && $contactByName && $contactByMobile->id !== $contactByName->id) {
                 // Conflict: mobile and name belong to different people
                 throw new \Exception('The provided name and mobile number belong to different contacts.');
@@ -172,17 +172,16 @@ class SocialMediaLinkRegistration extends Component implements HasForms
             $contact->save();
 
             $checkin = new Checkin();
-//            $checkin->campaign()->associate($campaign);
+           $checkin->campaign()->associate($campaign);
             $checkin->contact()->associate($contact);
 
-            if (!empty($this->data['project'])) {
-                $project = Project::where('name', $this->data['project'])->firstOrFail();
-                $checkin->project()->associate($project);
-            }
+            // if (!empty($this->data['project'])) {
+            //     $project = Project::where('name', $this->data['project'])->firstOrFail();
+            //     $checkin->project()->associate($project);
+            // }
 
             $checkin->save();
             $contact->notify(new AcknowledgeAvailmentNotification($checkin));
-
             return $checkin;
         } catch (\Exception $e) {
             report($e);
