@@ -42,7 +42,7 @@
                    <button
                            class="w-full max-w-xs rounded-lg text-black font-bold p-2 mt-1"
                            style="background-color: white; border: 1px solid rgb(212, 212, 212);">
-                       {{$this->checkin->social_media_campaign->undecided_label ?? 'Expolore More'}}
+                       {{$this->checkin->social_media_campaign->undecided_label ?? 'Explore More'}}
                    </button>
                </div>
             </div>
