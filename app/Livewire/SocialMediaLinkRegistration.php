@@ -9,6 +9,7 @@ use App\Models\Organization;
 use App\Models\Project;
 use App\Models\SocialMedia;
 use App\Models\SocialMediaCampaign;
+use App\Models\SocialMediaCheckin;
 use App\Notifications\AcknowledgeAvailmentNotification;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
@@ -164,22 +165,21 @@ class SocialMediaLinkRegistration extends Component implements HasForms
             }
 
             // Safe to update
-            // $contact->first_name = $firstName;
-            // $contact->last_name = $lastName;
-            // $contact->name = $fullName;
-            // $contact->email = $email;
+            $contact->first_name = $firstName;
+            $contact->last_name = $lastName;
+            $contact->name = $fullName;
+            $contact->email = $email;
 
-            // $contact->save();
+            $contact->save();
 
-            // $checkin = new Checkin();
-            // $checkin->campaign()->associate($campaign);
-            // $checkin->contact()->associate($contact);
+            $checkin = new SocialMediaCheckin();
+            $checkin->campaign()->associate($campaign);
+            $checkin->contact()->associate($contact);
 
 
-            // $checkin->save();
+            $checkin->save();
             // $contact->notify(new AcknowledgeAvailmentNotification($checkin));
-            // return $checkin;
-            return null;
+            return $checkin;
         } catch (\Exception $e) {
             report($e);
             throw $e;

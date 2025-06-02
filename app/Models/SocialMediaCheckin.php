@@ -2,46 +2,27 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Spatie\SchemalessAttributes\SchemalessAttributes;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
-use Illuminate\Database\Eloquent\Model;
-use Homeful\Common\Traits\HasMeta;
 use App\Actions\GenerateAvailUrl;
+use Homeful\Common\Traits\HasMeta;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
-/**
- * Class Checkin
- *
- * @property string $id
- * @property Contact $contact
- * @property Campaign $campaign
- * @property SchemalessAttributes $meta
- * @property string registration_code
- * @property Project $project
- * @property Link $link
- *
- * @method int getKey()
- */
-class Checkin extends Model
+class SocialMediaCheckin extends Model
 {
-    /** @use HasFactory<\Database\Factories\CheckinFactory> */
     use HasFactory;
     use HasUuids;
     use HasMeta;
 
     const REG_CODE_UUID_GROUP_INDEX = 5;
     const REG_CODE_SUBSTRING_COUNT = 6;
-
-    protected $keyType = 'string';
-    public $incrementing = false;
-
+    
     protected $fillable = [
-        'campaign_id',
+        'social_media_campaign_id',
         'contact_id',
         'rider_url',
         'project_id',
         'reference_code'
-
     ];
 
     public function contact(): \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -51,7 +32,7 @@ class Checkin extends Model
 
     public function campaign(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(Campaign::class);
+        return $this->belongsTo(SocialMediaCampaign::class, 'social_media_campaign_id');
     }
 
     public function getRegistrationCodeAttribute(): string

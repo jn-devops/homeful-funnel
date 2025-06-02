@@ -164,6 +164,11 @@ class Contact extends Model
     {
         return $this->hasMany(SmsLogs::class,'contacts_id');
     }
+    
+    public function social_media_checkins(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(SocialMediaCheckin::class,'contacts_id');
+    }
 
     public function getMobileCountryAttribute(): string
     {

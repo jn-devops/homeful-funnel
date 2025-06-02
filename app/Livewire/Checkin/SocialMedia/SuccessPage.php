@@ -3,6 +3,7 @@
 namespace App\Livewire\Checkin\SocialMedia;
 
 use App\Models\Checkin;
+use App\Models\SocialMediaCheckin;
 use Illuminate\Http\Request;
 use Livewire\Component;
 
@@ -11,7 +12,7 @@ class SuccessPage extends Component
     public $checkin;
     public function mount(Request $request)
     {
-        $this->checkin = Checkin::find($request->query('checkin'));
+        $this->checkin = SocialMediaCheckin::find($request->query('checkin'));
     }
     
     public function render()
