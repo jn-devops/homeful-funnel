@@ -61,7 +61,11 @@ class TripsTable extends Component implements HasForms, HasTable
                 TextColumn::make('project')
                     ->label('Project')
                     ->getStateUsing(function ($record) {
-                        return "{$record->project->name}\n{$record->project->project_location}";
+                        if($record->project){
+                            return "{$record->project?->name}\n{$record->project?->project_location}";
+                        }else{
+                            return $record->project_id;
+                        }
                     })
                     ->extraAttributes(['style' => 'white-space: pre-line']),
                 TextColumn::make('preferred_date')
@@ -104,7 +108,11 @@ class TripsTable extends Component implements HasForms, HasTable
                 TextColumn::make('project')
                     ->label('Project')
                     ->getStateUsing(function ($record) {
-                        return "{$record->project->name}\n{$record->project->project_location}";
+                        if($record->project){
+                            return "{$record->project?->name}\n{$record->project?->project_location}";
+                        }else{
+                            return $record->project_id;
+                        }
                     })
                     ->extraAttributes(['style' => 'white-space: pre-line']),
                 TextColumn::make('preferred_date')
@@ -147,7 +155,11 @@ class TripsTable extends Component implements HasForms, HasTable
                 TextColumn::make('project')
                     ->label('Project')
                     ->getStateUsing(function ($record) {
-                        return "{$record->project->name}\n{$record->project->project_location}";
+                        if($record->project){
+                            return "{$record->project?->name}\n{$record->project?->project_location}";
+                        }else{
+                            return $record->project_id;
+                        }
                     })
                     ->extraAttributes(['style' => 'white-space: pre-line']),
                 TextColumn::make('preferred_date')
@@ -190,7 +202,11 @@ class TripsTable extends Component implements HasForms, HasTable
                 TextColumn::make('project')
                     ->label('Project')
                     ->getStateUsing(function ($record) {
-                        return "{$record->project->name}\n{$record->project->project_location}";
+                        if($record->project){
+                            return "{$record->project?->name}\n{$record->project?->project_location}";
+                        }else{
+                            return $record->project_id;
+                        }
                     })
                     ->extraAttributes(['style' => 'white-space: pre-line']),
                 TextColumn::make('campaign.name')
@@ -233,7 +249,11 @@ class TripsTable extends Component implements HasForms, HasTable
                 TextColumn::make('project')
                     ->label('Project')
                     ->getStateUsing(function ($record) {
-                        return "{$record->project->name}\n{$record->project->project_location}";
+                        if($record->project){
+                            return "{$record->project?->name}\n{$record->project?->project_location}";
+                        }else{
+                            return $record->project_id;
+                        }
                     })
                     ->extraAttributes(['style' => 'white-space: pre-line']),
                 TextColumn::make('preferred_date')
@@ -276,7 +296,11 @@ class TripsTable extends Component implements HasForms, HasTable
                 TextColumn::make('project')
                     ->label('Project')
                     ->getStateUsing(function ($record) {
-                        return "{$record->project->name}\n{$record->project->project_location}";
+                        if($record->project){
+                            return "{$record->project?->name}\n{$record->project?->project_location}";
+                        }else{
+                            return $record->project_id;
+                        }
                     })
                     ->extraAttributes(['style' => 'white-space: pre-line']),
                 TextColumn::make('preferred_date')
@@ -322,7 +346,11 @@ class TripsTable extends Component implements HasForms, HasTable
                 TextColumn::make('project')
                     ->label('Project')
                     ->getStateUsing(function ($record) {
-                        return "{$record->project->name}\n{$record->project->project_location}";
+                        if($record->project){
+                            return "{$record->project?->name}\n{$record->project?->project_location}";
+                        }else{
+                            return $record->project_id;
+                        }
                     })
                     ->extraAttributes(['style' => 'white-space: pre-line']),
                 TextColumn::make('remarks')
