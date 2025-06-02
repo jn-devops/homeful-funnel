@@ -29,7 +29,7 @@ class SuccessPage extends Component
         if( $this->checkin->contact->state instanceof Registered){
             $this->checkin->contact->state->transitionTo(ForTripping::class);
         }
-        return redirect()->to(config('app.url') .'/schedule-trip?campaign_id='.$this->checkin->campaign->id .'&contact_id='. $this->checkin->contact->id.' &checkin_id='.$this->checkin->id);
+        return redirect()->to(config('app.url') .'/social-media/schedule-trip?campaign_id='.$this->checkin->campaign->id .'&contact_id='. $this->checkin->contact->id.' &checkin_id='.$this->checkin->id);
     }
 
     public function chat_url()

@@ -54,6 +54,9 @@ class TripsTable extends Component implements HasForms, HasTable
                     ->formatStateUsing(fn($record)=>ucfirst($record->contact->name))
                     ->searchable(),
                 TextColumn::make('campaign.name')
+                    ->getStateUsing(function ($record) {
+                        return $record->campaign?->name ?? 'Social Media Campaign';
+                    })
                     ->label('Campaign'),
                 TextColumn::make('project')
                     ->label('Project')
@@ -94,6 +97,9 @@ class TripsTable extends Component implements HasForms, HasTable
                     ->formatStateUsing(fn($record)=>ucfirst($record->contact->name))
                     ->searchable(),
                 TextColumn::make('campaign.name')
+                    ->getStateUsing(function ($record) {
+                        return $record->campaign?->name ?? 'Social Media Campaign';
+                    })
                     ->label('Campaign'),
                 TextColumn::make('project')
                     ->label('Project')
@@ -134,6 +140,9 @@ class TripsTable extends Component implements HasForms, HasTable
                     ->formatStateUsing(fn($record)=>ucfirst($record->contact->name))
                     ->searchable(),
                 TextColumn::make('campaign.name')
+                    ->getStateUsing(function ($record) {
+                        return $record->campaign?->name ?? 'Social Media Campaign';
+                    })
                     ->label('Campaign'),
                 TextColumn::make('project')
                     ->label('Project')
@@ -185,6 +194,9 @@ class TripsTable extends Component implements HasForms, HasTable
                     })
                     ->extraAttributes(['style' => 'white-space: pre-line']),
                 TextColumn::make('campaign.name')
+                    ->getStateUsing(function ($record) {
+                        return $record->campaign?->name ?? 'Social Media Campaign';
+                    })
                     ->label('Campaign'),
                 TextColumn::make('preferred_date')
                     ->label('Date')
@@ -214,6 +226,9 @@ class TripsTable extends Component implements HasForms, HasTable
                     ->formatStateUsing(fn($record)=>ucfirst($record->contact->name))
                     ->searchable(),
                 TextColumn::make('campaign.name')
+                    ->getStateUsing(function ($record) {
+                        return $record->campaign?->name ?? 'Social Media Campaign';
+                    })
                     ->label('Campaign'),
                 TextColumn::make('project')
                     ->label('Project')
@@ -254,6 +269,9 @@ class TripsTable extends Component implements HasForms, HasTable
                     ->formatStateUsing(fn($record)=>ucfirst($record->contact->name))
                     ->searchable(),
                 TextColumn::make('campaign.name')
+                    ->getStateUsing(function ($record) {
+                        return $record->campaign?->name ?? 'Social Media Campaign';
+                    })
                     ->label('Campaign'),
                 TextColumn::make('project')
                     ->label('Project')

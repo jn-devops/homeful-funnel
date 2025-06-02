@@ -11,6 +11,7 @@ Route::get('checkin-success', App\Livewire\Checkin\SuccessPage::class )->name('c
 Route::get('social-media-success', App\Livewire\Checkin\SocialMedia\SuccessPage::class )->name('checkin.social_media_success_page');
 
 Route::get('schedule-trip/',App\Livewire\Trips\CreateTrip::class, )->name('schedule_trip');
+Route::get('social-media/schedule-trip/',App\Livewire\Trips\SocialMediaCreateTrip::class, )->name('social_media.schedule_trip');
 Route::get('schedule-trip-success', App\Livewire\Trips\SuccessPage::class )->name('schedule.success_page');
 
 //Route::get('checkin-success',function (Request $request){
