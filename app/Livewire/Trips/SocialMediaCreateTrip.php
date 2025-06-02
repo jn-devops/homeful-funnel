@@ -15,6 +15,7 @@ use Livewire\Component;
 use Filament\Forms;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
+use Illuminate\Support\Facades\Http;
 
 class SocialMediaCreateTrip extends Component implements HasForms
 {
@@ -38,12 +39,19 @@ class SocialMediaCreateTrip extends Component implements HasForms
         $this->contact = Contact::find($request->contact_id);
         $this->checkin = SocialMediaCheckin::find($request->checkin_id);
         $this->form->fill([
-            'project_id' => $this->checkin->project->id ?? '',
+            'project_id' => $this->campaign->project_code ?? '',
         ]);
+
     }
 
     public function form(Form $form): Form
     {
+        $response = Http::get('https://properties.homeful.ph/fetch-projects');
+        $projects = collect($response->json()['projects'])->mapWithKeys(function ($project) {
+            return [
+                $project['code'] => $project['name'],
+            ];
+        })->toArray();
         return $form
             ->schema([
                 Forms\Components\Select::make('project_id')
@@ -51,7 +59,7 @@ class SocialMediaCreateTrip extends Component implements HasForms
                     ->required()
                     ->inlineLabel()
                     ->native(false)
-                    ->options(Project::all()->pluck('name', 'id')->toArray())
+                    ->options($projects)
                     ->preload()
                     ->placeholder('Choose your preferred project'),
                Forms\Components\DatePicker::make('preferred_date')
