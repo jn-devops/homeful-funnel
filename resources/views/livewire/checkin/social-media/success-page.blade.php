@@ -5,8 +5,8 @@
             <div id="lottie-animation" class=" mx-auto" style="width: 12rem;"></div>
             <div class="text-center mx-5 mb-10">
                 <div class="text-3xl font-bold mb-4">Successfully Registered</div>
-                <div>Hi {{$checkin->contact->first_name ?? ''}}, Thank you for your Registration from {{$checkin->contact->organization->name??''}}. </div>
-                <br>
+                {{-- <div>Hi {{$checkin->contact->first_name ?? ''}}, Thank you for your Registration from {{$checkin->contact->organization->name??''}}. </div>
+                <br> --}}
                 <div>Here is your registration code: </div>
                 <div class="font-semibold text-3xl">{{ $checkin->registration_code ?? ''}}</div>
             </div>
@@ -22,7 +22,7 @@
                </div> --}}
                <div class="flex flex-col items-center w-full">
                     <span>To schedule site visit, click the button below</span>
-                   <button 
+                   <button wire:click="trip()"
                    class="w-full max-w-xs rounded-lg text-white font-bold p-2 mb-2 items-center justify-center flex gap-2"
                            style="background-color: #16A34A;">
                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5 mr-2">
@@ -31,7 +31,7 @@
                        {{$this->checkin->social_media_campaign->trip_label ?? 'Book a Trip'}}
                    </button>
                    <span>Should you need assistance?</span>
-                   <button
+                   <button wire:click="chat_url()"
                            class="w-full max-w-xs rounded-lg text-white font-bold p-2 mb-2 items-center justify-center flex gap-2"
                            style="background-color: #F9BC2D;">
                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -39,7 +39,7 @@
                        </svg>
                        Ask Joy
                    </button>
-                   <button
+                   <button wire:click="not_now()"
                            class="w-full max-w-xs rounded-lg text-black font-bold p-2 mt-1"
                            style="background-color: white; border: 1px solid rgb(212, 212, 212);">
                        {{$this->checkin->social_media_campaign->undecided_label ?? 'Explore More'}}
