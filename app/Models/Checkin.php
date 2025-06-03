@@ -40,7 +40,9 @@ class Checkin extends Model
         'contact_id',
         'rider_url',
         'project_id',
-        'reference_code'
+        'reference_code',
+        'project_code',
+        'project_name',
 
     ];
 
@@ -95,5 +97,26 @@ class Checkin extends Model
             ? app(GenerateAvailUrl::class)->run($this)
             : route('link.show', ['shortUrl' => $this->link->short_url])
             ;
+    }
+
+    public function setProjectCodeAttribute(string $value): static
+    {
+        $this->meta->set('project_code', $value);
+        return $this;
+    }
+
+    public function getProjectCodeAttribute(): ?string
+    {
+        return $this->meta->get('project_code');
+    }
+    public function setProjectNameAttribute(string $value): static
+    {
+        $this->meta->set('project_name', $value);
+        return $this;
+    }
+
+    public function getProjectNameAttribute(): ?string
+    {
+        return $this->meta->get('project_name');
     }
 }
