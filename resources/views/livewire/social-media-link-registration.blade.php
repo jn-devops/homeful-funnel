@@ -1,16 +1,26 @@
-<div class="flex justify-center items-center min-h-screen" style="background-image: url('{{ asset('storage').'/'.$campaign->registration_background }}'); background-size: cover; background-position: center;" x-data="{ showSplash: true }" x-init="setTimeout(() => showSplash = false, 2500)">
+
+{{-- <div class="flex justify-center items-center min-h-screen" style="background-image: url('{{ asset('storage').'/'.$campaign->registration_background }}'); background-size: cover; background-position: center;" x-data="{ showSplash: true }" x-init="setTimeout(() => showSplash = false, 2500)"> --}}
+<div class="relative flex justify-center items-center min-h-screen" 
+    style="background-image: url('{{ asset('storage').'/'.$campaign->registration_background }}'); background-size: cover; background-position: center;" 
+    x-data="{ showSplash: true }" 
+    x-init="setTimeout(() => showSplash = false, 2500)">
+
+    <!-- Black overlay -->
+    <div style="position: absolute; top: 0; right: 0; bottom: 0; left: 0; background-color: rgba(0, 0, 0, 0.6); width: 100%; height: 100vh; z-index: 0;"></div>
+
     <!-- Splash Screen -->
     <div x-show="showSplash" class="fixed inset-0 flex justify-center items-center bg-transparent z-50">
         <img class="h-full w-full object-cover" src="{{config('app.url').'/storage/'.$this->campaign->splash_image_url}}" alt="Splash Image">
     </div>
 
-    <div  x-show="!showSplash" x-transition class="w-full max-w-lg bg-transparent p-4 rounded-lg">
-        <div class=" flex justify-center ">
+    <div  x-show="!showSplash" x-transition class="w-full max-w-lg bg-transparent p-4 rounded-lg relative z-10">
+        <div class=" flex justify-center">
             <img class="h-auto w-full lg:w-full" src="{{config('app.url').'/storage/'.$this->campaign->registration_logo}}" alt="CompanyLogo.png">
+            
         </div>
         <form wire:submit="save" class="w-full">
             <div  class="flex justify-center mt-4 mb-4">
-                <h2 class="text-xl font-bold leading-tight text-gray-800  text-center">
+                <h2 class="text-xl font-bold leading-tight text-gray-800  text-center" style="color: white">
                     {{$this->campaign->name}}
                 </h2>
 
