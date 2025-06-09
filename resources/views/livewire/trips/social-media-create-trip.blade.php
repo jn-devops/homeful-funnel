@@ -6,7 +6,7 @@
 
     <div  x-show="!showSplash" x-transition class="w-full max-w-lg bg-white p-4 rounded-lg">
         <div class=" flex justify-center ">
-            <img class="h-auto w-full lg:w-full" src="/CompanyLogo.png" alt="CompanyLogo.png">
+            <img class="h-auto w-full lg:w-full" src="/eve_logo.jpeg" alt="eve_logo.jpeg">
         </div>
         <div  class="flex justify-center ">
             <h2 class="text-xl font-bold leading-tight text-gray-800  text-center">
