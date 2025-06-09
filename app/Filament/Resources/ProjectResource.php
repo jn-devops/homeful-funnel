@@ -38,109 +38,109 @@ class ProjectResource extends Resource
                     ->label('Location')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('product_code')
-                    ->label('Product Code')
-                    ->required()
-                    ->maxLength(255),
-                FileUpload::make('project_image')
-                    ->required()
-                    ->label('Image')
-                    ->columnSpanFull()
-                    ->image()
-                    ->imageEditor()
-                    ->imageEditorAspectRatios([
-                        null,
-                        '16:9',
-                        '4:3',
-                        '1:1',
-                    ])
-                    ->maxSize(2048)
-                    ->openable()
-                    ->downloadable(),
-                Forms\Components\TextInput::make('rider_url')
-                    ->label('Redirect URL')
-                    ->required()
-                    ->maxLength(255)
-                    ->columnSpanFull(),
-                Forms\Components\TextInput::make('avail_url')
-                    ->label('Avail URL')
-                    ->required()
-                    ->maxLength(255)
-                    ->columnSpanFull(),
-                Forms\Components\TextInput::make('kwyc_check_campaign_code')
-                    ->label('KWYC Campaign Code')
-                    ->maxLength(255)
-                    ->hidden()
-                    ->columnSpanFull(),
+//                Forms\Components\TextInput::make('product_code')
+//                    ->label('Product Code')
+//                    ->required()
+//                    ->maxLength(255),
+//                FileUpload::make('project_image')
+//                    ->required()
+//                    ->label('Image')
+//                    ->columnSpanFull()
+//                    ->image()
+//                    ->imageEditor()
+//                    ->imageEditorAspectRatios([
+//                        null,
+//                        '16:9',
+//                        '4:3',
+//                        '1:1',
+//                    ])
+//                    ->maxSize(2048)
+//                    ->openable()
+//                    ->downloadable(),
+//                Forms\Components\TextInput::make('rider_url')
+//                    ->label('Redirect URL')
+//                    ->required()
+//                    ->maxLength(255)
+//                    ->columnSpanFull(),
+//                Forms\Components\TextInput::make('avail_url')
+//                    ->label('Avail URL')
+//                    ->required()
+//                    ->maxLength(255)
+//                    ->columnSpanFull(),
+//                Forms\Components\TextInput::make('kwyc_check_campaign_code')
+//                    ->label('KWYC Campaign Code')
+//                    ->maxLength(255)
+//                    ->hidden()
+//                    ->columnSpanFull(),
                 Forms\Components\TextInput::make('trip_notification_email')
                     ->label('Recipient for Trippings')
                     ->required()
                     ->maxLength(255)
                     ->columnSpanFull(),
-                Forms\Components\TextInput::make('default_product')
-                    ->label('Default Product')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('minimum_salary')
-                    ->label('Minimum Salary')
-                    ->numeric()
-                    ->maxValue(120000)
-                    ->minValue(10000)
-                    ->required(),
-                Forms\Components\Select::make('sales_unit')
-                    ->label('Brand')
-                    ->native(false)
-                    ->options(function () {
-                        $data = array_map(fn($case) => [
-                            'value' => $case->value,
-                            'label' => $case->name,
-                        ], SalesUnit::cases());
-                        $values = array_column($data, 'value');
-                        $labels = array_column($data, 'label');
-                        return array_combine($values, array_map('ucfirst', $values));
-                    })
-                    ->required(),
-                Forms\Components\TextInput::make('default_price')
-                    ->label('Default Price')
-                    ->numeric()
-                    ->maxValue(10000000)
-                    ->minValue(500000)
-                    ->required(),
-                Forms\Components\TextInput::make('default_percent_down_payment')
-                    ->label('Default Percent Downpayment')
-                    ->numeric()
-                    ->prefix('%')
-                    ->required(),
-                Forms\Components\TextInput::make('default_percent_miscellaneous_fees')
-                    ->label('Default Percent Miscellaneous Fees')
-                    ->numeric()
-                    ->prefix('%')
-                    ->maxValue(15)
-                    ->required(),
-                Forms\Components\TextInput::make('default_down_payment_term')
-                    ->label('Default Percent Downpayment Term(In Months)')
-                    ->numeric()
-                    ->maxValue(24)
-                    ->required(),
-                Forms\Components\TextInput::make('default_balance_payment_term')
-                    ->label('Default Balance Payment Term(In Years)')
-                    ->numeric()
-                    ->maxValue(30)
-                    ->required(),
-                Forms\Components\TextInput::make('default_balance_payment_interest_rate')
-                    ->label('Default Balance Payment Interest Rate')
-                    ->numeric()
-                    ->prefix('%')
-                    ->maxValue(20)
-                    ->required(),
-                Forms\Components\TextInput::make('default_seller_commission_code')
-                    ->label('Default Seller Commission Code')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('seller_code')
-                    ->label('Seller Code')
-                    ->required()
-                    ->maxLength(255),
+//                Forms\Components\TextInput::make('default_product')
+//                    ->label('Default Product')
+//                    ->required()
+//                    ->maxLength(255),
+//                Forms\Components\TextInput::make('minimum_salary')
+//                    ->label('Minimum Salary')
+//                    ->numeric()
+//                    ->maxValue(120000)
+//                    ->minValue(10000)
+//                    ->required(),
+//                Forms\Components\Select::make('sales_unit')
+//                    ->label('Brand')
+//                    ->native(false)
+//                    ->options(function () {
+//                        $data = array_map(fn($case) => [
+//                            'value' => $case->value,
+//                            'label' => $case->name,
+//                        ], SalesUnit::cases());
+//                        $values = array_column($data, 'value');
+//                        $labels = array_column($data, 'label');
+//                        return array_combine($values, array_map('ucfirst', $values));
+//                    })
+//                    ->required(),
+//                Forms\Components\TextInput::make('default_price')
+//                    ->label('Default Price')
+//                    ->numeric()
+//                    ->maxValue(10000000)
+//                    ->minValue(500000)
+//                    ->required(),
+//                Forms\Components\TextInput::make('default_percent_down_payment')
+//                    ->label('Default Percent Downpayment')
+//                    ->numeric()
+//                    ->prefix('%')
+//                    ->required(),
+//                Forms\Components\TextInput::make('default_percent_miscellaneous_fees')
+//                    ->label('Default Percent Miscellaneous Fees')
+//                    ->numeric()
+//                    ->prefix('%')
+//                    ->maxValue(15)
+//                    ->required(),
+//                Forms\Components\TextInput::make('default_down_payment_term')
+//                    ->label('Default Percent Downpayment Term(In Months)')
+//                    ->numeric()
+//                    ->maxValue(24)
+//                    ->required(),
+//                Forms\Components\TextInput::make('default_balance_payment_term')
+//                    ->label('Default Balance Payment Term(In Years)')
+//                    ->numeric()
+//                    ->maxValue(30)
+//                    ->required(),
+//                Forms\Components\TextInput::make('default_balance_payment_interest_rate')
+//                    ->label('Default Balance Payment Interest Rate')
+//                    ->numeric()
+//                    ->prefix('%')
+//                    ->maxValue(20)
+//                    ->required(),
+//                Forms\Components\TextInput::make('default_seller_commission_code')
+//                    ->label('Default Seller Commission Code')
+//                    ->required()
+//                    ->maxLength(255),
+//                Forms\Components\TextInput::make('seller_code')
+//                    ->label('Seller Code')
+//                    ->required()
+//                    ->maxLength(255),
             ])->columns(3);
     }
 
@@ -152,16 +152,24 @@ class ProjectResource extends Resource
                     ->label('ID')
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('code')
+                    ->searchable()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('name')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('seller_code')
-                    ->label('Seller Code')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('product_code')
-                    ->label('Product Code')
-                    ->searchable(),
-                Tables\Columns\ImageColumn::make('project_image')
-                    ->label('Image'),
+                    ->searchable()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('project_location')
+                    ->label('Location')
+                    ->searchable()
+                    ->sortable(),
+//                Tables\Columns\TextColumn::make('seller_code')
+//                    ->label('Seller Code')
+//                    ->searchable(),
+//                Tables\Columns\TextColumn::make('product_code')
+//                    ->label('Product Code')
+//                    ->searchable(),
+//                Tables\Columns\ImageColumn::make('project_image')
+//                    ->label('Image'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

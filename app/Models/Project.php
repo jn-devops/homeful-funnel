@@ -43,6 +43,7 @@ class Project extends Model
 
     protected $fillable = [
         'name',
+        'code',
         'project_image',
         'seller_code',
         'product_code',
