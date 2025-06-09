@@ -42,6 +42,6 @@ class SuccessPage extends Component
         if( $this->checkin->contact->state instanceof Registered){
             $this->checkin->contact->state->transitionTo(Undecided::class);
         }
-        return redirect()->to($this->checkin->campaign->rider_url);
+        return redirect()->to($this->checkin->campaign->redirect_url);
     }
 }

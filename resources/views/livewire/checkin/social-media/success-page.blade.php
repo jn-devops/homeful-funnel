@@ -16,7 +16,7 @@
                    <button wire:click="availed()"
                            class="w-full max-w-xs rounded-lg text-white font-bold p-2"
                            style="background-color: #D97706;">
-                       {{$this->checkin->social_media_campaign->avail_label}}
+                       {{$this->checkin->campaign->avail_label}}
                    </button>
                    <span class="text-center text-sm" style="color: #8B8B8B">Use the registration code to avail</span>
                </div> --}}
@@ -28,7 +28,7 @@
                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5 mr-2">
                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3M5 11h14M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
                        </svg>
-                       {{$this->checkin->social_media_campaign->trip_label ?? 'Book a Trip'}}
+                       {{$this->checkin->campaign->trip_label ?? 'Book a Trip'}}
                    </button>
                    <span>Should you need assistance?</span>
                    <button wire:click="chat_url()"
@@ -42,7 +42,7 @@
                    <button wire:click="not_now()"
                            class="w-full max-w-xs rounded-lg text-black font-bold p-2 mt-1"
                            style="background-color: white; border: 1px solid rgb(212, 212, 212);">
-                       {{$this->checkin->social_media_campaign->undecided_label ?? 'Explore More'}}
+                       {{$this->checkin->campaign->undecided_label ?? 'Explore More'}}
                    </button>
                </div>
             </div>
