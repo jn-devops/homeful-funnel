@@ -1,12 +1,9 @@
 
 {{-- <div class="flex justify-center items-center min-h-screen" style="background-image: url('{{ asset('storage').'/'.$campaign->registration_background }}'); background-size: cover; background-position: center;" x-data="{ showSplash: true }" x-init="setTimeout(() => showSplash = false, 2500)"> --}}
-<div class="relative flex justify-center items-center min-h-screen" 
+<div class="flex justify-center items-center min-h-screen" 
     style="background-image: url('{{ asset('storage').'/'.$campaign->registration_background }}'); background-size: cover; background-position: center;" 
     x-data="{ showSplash: true }" 
     x-init="setTimeout(() => showSplash = false, 2500)">
-
-    <!-- Black overlay -->
-    <div style="position: absolute; top: 0; right: 0; bottom: 0; left: 0; background-color: rgba(0, 0, 0, 0.6); width: 100%; height: 100vh; z-index: 0;"></div>
 
     <!-- Splash Screen -->
     <div x-show="showSplash" class="fixed inset-0 flex justify-center items-center bg-transparent z-50">
@@ -20,7 +17,7 @@
         </div>
         <form wire:submit="save" class="w-full">
             <div  class="flex justify-center mt-4 mb-4">
-                <h2 class="text-xl font-bold leading-tight text-gray-800  text-center" style="color: white">
+                <h2 class="text-xl font-bold leading-tight text-gray-800  text-center" style="color: black;">
                     {{$this->campaign->name}}
                 </h2>
 
