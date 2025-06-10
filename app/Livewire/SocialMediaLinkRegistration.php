@@ -11,6 +11,7 @@ use App\Models\SocialMedia;
 use App\Models\SocialMediaCampaign;
 use App\Models\SocialMediaCheckin;
 use App\Notifications\AcknowledgeAvailmentNotification;
+use App\Notifications\AcknowledgeAvailmentNotificationSocialMedia;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
@@ -178,7 +179,7 @@ class SocialMediaLinkRegistration extends Component implements HasForms
 
 
             $checkin->save();
-            // $contact->notify(new AcknowledgeAvailmentNotification($checkin));
+            $contact->notify(new AcknowledgeAvailmentNotificationSocialMedia($checkin));
             return $checkin;
         } catch (\Exception $e) {
             report($e);
