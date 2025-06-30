@@ -38,6 +38,10 @@ class ProjectResource extends Resource
                     ->label('Location')
                     ->required()
                     ->maxLength(255),
+                Forms\Components\TextInput::make('code')
+                    ->label('Project Code')
+                    ->required()
+                    ->maxLength(255),
 //                Forms\Components\TextInput::make('product_code')
 //                    ->label('Product Code')
 //                    ->required()
@@ -160,7 +164,9 @@ class ProjectResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('project_location')
                     ->label('Location')
-                    ->searchable()
+                    ->searchable(query: function ($query, $search) {
+                        return $query->where('meta->project_location', 'like', "%{$search}%"); 
+                    })
                     ->sortable(),
 //                Tables\Columns\TextColumn::make('seller_code')
 //                    ->label('Seller Code')

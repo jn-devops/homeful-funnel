@@ -21,6 +21,9 @@ class GenerateAvailUrl
             'email' => $checkin->contact->email,
             'mobile' => phone($checkin->contact->mobile, 'PH')->formatForMobileDialingInCountry('PH')
         ];
+        if($checkin->project){
+            $query['project_code'] = $checkin->project->code;
+        }
 
         $url->queryArray(query: array_filter($query));
 
