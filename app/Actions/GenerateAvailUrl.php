@@ -12,11 +12,8 @@ class GenerateAvailUrl
 
     public function handle(Checkin $checkin): string
     {
-        $url = Url::parse(url: config('funnel.defaults.contact_register'));
+        $url = Url::parse(url: config('funnel.defaults.contract_server').'/corporate-registration');
         $query = [
-            'callback' => config('funnel.defaults.contract_callback'),
-            'showExtra' => true,
-            'hidePassword' => true,
             'name' => $checkin->contact->name,
             'email' => $checkin->contact->email,
             'mobile' => phone($checkin->contact->mobile, 'PH')->formatForMobileDialingInCountry('PH')
